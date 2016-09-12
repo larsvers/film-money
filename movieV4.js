@@ -266,13 +266,13 @@ function chart() {
 
 			// ===  Scales === //
 
-			scaleX = d3.scale.linear().domain([0, objX.extent[1]]).range([0, width]);
+			scaleX = d3.scaleLinear().domain([0, objX.extent[1]]).range([0, width]);
 
-			scaleY = d3.scale.ordinal().domain(dataNest.map(function(el) { return el[objY.values]; })).rangePoints([height, 0], 1);
+			scaleY = d3.scalePoint().domain(dataNest.map(function(el) { return el[objY.values]; })).range([height, 0]).padding(1);
 
-			scaleZ = d3.scale.sqrt().domain([objZ.extent[0], objZ.extent[1]]).range([3, 20]);
+			scaleZ = d3.scaleSqrt().domain([objZ.extent[0], objZ.extent[1]]).range([3, 20]);
 
-			scaleZCol = d3.scale.linear().domain([objZ.extent[0], objZ.extent[1]]).range(['#ccc', 'red']);
+			scaleZCol = d3.scaleLinear().domain([objZ.extent[0], objZ.extent[1]]).range(['#ccc', 'red']);
 
 
 			// === Init === //
@@ -286,7 +286,7 @@ function chart() {
 				.append('svg')
 				.append('g');
 
-			svg
+			d3.select('svg')
 					.attr('width', width + margin.left + margin.right)
 					.attr('height', height + margin.top + margin.bottom); // Changing attributes of only the 'svg' element and not the 'g' element although the 'svg' element itself doesn't get added when the svg variable is being created. It seems the svg variable gets extended with the 'svg' element through gEnter, while gEnter identifies the 'g' element.
 
@@ -294,8 +294,11 @@ function chart() {
 			gEnter.append('g').attr('class', 'y axis');
 			gEnter.append('g').attr('class', 'lollipops'); // Boxes for the 3 key element-groups. Will only be created the time the chart gets created the first time at enter().
 
-			var g = svg.select('g')
+
+
+			var g = d3.select('svg').select('g')
 					.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')'); // Addressing the g-frame for the margins.
+
 
 			
 			// ===  Axes === //
@@ -304,12 +307,11 @@ function chart() {
 			var dur = 1000; 	
 			var formatValue = d3.format('.2s');
 
-			axisX = d3.svg.axis().scale(scaleX).orient('bottom')
+			axisX = d3.axisBottom(scaleX)
 					.tickFormat(function(d) { return formatValue(d).replace('M', ' mil').replace('G', ' tril'); })
-					.orient('bottom')
 					.tickSize(-height);
 
-			axisY = d3.svg.axis().scale(scaleY).orient('left');
+			axisY = d3.axisLeft(scaleY);
 
 			d3.select('.x.axis')
 				.attr('transform', 'translate(0,' + height + ')')
@@ -336,6 +338,7 @@ function chart() {
 					.selectAll('.circles')
 					.data(dataNest, function(d) { return d[objY.values]; });
 
+
 			// enter
 			circles
 					.enter()
@@ -343,6 +346,12 @@ function chart() {
 					.attr('class', 'circles')
 					.attr('cx', scaleX(0))
 					.attr('cy', function(d) { return scaleY(d[objY.values]); })
+					.attr('r', 0)
+					.style('fill', '#ccc')
+				.transition()
+				.duration(dur)
+				.delay(function(d,i) { return i * dur / n; })
+					// .attr('cx', function(d) { return scaleX(d[objX.values]); })
 					.attr('r', 5)
 					.style('fill', '#ccc');
 
@@ -369,12 +378,13 @@ function chart() {
 
 			if (plotpoint.step === 1 && d3.select('.baseline').empty()) {
 
-			d3.select('g.lollipops')
+			var lollipops = d3.select('g.lollipops')
 					.selectAll('circle.baseline')
 					.data(dataNest.map(function(el) { return { 'yValues': el[objY.values],'xValues': el[plotpoint.dataSequence[0]] }}))
 					.enter()
 				.append('circle')
 					.classed('baseline', true)
+					.attr('cy', function(d) { return scaleY(d.yValues); })
 					.attr('cx', function(d) { return scaleX(d.xValues); })
 					.attr('r', 5)
 					.style('fill', 'steelblue')
