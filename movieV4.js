@@ -7,34 +7,30 @@ var dir = console.dir.bind(console);
 
 // plotpoint object used to trigger stages of narrative 
 var plotpoint = {};
-plotpoint.dataSequence = ['production_budget', 'domestic_gross', 'worldwide_gross'];
+plotpoint.dataSequence = ['start_value', 'production_budget', 'domestic_gross', 'worldwide_gross'];
 plotpoint.ratingsIMDB = false;
 plotpoint.ratingsRT = false;
-
-// Data for select dropdown
-var varsSelect = [
-	{'var': 'production_budget', 'name': 'Production Budget'},
-	{'var': 'domestic_gross', 'name': 'Domestic Gross'},
-	{'var': 'worldwide_gross', 'name': 'Worldwide Gross'},
-	{'var': 'rating_imdb', 'name': 'Rating IMDb (1-10)'},
-	{'var': 'rating_rt', 'name': 'Rating Rotten Tomatoes (1-10)'}
-];
+plotpoint.rating = ['rating_imdb', 'rating_rt'];
+plotpoint.keyValue = 'biggest_budgets';
 
 
-// === Load data === //
+// === Load data, Initial state, Listeners === //
 
-var data = d3.csv("data/movies0.csv", type, function(data){
+d3.csv("data/movies0.csv", type, function(data){
 
 	
-	// === Initial state === //
+	// --- Initial state --- //
 
 	data = _.sortBy(data, function(el) { return el.production_budget; }); // Sort before feeding into any function. Otherwise the data won't be sorted descendingly but ascendingly
 
 	plotpoint.step = 0;
-	handler.plotpoint.one(data);
+	handler.plotpoint.zero(data);
 	
 
-	// === Click listener === //
+
+	// --- Click listener --- //
+
+	d3.select('button#zero').on('mousedown', function() { handler.plotpoint.zero(data); });
 
 	d3.select('button#one').on('mousedown', function() { handler.plotpoint.one(data); });
 
@@ -42,31 +38,84 @@ var data = d3.csv("data/movies0.csv", type, function(data){
 
 	d3.select('button#three').on('mousedown', function() { handler.plotpoint.three(data); });
 
-	d3.select('button#imdb').on('mousedown', function() { handler.ratings.one(data); });
+
+	d3.selectAll('button.rating').on('mousedown', function() { 
+
+		var that = this;
+		handler.ratings(that, data); 
+
+	});
 
 	d3.select('button#rt').on('mousedown', function() { handler.ratings.two(data); });
 
-	d3.select('select').on('change', function() {
 
-		var l = String(this.value);
-		var arraySelect = ['one', 'two', 'three'],
-				p = arraySelect[plotpoint.step];
-		data = _.sortBy(data, function(el) { return el[l]; }); // Sort before feeding into any function. Otherwise the data won't be sorted descendingly but ascendingly
-		
-		handler.plotpoint[p](data);
+	d3.select('select#sort').on('change', function() { 
+	
+		var that = this; 
+		handler.sort.one(that, data); 
+	
+	}); // sort listener and handler
 
-	}); // select listener and handler
+	d3.select('select#keyValue').on('change', function() {
+
+		var that = this; 
+		handler.sort.two(that, data); 
+
+	}); // category = keyValue listener and handler
+
+
+	// --- Scroll listener --- //
+
+	$('#explanations').on('itemfocus', function(event, item) {
+	
+		log('item index', item.index);
+
+		if (item.data.action === "") return;
+
+		var action = isNaN(item.data.action) ? item.data.action.split(',').map(Number) : [item.data.action]; // convert single number or number of strings to array
+
+		// d3.select('svg').selectAll('*').interrupt();
+
+		action.forEach(function(el) { storyLookup[el](data); })
+
+	}); // when item (= element with class .story) gets into focus
 
 }); // d3.csv() 
-
 
 
 // === Select builder === //
 
 var selectBuilder = (function() {
 	
-	d3.select('select').selectAll('option')
-			.data(varsSelect)
+	// --- Sort dropdown --- //
+	
+	var varsSelectSort = [
+		{'var': 'production_budget', 'name': 'Production Budget'},
+		{'var': 'domestic_gross', 'name': 'Domestic Gross'},
+		{'var': 'worldwide_gross', 'name': 'Worldwide Gross'},
+		{'var': 'rating_imdb', 'name': 'Rating IMDb (1-10)'},
+		{'var': 'rating_rt', 'name': 'Rating Rotten Tomatoes (1-10)'}
+	];
+
+	d3.select('select#sort').selectAll('option')
+			.data(varsSelectSort)
+			.enter()
+		.append('option')
+			.attr('value', function(d) { return d.var; })
+			.html(function(d) { return d.name; });
+
+
+	// --- Keyvalue dropdown --- //
+
+	var varsSelectKeyvalue = [
+		{'var': 'biggest_budgets', 'name': 'Biggest Budgets'},
+		{'var': 'most_profitable', 'name': 'Most profitable'},
+		{'var': 'biggest_money_losers', 'name': 'Biggest money losers'},
+		{'var': 'low_budget_winners', 'name': 'Low budget winners'}
+	];
+
+	d3.select('select#keyValue').selectAll('option')
+			.data(varsSelectKeyvalue)
 			.enter()
 		.append('option')
 			.attr('value', function(d) { return d.var; })
@@ -82,9 +131,10 @@ var handler = (function() {
 	var my = {};
 
 	my.plotpoint = {};
-	my.ratings = {};
+	my.ratings;
+	my.sort = {};
 
-	my.plotpoint.one = function(data) {
+	my.plotpoint.zero = function(data) {
 
 		plotpoint.ratingsIMDB = false;
 		plotpoint.ratingsRT = false;
@@ -92,18 +142,18 @@ var handler = (function() {
 
 		var newChart = chart()
 				.key('category')
-				.keyValue('Biggest budgets')
-				.varsX(['production_budget', 'domestic_gross', 'worldwide_gross'])
+				.keyValue(plotpoint.keyValue)
+				.varsX(['start_value', 'production_budget', 'domestic_gross', 'worldwide_gross'])
 				.varsY(['movie'])
 				.varsZ(['rating_imdb', 'rating_rt']);
 
-		d3.select('div.container')
+		d3.select('div#container')
 				.datum(data)
 				.call(newChart);
 
-	}
+	} // films
 
-	my.plotpoint.two = function(data) {
+	my.plotpoint.one = function(data) {
 
 		plotpoint.ratingsIMDB = false;
 		plotpoint.ratingsRT = false;
@@ -111,19 +161,18 @@ var handler = (function() {
 
 		var newChart = chart()
 				.key('category')
-				.keyValue('Biggest budgets')
-				.varsX(['domestic_gross', 'production_budget', 'worldwide_gross'])
+				.keyValue(plotpoint.keyValue)
+				.varsX(['production_budget', 'domestic_gross', 'worldwide_gross', 'start_value'])
 				.varsY(['movie'])
 				.varsZ(['rating_imdb', 'rating_rt']);
 
-		d3.select('div.container')
+		d3.select('div#container')
 				.datum(data)
 				.call(newChart);
 
-	}
+	} // production budget
 
-	my.plotpoint.three = function(data) {
-
+	my.plotpoint.two = function(data) {
 
 		plotpoint.ratingsIMDB = false;
 		plotpoint.ratingsRT = false;
@@ -131,61 +180,117 @@ var handler = (function() {
 
 		var newChart = chart()
 				.key('category')
-				.keyValue('Biggest budgets')
-				.varsX(['worldwide_gross', 'domestic_gross', 'production_budget'])
+				.keyValue(plotpoint.keyValue)
+				.varsX(['domestic_gross', 'production_budget', 'worldwide_gross', 'start_value'])
 				.varsY(['movie'])
 				.varsZ(['rating_imdb', 'rating_rt']);
 
-		d3.select('div.container')
+		d3.select('div#container')
 				.datum(data)
 				.call(newChart);
+
+	} // domestic gross
+
+	my.plotpoint.three = function(data) {
+
+
+		plotpoint.ratingsIMDB = false;
+		plotpoint.ratingsRT = false;
+		plotpoint.step = 3;
+
+		var newChart = chart()
+				.key('category')
+				.keyValue(plotpoint.keyValue)
+				.varsX(['worldwide_gross', 'domestic_gross', 'production_budget', 'start_value'])
+				.varsY(['movie'])
+				.varsZ(['rating_imdb', 'rating_rt']);
+
+		d3.select('div#container')
+				.datum(data)
+				.call(newChart);
+
+	} // worldwirde gross
+
+	my.ratings = function(that, data, value) {
+
+
+			// set the rating to choose
+			var value = arguments.length === 2 ? String(that.id) : value;
+			var valueArray = [];
+
+			if (value === 'rating_imdb') {
+				plotpoint.ratingsIMDB = true;
+				plotpoint.ratingsRT = false;
+
+				valueArray = plotpoint.rating.slice();
+				valueArray = _.pull(valueArray, value);
+				valueArray.unshift(value); // set an array of the rating-names in the right order to pass to chart-factory (which needs all names to calc the extent and the first name to be the one used)
+			} 
+
+			if (value === 'rating_rt') {
+				plotpoint.ratingsIMDB = false;
+				plotpoint.ratingsRT = true;				
+
+				valueArray = plotpoint.rating.slice();
+				valueArray = _.pull(valueArray, value);
+				valueArray.unshift(value);
+			}
+
+			// get the current chart state
+			var arraySelect = ['zero', 'one', 'two', 'three'];
+			var currentPlotpoint = arraySelect[plotpoint.step];
+			var currentXvar = plotpoint.dataSequence[plotpoint.step];
+
+			// This builds a list of x variables so that the current x variable is at array pos 1.
+			// This way we can build a new chart with inflated circles at the same x position as the previous chart.
+			var varsX = plotpoint.dataSequence.slice(); // Array.slice() with no args clones an array
+			_.pull(varsX, currentXvar); // remove the current x variable item from the array 
+			varsX.unshift(currentXvar); // re-introduce the current x variable item at the beginning of the array
+			
+			// build the chart
+			var newChart = chart()
+					.key('category')
+					.keyValue(plotpoint.keyValue)
+					.varsX(varsX)
+					.varsY(['movie'])
+					.varsZ(valueArray);
+
+			d3.select('div#container')
+					.datum(data)
+					.call(newChart);
+
+	} // set new rating
+
+	my.sort.one = function(that, data, value) {
+
+
+		var v = arguments.length === 2 ? String(that.value) : value;
+
+		var arraySelect = ['zero', 'one', 'two', 'three'],
+				p = arraySelect[plotpoint.step];
+		data = _.sortBy(data, function(el) { return el[v]; }); // Sort before feeding into any function. Otherwise the data won't be sorted descendingly but ascendingly
 		
-	}
+		my.plotpoint[p](data);
 
-	my.ratings.one = function(data) {
+	} // set new sort
 
-			plotpoint.ratingsIMDB = true;
-			plotpoint.ratingsRT = false;
+	my.sort.two = function(that, data, value) {
 
-			var newChart = chart()
-					.key('category')
-					.keyValue('Biggest budgets')
-					.varsX(['production_budget', 'domestic_gross', 'worldwide_gross'])
-					.varsY(['movie'])
-					.varsZ(['rating_imdb', 'rating_rt']);
+		var v = arguments.length === 2 ? String(that.value) : value;
 
-			d3.select('div.container')
-					.datum(data)
-					.call(newChart);
+		plotpoint.keyValue = v;
+		plotpoint.step = 0;
 
-	}
+		my.plotpoint.zero(data);
 
-	my.ratings.two = function(data) {
-
-			plotpoint.ratingsIMDB = false;
-			plotpoint.ratingsRT = true;
-
-			var newChart = chart()
-					.key('category')
-					.keyValue('Biggest budgets')
-					.varsX(['production_budget', 'domestic_gross', 'worldwide_gross'])
-					.varsY(['movie'])
-					.varsZ(['rating_rt', 'rating_imdb']);
-
-			d3.select('div.container')
-					.datum(data)
-					.call(newChart);
-					
-	}
+	} // set new category
 
 	return my;
 
 })();
 
 
-
 // === Reusable Chart builder === //
-
 
 function chart() {
 
@@ -198,7 +303,7 @@ function chart() {
 
 	var margin = { top: 50, right: 20, bottom: 70, left: 300 };
 	var width = 1000 - margin.left - margin.right;
-	var height = 500 - margin.top - margin.bottom;
+	var height = 450 - margin.top - margin.bottom;
 
 
 	function my(selection) {
@@ -274,6 +379,10 @@ function chart() {
 
 			scaleZCol = d3.scaleLinear().domain([objZ.extent[0], objZ.extent[1]]).range(['#ccc', 'red']);
 
+			// scaleZ = d3.scaleSqrt().domain([0, 10]).range([3, 20]);
+
+			// scaleZCol = d3.scaleLinear().domain([0, 10]).range(['#ccc', 'red']);
+
 
 			// === Init === //
 
@@ -288,17 +397,17 @@ function chart() {
 
 			d3.select('svg')
 					.attr('width', width + margin.left + margin.right)
-					.attr('height', height + margin.top + margin.bottom); // Changing attributes of only the 'svg' element and not the 'g' element although the 'svg' element itself doesn't get added when the svg variable is being created. It seems the svg variable gets extended with the 'svg' element through gEnter, while gEnter identifies the 'g' element.
+					.attr('height', height + margin.top + margin.bottom) // Changing attributes of only the 'svg' element and not the 'g' element although the 'svg' element itself doesn't get added when the svg variable is being created. It seems the svg variable gets extended with the 'svg' element through gEnter, while gEnter identifies the 'g' element.
+					.attr("viewBox", "0 0 " + (width + margin.left + margin.right) + " " + (height + margin.top + margin.bottom))
+					.attr("preserveAspectRatio", "xMinYMax"); // svg with viewBox for responsiveness
+
 
 			gEnter.append('g').attr('class', 'x axis');
 			gEnter.append('g').attr('class', 'y axis');
 			gEnter.append('g').attr('class', 'lollipops'); // Boxes for the 3 key element-groups. Will only be created the time the chart gets created the first time at enter().
 
-
-
 			var g = d3.select('svg').select('g')
 					.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')'); // Addressing the g-frame for the margins.
-
 
 			
 			// ===  Axes === //
@@ -307,15 +416,21 @@ function chart() {
 			var dur = 1000; 	
 			var formatValue = d3.format('.2s');
 
-			axisX = d3.axisBottom(scaleX)
+			axisX = d3.axisTop(scaleX)
 					.tickFormat(function(d) { return formatValue(d).replace('M', ' mil').replace('G', ' tril'); })
-					.tickSize(-height);
+					.tickSize(-height)
+					.tickPadding(10);
 
-			axisY = d3.axisLeft(scaleY);
+			axisY = d3.axisLeft(scaleY).tickPadding(10);
 
 			d3.select('.x.axis')
-				.attr('transform', 'translate(0,' + height + ')')
-				.call(axisX);
+					.attr('transform', 'translate(0, 0)')
+				.transition()
+				.duration(dur)
+					.call(axisX)
+					.selectAll('g')
+				.delay(function(d,i) { return i * 5; });
+
 
 			d3.select('.y.axis')
 				.transition()
@@ -327,17 +442,18 @@ function chart() {
 				// then sub-select all g's (the individual ticks) and delay on it's data-indeces.
 
 			d3.selectAll('g.x.axis > g.tick > text')
-				.style('text-anchor', 'end')
-				.attr('transform', 'rotate(-40)');
-
+				.style('text-anchor', 'start');
+				
 		
 			// ==== Chart === //
+
+			
+			// --- Circles --- //
 
 			// join
 			var circles = d3.select('g.lollipops')
 					.selectAll('.circles')
 					.data(dataNest, function(d) { return d[objY.values]; });
-
 
 			// enter
 			circles
@@ -351,10 +467,9 @@ function chart() {
 				.transition()
 				.duration(dur)
 				.delay(function(d,i) { return i * dur / n; })
-					// .attr('cx', function(d) { return scaleX(d[objX.values]); })
 					.attr('r', 5)
 					.style('fill', '#ccc');
-
+			
 			// update
 			circles
 				.transition()
@@ -372,70 +487,173 @@ function chart() {
 					.style('opacity', 1e-6)
 					.remove();
 
+			
+			// --- Lines --- //
+
+			// join
+			var lines = d3.select('g.lollipops')
+					.selectAll('.lines')
+					.data(dataNest, function(d) { return d[objY.values]; });
+
+			// enter
+			lines
+					.enter()
+				.append('line')
+					.attr('class', 'lines')
+					.attr('x1', scaleX(0))
+					.attr('y1', function(d) { return scaleY(d[objY.values]); })
+					.attr('x2', scaleX(0))
+					.attr('y2', function(d) { return scaleY(d[objY.values]); })
+					.style('stroke', '#ccc')
+				.transition()
+				.duration(dur)
+				.delay(function(d,i) { return i * dur /n; })
+					.attr('x2', function(d) { return scaleX(d[objX.values]); });
+
+
+				// update
+				lines
+					.transition()
+					.duration(dur)
+					.delay(function(d,i) { return i * dur / n; })
+						.attr('y1', function(d) { return scaleY(d[objY.values]); })
+						.attr('x2', function(d) { return scaleX(d[objX.values]); })
+						.attr('y2', function(d) { return scaleY(d[objY.values]); })
+						.style('stroke','#ccc');
+
+				lines
+						.exit()
+						.transition()
+						.duration(dur)
+							.style('opacity', 1e-6)
+							.remove();
 
 
 			// === Specific plotpoint actions === //
 
-			if (plotpoint.step === 1 && d3.select('.baseline').empty()) {
+			var specificActions = (function() {
 
-			var lollipops = d3.select('g.lollipops')
-					.selectAll('circle.baseline')
-					.data(dataNest.map(function(el) { return { 'yValues': el[objY.values],'xValues': el[plotpoint.dataSequence[0]] }}))
-					.enter()
-				.append('circle')
-					.classed('baseline', true)
-					.attr('cy', function(d) { return scaleY(d.yValues); })
-					.attr('cx', function(d) { return scaleX(d.xValues); })
-					.attr('r', 5)
-					.style('fill', 'steelblue')
-					.style('opacity', 1e-6);
+				if (plotpoint.step === 2 && d3.select('.baseline').empty()) {
 
-			}
-
-			if (plotpoint.step === 0) {
-
-				d3.selectAll('circle.baseline')
-					.transition()
-					.duration(dur*3)
-					.delay(function(d,i) { return i * dur / n; })
-						.style('opacity', 1e-6)
-						.remove()
-
-			}
-
-			if (plotpoint.step !== 0) {
-
-				d3.selectAll('circle.baseline')
-					.transition()
-					.duration(dur)
-					.delay(function(d,i) { return i * dur / n; })
+				d3.select('g.lollipops')
+						.selectAll('circle.baseline')
+						.data(dataNest.map(function(el) { return { 'yValues': el[objY.values],'xValues': el[plotpoint.dataSequence[1]] }}))
+						.enter()
+					.append('circle')
+						.classed('baseline', true)
 						.attr('cy', function(d) { return scaleY(d.yValues); })
-						.style('opacity', 1);
+						.attr('cx', function(d) { return scaleX(d.xValues); })
+						.attr('r', 5)
+						.style('fill', 'steelblue')
+						.style('opacity', 1e-6);
 
-			}
+				}
+
+				if (plotpoint.step === 1 || plotpoint.step === 0) {
+
+					d3.selectAll('circle.baseline')
+						.transition()
+						.duration(dur)
+						.delay(function(d,i) { return i * dur / n; })
+							.style('opacity', 1e-6)
+							.remove()
+
+				}
+
+				if (plotpoint.step !== 1 && plotpoint.step !== 0) {
+
+					d3.selectAll('circle.baseline')
+						.transition()
+						.duration(dur)
+						.delay(function(d,i) { return i * dur / n; })
+							.attr('cy', function(d) { return scaleY(d.yValues); })
+							.style('opacity', 1);
+
+				}
 
 
 
-			if (plotpoint.ratingsIMDB) {
+				if (plotpoint.ratingsIMDB) {
 
-				circles
-					.transition()
-					.duration(dur)
-						.attr('r', function(d) { return scaleZ(d[objZ.values]); })
-						.style('fill', function(d) { return scaleZCol(d[objZ.values]); });
+					circles
+						.transition()
+						.duration(dur)
+							.attr('r', function(d) { return scaleZ(d[objZ.values]); })
+							.style('fill', function(d) { return scaleZCol(d[objZ.values]); });
 
-			}
-
-			if (plotpoint.ratingsRT) {
-
-				circles
-					.transition()
-					.duration(dur)
-						.attr('r', function(d) { return scaleZ(d[objZ.values]); })
-						.style('fill', function(d) { return scaleZCol(d[objZ.values]); });
+					lines
+						.transition()
+						.duration(dur)
+							.style('stroke', function(d) { return scaleZCol(d[objZ.values]); });
 
 
-			}
+				}
+
+				if (plotpoint.ratingsRT) {
+
+					circles
+						.transition()
+						.duration(dur)
+							.attr('r', function(d) { return scaleZ(d[objZ.values]); })
+							.style('fill', function(d) { return scaleZCol(d[objZ.values]); });
+
+					lines
+						.transition()
+						.duration(dur)
+							.style('stroke', function(d) { return scaleZCol(d[objZ.values]); });
+
+
+				}
+
+			})(); // specificActions namespace
+
+
+			var tooltip = (function	() {
+
+				d3.selectAll('.circles').on('mouseover', function(d) {
+
+					var formatValue = d3.format('.2s');
+					function format(num) { return '$ ' + formatValue(num).replace('M', ' mil').replace('G', ' tril')}
+
+					var html = 
+						'<h1 class="tooltipText">' + d.movie + '</h1>\
+						<p class="tooltipText">Realeased: ' + d.release_date.getFullYear() + '</p>\
+						<p class="tooltipText">Rank in category: ' + d.rank + ' in ' + d.categoryNice + '</p>\
+						<p class="tooltipText">Production Budget: ' + format(d.production_budget) + '</p>\
+						<p class="tooltipText">Domestic reveneu: ' + format(d.domestic_gross) + '</p>\
+						<p class="tooltipText">Worldwide reveneu: ' + format(d.worldwide_gross) + '</p>';
+
+					d3.select('.tooltip')
+							.html(html)
+							.style('top', (d3.event.pageY + 5) + 'px')
+							.style('left', (d3.event.pageX + 5) + 'px')
+						.transition()
+							.style('opacity', 0.8);
+					
+				}); // mouseover
+
+				d3.selectAll('.circles').on('mousemove', function(d) {
+
+					d3.select('.tooltip')
+						.style('top', (d3.event.pageY + 5) + 'px')
+						.style('left', (d3.event.pageX + 5) + 'px');
+
+				}); // mousemove
+
+				d3.selectAll('.circles').on('mouseout', function(d) {
+
+					d3.select('.tooltip')
+						.style('top', '-100px')
+						.style('left', '0px')
+						.transition()
+							.style('opacity', 0);
+
+				}); // mouseout
+
+
+			})(); // tooltip namespace
+
+
 
 
 		}); // selection.each(data, i)
@@ -491,10 +709,13 @@ function chart() {
 		return my;
 	}
 
-
 return my;
 
 } // chart()
+
+
+
+
 
 
 
@@ -502,14 +723,17 @@ return my;
 
 function type(d) {
 	d.rank = parseFloat(d.rank);
-	d.production_budget = parseFloat(d.production_budget.replace(/,/g, ''));
-	d.domestic_gross = parseFloat(d.domestic_gross.replace(/,/g, ''));
-	d.worldwide_gross = parseFloat(d.worldwide_gross.replace(/,/g, ''));
-	d.rating_imdb = parseFloat(d.rating_imdb.replace(/,/g, ''));
-	d.rating_rt = parseFloat(d.rating_rt.replace(/,/g, ''));
-	d.approx_income = parseFloat(d.approx_income.replace(/,/g, ''));
-	d.approx_expense = parseFloat(d.approx_expense.replace(/,/g, ''));
-	d.profit = parseFloat(d.profit.replace(/,/g, ''));
+	d.start_value = parseFloat(d.start_value);
+	d.production_budget = parseFloat(d.production_budget);
+	d.domestic_gross = parseFloat(d.domestic_gross);
+	d.worldwide_gross = parseFloat(d.worldwide_gross);
+	d.rating_imdb = parseFloat(d.rating_imdb);
+	d.rating_rt = parseFloat(d.rating_rt);
+	d.approx_income = parseFloat(d.approx_income);
+	d.approx_expense = parseFloat(d.approx_expense);
+	d.profit = parseFloat(d.profit);
 	d.release_date = new Date(Date.parse(d.release_date));
 	return d;
 }
+
+

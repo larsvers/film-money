@@ -4,21 +4,21 @@ html, body {
 	margin: 0;
 	padding: 0;
 	border: 0;
+	font-family: Arial;
 	font-size: 100%;
-	font: inherit;
 	vertical-align: baseline;
+	height: 100%;
 }
+
 a:link, a:visited, a:hover, a:active {
 	color: #000;
 }
-
 
 .axis path,
 .axis line {
   fill: none;
   stroke: none;
 }
-
 
 .tick > line {
   stroke: #ccc;
@@ -30,9 +30,102 @@ a:link, a:visited, a:hover, a:active {
 	stroke: none;	
 } 
 
-
-
-
 .axis text {
 	fill: #444;
+}
+
+.lines {
+	fill: none;
+	stroke: #ccc;
+	stroke-width: 1px;
+}
+
+
+div#intro {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+div#graph {
+	display: flex;
+	align-items: center;
+
+	width: 100vw;
+	border: 1px dashed steelblue;
+	background: rgba(255,255,255,1);
+	z-index: 1;
+}
+
+div#controls {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+div#main {
+	/* display: none; */
+	position: absolute;
+	/* top:  100vh; */
+	height: 30vh;
+	width:  100vw;
+}
+
+div#explanations {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+div.story, p.story {
+	border: 3px dashed #ccc;
+	width: 50vw;
+	padding: 80px 0;
+}
+
+#explanations .story {
+	padding: 15vh 0 60vh;
+}
+
+#explanations .story:last-child {
+
+	padding: 15vh 0 10vh;
+	
+}
+
+#intro * {
+	text-align: center;
+}
+
+
+/* Tooltip */
+
+div.tooltip {
+  position: absolute;        
+	display: inline-block;
+	max-width: 20vw;
+	padding: 10px;
+	font-family: Arial;
+	color: #000;
+  background-color: #fff;
+	border: 1px solid #999;
+	border-radius: 2px;
+  pointer-events: none;
+	opacity: 0;
+	z-index: 2;
+}
+
+
+h1.tooltipText, p.tooltipText {
+	margin-top: 4px;
+	margin-bottom: 4px;
+	font-size: 0.7em;
+	text-align: left;
+}
+
+h1.tooltipText {
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 0.2em;
 }
