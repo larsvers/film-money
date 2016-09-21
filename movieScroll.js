@@ -7,7 +7,8 @@ d3.json('data/story.json', function(error, storyData) {
 	var dataIntro = storyData.story.introduction;
 	var dataMain = storyData.story.main;
 
-	// set up introduction div
+	// --- set up introduction div --- //
+
 	var introElement = d3.select('#intro').selectAll('div.story.intro')
 			.data(dataIntro)
 			.enter()
@@ -15,18 +16,17 @@ d3.json('data/story.json', function(error, storyData) {
 			.classed('story', true)
 			.classed('intro', true)
 
-	introElement.append('h1').html(function(d) { return d.headline; });
-
-	introElement.append('h2').html(function(d) { return d.subline; });
-
+	introElement.append('h1').html(function(d) { return d.headlineText; });
+	introElement.append('h2').html(function(d) { return d.sublineText; });
 	introElement.append('p').html(function(d) { return d.text; });
 
 
-	// set up main text p's
+	// --- set up main text p's --- //
+	
 	d3.select('#explanations').selectAll('p.story.main')
 			.data(dataMain)
 			.enter()
-		.append('p')
+		.append(function(d) { return d.headline ? document.createElement('h1') : document.createElement('p'); })
 			.classed('story', true)
 			.classed('main', true)
 			.attr('data-action', function(d) { return d.action; }) // add data to markup which we use later in events to trigger actions
@@ -43,7 +43,6 @@ d3.json('data/story.json', function(error, storyData) {
 
 	// === Initiate scroll-story === //
 
-
 	$('#intro').scrollStory({
 
 		triggerOffset: 0
@@ -59,7 +58,6 @@ d3.json('data/story.json', function(error, storyData) {
 
 
 	// === Set up scroll listener === //
-
 
 	$('#intro').on('itemblur', function(event, item) {
 

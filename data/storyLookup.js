@@ -4,10 +4,10 @@
 
 var storyLookup = {};
 
-storyLookup[0] = function(data) { handler.plotpoint.zero(data); };
-storyLookup[1] = function(data) { handler.plotpoint.one(data); };
-storyLookup[2] = function(data) { handler.plotpoint.two(data); };
-storyLookup[3] = function(data) { handler.plotpoint.three(data); };
+storyLookup[0] = function(data) { handler.plotpoint.start_value(data); };
+storyLookup[1] = function(data) { handler.plotpoint.production_budget(data); };
+storyLookup[2] = function(data) { handler.plotpoint.domestic_gross(data); };
+storyLookup[3] = function(data) { handler.plotpoint.worldwide_gross(data); };
 storyLookup[4] = function(data) { handler.sort.one(undefined, data, 'domestic_gross'); };
 storyLookup[5] = function(data) { handler.sort.one(undefined, data, 'production_budget'); };
 storyLookup[6] = function(data) { handler.ratings(undefined, data, 'rating_imdb'); };

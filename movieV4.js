@@ -1,17 +1,53 @@
 var log = console.log.bind(console);
 var dir = console.dir.bind(console);
+var hashToObjects = function(_) {
+
+	var keys = d3.keys(_);
+	var values = d3.values(_);
+
+	var newarray = [];
+
+	keys.forEach(function(el, i) {
+
+		newarray.push( {'key': el, 'value': values[i]} );
+
+	});
+
+	return newarray;
+
+}; // takes a hashmap / lookup table and turns into an array of objects with key and value properties per object
 
 
+// Continue in Debugger. The problem lies with repeatingly clicking on worldwide_gross. 
+// Process: value: worldwide_gross >> sort by worldwide_gross >> value: worldwide_gross. Sorts it by production_budget the second time !
 
 // === Globals === //
 
-// plotpoint object used to trigger stages of narrative 
-var plotpoint = {};
-plotpoint.dataSequence = ['start_value', 'production_budget', 'domestic_gross', 'worldwide_gross'];
-plotpoint.ratingsIMDB = false;
-plotpoint.ratingsRT = false;
-plotpoint.rating = ['rating_imdb', 'rating_rt'];
-plotpoint.keyValue = 'biggest_budgets';
+var globals = (function() {
+
+	// plotpoint object used to trigger stages of narrative 
+	window.plotpoint = {};
+	plotpoint.dataSequence = ['start_value', 'production_budget', 'domestic_gross', 'worldwide_gross'];
+	plotpoint.ratingsIMDB = false;
+	plotpoint.ratingsRT = false;
+	plotpoint.rating = ['rating_imdb', 'rating_rt'];
+	plotpoint.keyValue = 'biggest_budgets';
+
+	// hashtables for lookups
+	window.hashSort = {};
+	hashSort.production_budget = 'Production Budget';
+	hashSort.domestic_gross = 'Domestic Gross';
+	hashSort.worldwide_gross = 'Worldwide Gross';
+	hashSort.rating_imdb = 'Rating IMDb (1-10)';
+	hashSort.rating_rt = 'Rating Rotten Tomatoes (1-10)';
+
+	window.hashKeyValue = {};
+	hashKeyValue.biggest_budgets = 'Biggest Budgets';
+	hashKeyValue.most_profitable = 'Most profitable';
+	hashKeyValue.biggest_money_losers = 'Biggest money losers';
+	hashKeyValue.low_budget_winners = 'Low budget winners';
+
+})(); // global namespace
 
 
 // === Load data, Initial state, Listeners === //
@@ -24,44 +60,42 @@ d3.csv("data/movies0.csv", type, function(data){
 	data = _.sortBy(data, function(el) { return el.production_budget; }); // Sort before feeding into any function. Otherwise the data won't be sorted descendingly but ascendingly
 
 	plotpoint.step = 0;
-	handler.plotpoint.zero(data);
+	handler.plotpoint.initial(data);
 	
-
 
 	// --- Click listener --- //
 
-	d3.select('button#zero').on('mousedown', function() { handler.plotpoint.zero(data); });
+	d3.select('button#start_value').on('mousedown', function() { handler.pressed(this); handler.plotpoint.start_value(data); });
 
-	d3.select('button#one').on('mousedown', function() { handler.plotpoint.one(data); });
+	d3.select('button#production_budget').on('mousedown', function() { handler.pressed(this); handler.plotpoint.production_budget(data); });
 
-	d3.select('button#two').on('mousedown', function() { handler.plotpoint.two(data); });
+	d3.select('button#domestic_gross').on('mousedown', function() { handler.pressed(this); handler.plotpoint.domestic_gross(data); });
 
-	d3.select('button#three').on('mousedown', function() { handler.plotpoint.three(data); });
+	d3.select('button#worldwide_gross').on('mousedown', function() { handler.pressed(this); handler.plotpoint.worldwide_gross(data); });
 
 
 	d3.selectAll('button.rating').on('mousedown', function() { 
 
-		var that = this;
-		handler.ratings(that, data); 
+		handler.pressed(this);
+		handler.ratings(this, data); 
 
 	});
-
-	d3.select('button#rt').on('mousedown', function() { handler.ratings.two(data); });
-
-
-	d3.select('select#sort').on('change', function() { 
 	
-		var that = this; 
-		handler.sort.one(that, data); 
+	d3.selectAll('li.sortItems').on('mousedown', function() { 
+	
+		handler.pressed(this);
+		handler.sort.one(this, data); 
 	
 	}); // sort listener and handler
 
-	d3.select('select#keyValue').on('change', function() {
+	d3.selectAll('li.keyValueItems').on('mousedown', function() {
 
-		var that = this; 
-		handler.sort.two(that, data); 
+		handler.pressed(this);
+		handler.sort.two(this, data); 
 
 	}); // category = keyValue listener and handler
+
+
 
 
 	// --- Scroll listener --- //
@@ -74,9 +108,11 @@ d3.csv("data/movies0.csv", type, function(data){
 
 		var action = isNaN(item.data.action) ? item.data.action.split(',').map(Number) : [item.data.action]; // convert single number or number of strings to array
 
-		// d3.select('svg').selectAll('*').interrupt();
+		action.forEach(function(el) { storyLookup[el](data); });
 
-		action.forEach(function(el) { storyLookup[el](data); })
+		// --- scroll stop if we feel inclined that way - feels a little wrong --- //
+		// d3.select('body').classed('stop-scrolling', true);
+		// setTimeout(function() { d3.select('body').classed('stop-scrolling', false); }, 1000);
 
 	}); // when item (= element with class .story) gets into focus
 
@@ -87,44 +123,58 @@ d3.csv("data/movies0.csv", type, function(data){
 
 var selectBuilder = (function() {
 	
-	// --- Sort dropdown --- //
+	// --- Key-value dropdown --- //
 	
-	var varsSelectSort = [
-		{'var': 'production_budget', 'name': 'Production Budget'},
-		{'var': 'domestic_gross', 'name': 'Domestic Gross'},
-		{'var': 'worldwide_gross', 'name': 'Worldwide Gross'},
-		{'var': 'rating_imdb', 'name': 'Rating IMDb (1-10)'},
-		{'var': 'rating_rt', 'name': 'Rating Rotten Tomatoes (1-10)'}
-	];
-
-	d3.select('select#sort').selectAll('option')
-			.data(varsSelectSort)
+	d3.select('nav#keyValue > ul').selectAll('.selectItems')
+			.data(hashToObjects(hashKeyValue))
 			.enter()
-		.append('option')
-			.attr('value', function(d) { return d.var; })
-			.html(function(d) { return d.name; });
+		.append('li')
+			.classed('selectItems', true)
+			.classed('keyValueItems', true)
+			.attr('id', function(d) { return d.key; })
+			.html(function(d) { return d.value; });
+
+	d3.select('nav#keyValue > ul').classed('hide', true);
+
+	d3.select('nav#keyValue').on('mousedown', function() {
+
+		var el = this;
+		$('nav#keyValue ul').width(el.offsetWidth);
+		$('nav#keyValue ul').toggleClass('hide');
+		$('#keyValue .fa.fa-chevron-circle-up').toggleClass('hide');
+		$('#keyValue .fa.fa-chevron-circle-down').toggleClass('hide');
+		
+	});
 
 
-	// --- Keyvalue dropdown --- //
-
-	var varsSelectKeyvalue = [
-		{'var': 'biggest_budgets', 'name': 'Biggest Budgets'},
-		{'var': 'most_profitable', 'name': 'Most profitable'},
-		{'var': 'biggest_money_losers', 'name': 'Biggest money losers'},
-		{'var': 'low_budget_winners', 'name': 'Low budget winners'}
-	];
-
-	d3.select('select#keyValue').selectAll('option')
-			.data(varsSelectKeyvalue)
+	// // --- Sort dropdown --- //
+	
+	d3.select('nav#sort > ul').selectAll('.selectItems')
+			.data(hashToObjects(hashSort))
 			.enter()
-		.append('option')
-			.attr('value', function(d) { return d.var; })
-			.html(function(d) { return d.name; });
+		.append('li')
+			.classed('selectItems', true)
+			.classed('sortItems', true)
+			.attr('id', function(d) { return d.key; })
+			.html(function(d) { return d.value; });
+
+	d3.select('nav#sort > ul').classed('hide', true);
+
+	d3.select('nav#sort').on('mousedown', function() {
+
+		var el = this;
+		$('nav#sort ul').width(el.offsetWidth);
+		$('nav#sort ul').toggleClass('hide');
+		$('#sort .fa.fa-chevron-circle-up').toggleClass('hide');
+		$('#sort .fa.fa-chevron-circle-down').toggleClass('hide');
+		
+	});
 
 })();
 
 
 // === Click handler === //
+
 
 var handler = (function() {
 
@@ -133,8 +183,48 @@ var handler = (function() {
 	my.plotpoint = {};
 	my.ratings;
 	my.sort = {};
+	my.highlight;
 
-	my.plotpoint.zero = function(data) {
+	my.pressed = function(that) {
+
+		if ($(that).hasClass('selectItems')) {
+			$('button.rating').removeClass('pressed');			
+		} // if Top 20 or Sort by is chosen
+
+		if ($(that).hasClass('value')) {
+			$('button').removeClass('pressed');			
+			$(that).addClass('pressed');
+		} // if the value is changed
+
+		if ($(that).hasClass('rating')) {
+			$('button.rating').removeClass('pressed');			
+			$(that).addClass('pressed');
+		} // if the rating is changed
+
+	} // button handler
+
+	my.plotpoint.initial = function(data) {
+
+		plotpoint.ratingsIMDB = false;
+		plotpoint.ratingsRT = false;
+		plotpoint.step = 0;
+
+		var newChart = chart()
+				.key('category')
+				.keyValue(plotpoint.keyValue)
+				.margin({ top: 50, right: 20, bottom: 70, left: window.innerWidth/2 })
+				.varsX(['start_value', 'production_budget', 'domestic_gross', 'worldwide_gross'])
+				.varsY(['movie'])
+				.varsZ(['rating_imdb', 'rating_rt'])
+				.onlyYaxis(true);
+
+		d3.select('div#container')
+				.datum(data)
+				.call(newChart);
+
+	} // no axes
+
+	my.plotpoint.start_value = function(data) {
 
 		plotpoint.ratingsIMDB = false;
 		plotpoint.ratingsRT = false;
@@ -153,7 +243,7 @@ var handler = (function() {
 
 	} // films
 
-	my.plotpoint.one = function(data) {
+	my.plotpoint.production_budget = function(data) {
 
 		plotpoint.ratingsIMDB = false;
 		plotpoint.ratingsRT = false;
@@ -172,7 +262,7 @@ var handler = (function() {
 
 	} // production budget
 
-	my.plotpoint.two = function(data) {
+	my.plotpoint.domestic_gross = function(data) {
 
 		plotpoint.ratingsIMDB = false;
 		plotpoint.ratingsRT = false;
@@ -191,7 +281,7 @@ var handler = (function() {
 
 	} // domestic gross
 
-	my.plotpoint.three = function(data) {
+	my.plotpoint.worldwide_gross = function(data) {
 
 
 		plotpoint.ratingsIMDB = false;
@@ -213,61 +303,63 @@ var handler = (function() {
 
 	my.ratings = function(that, data, value) {
 
+		// set the rating to choose
+		var value = arguments.length === 2 ? String(that.id) : value;
+		var valueArray = [];
 
-			// set the rating to choose
-			var value = arguments.length === 2 ? String(that.id) : value;
-			var valueArray = [];
+		// set an array of the rating-names in the right order to pass to chart-factory 
+		// (which needs all names to calc the extent and the first name to be the one used)
+		if (value === 'rating_imdb') {
+			plotpoint.ratingsIMDB = true;
+			plotpoint.ratingsRT = false;
 
-			if (value === 'rating_imdb') {
-				plotpoint.ratingsIMDB = true;
-				plotpoint.ratingsRT = false;
+			valueArray = plotpoint.rating.slice();
+			valueArray = _.pull(valueArray, value);
+			valueArray.unshift(value); 
+		} 
 
-				valueArray = plotpoint.rating.slice();
-				valueArray = _.pull(valueArray, value);
-				valueArray.unshift(value); // set an array of the rating-names in the right order to pass to chart-factory (which needs all names to calc the extent and the first name to be the one used)
-			} 
+		if (value === 'rating_rt') {
+			plotpoint.ratingsIMDB = false;
+			plotpoint.ratingsRT = true;				
 
-			if (value === 'rating_rt') {
-				plotpoint.ratingsIMDB = false;
-				plotpoint.ratingsRT = true;				
+			valueArray = plotpoint.rating.slice();
+			valueArray = _.pull(valueArray, value);
+			valueArray.unshift(value);
+		}
 
-				valueArray = plotpoint.rating.slice();
-				valueArray = _.pull(valueArray, value);
-				valueArray.unshift(value);
-			}
+		// get the current chart state
+		var currentXvar = plotpoint.dataSequence[plotpoint.step];
 
-			// get the current chart state
-			var arraySelect = ['zero', 'one', 'two', 'three'];
-			var currentPlotpoint = arraySelect[plotpoint.step];
-			var currentXvar = plotpoint.dataSequence[plotpoint.step];
+		// This builds a list of x variables so that the current x variable is at array pos 1.
+		// This way we can build a new chart with inflated circles at the same x position as the previous chart.
+		var varsX = plotpoint.dataSequence.slice(); // Array.slice() with no args clones an array
+		_.pull(varsX, currentXvar); // remove the current x variable item from the array 
+		varsX.unshift(currentXvar); // re-introduce the current x variable item at the beginning of the array
+		
+		// build the chart
+		var newChart = chart()
+				.key('category')
+				.keyValue(plotpoint.keyValue)
+				.varsX(varsX)
+				.varsY(['movie'])
+				.varsZ(valueArray);
 
-			// This builds a list of x variables so that the current x variable is at array pos 1.
-			// This way we can build a new chart with inflated circles at the same x position as the previous chart.
-			var varsX = plotpoint.dataSequence.slice(); // Array.slice() with no args clones an array
-			_.pull(varsX, currentXvar); // remove the current x variable item from the array 
-			varsX.unshift(currentXvar); // re-introduce the current x variable item at the beginning of the array
-			
-			// build the chart
-			var newChart = chart()
-					.key('category')
-					.keyValue(plotpoint.keyValue)
-					.varsX(varsX)
-					.varsY(['movie'])
-					.varsZ(valueArray);
-
-			d3.select('div#container')
-					.datum(data)
-					.call(newChart);
+		d3.select('div#container')
+				.datum(data)
+				.call(newChart);
 
 	} // set new rating
 
 	my.sort.one = function(that, data, value) {
 
+		var v = arguments.length === 2 ? String(that.id) : value; // check for manual or programmatic input
 
-		var v = arguments.length === 2 ? String(that.value) : value;
+		d3.select('nav#sort p').html(hashSort[v]); // set the value if programmatic
 
-		var arraySelect = ['zero', 'one', 'two', 'three'],
-				p = arraySelect[plotpoint.step];
+		var	p = plotpoint.dataSequence[plotpoint.step]; // get identifier name to sort by
+		log('v', v);
+		log('p', p);
+		
 		data = _.sortBy(data, function(el) { return el[v]; }); // Sort before feeding into any function. Otherwise the data won't be sorted descendingly but ascendingly
 		
 		my.plotpoint[p](data);
@@ -276,12 +368,14 @@ var handler = (function() {
 
 	my.sort.two = function(that, data, value) {
 
-		var v = arguments.length === 2 ? String(that.value) : value;
+		var v = arguments.length === 2 ? String(that.id) : value; // check for manual or programmatic input
+
+		d3.select('nav#keyValue p').html(hashKeyValue[v]); // set the value if programmatic
 
 		plotpoint.keyValue = v;
 		plotpoint.step = 0;
 
-		my.plotpoint.zero(data);
+		my.plotpoint.start_value(data);
 
 	} // set new category
 
@@ -301,9 +395,11 @@ function chart() {
 	var varsY = undefined;
 	var varsZ = undefined;
 
-	var margin = { top: 50, right: 20, bottom: 70, left: 300 };
-	var width = 1000 - margin.left - margin.right;
-	var height = 450 - margin.top - margin.bottom;
+	var margin = { top: 50, right: (window.innerWidth*0.25) , bottom: 50, left: (window.innerWidth*0.25) };
+	var width = (window.innerWidth) - margin.left - margin.right;
+	var height = (window.innerHeight/2) - margin.top - margin.bottom;
+
+	var onlyYaxis = false;
 
 
 	function my(selection) {
@@ -329,15 +425,14 @@ function chart() {
 			var objY = measureVars(varsY);
 			var objZ = measureVars(varsZ);
 
-			// Sort descending
-			// dataNest = _.sortBy(dataNest, function(el) { return el[objX.values]; });
-			
-
 			// log('objX',objX);
 			// log('objY',objY);
 			// log('objZ',objZ);
 
 			function measureVars(vars) {
+
+				// log(dataNest);
+				// log(vars);
 
 				// error handling
 				try {
@@ -363,11 +458,13 @@ function chart() {
 				var varsObject = {};
 				varsObject.extent = d3.extent(numbers);
 				varsObject.values = varsStr[0]; 
-				
+
 				return varsObject;
 
 			};
 
+			log('dataNest',dataNest);
+			log('mapped dN by movies',dataNest.map(function(el) { return el[objY.values] }));
 
 			// ===  Scales === //
 
@@ -376,8 +473,9 @@ function chart() {
 			scaleY = d3.scalePoint().domain(dataNest.map(function(el) { return el[objY.values]; })).range([height, 0]).padding(1);
 
 			scaleZ = d3.scaleSqrt().domain([objZ.extent[0], objZ.extent[1]]).range([3, 20]);
-
-			scaleZCol = d3.scaleLinear().domain([objZ.extent[0], objZ.extent[1]]).range(['#ccc', 'red']);
+			
+			// scaleZCol = d3.scaleSequential(d3.interpolateOrRd).domain(objZ.extent);
+			scaleZCol = d3.scaleSequential(d3.interpolatePuRd).domain(objZ.extent);
 
 			// scaleZ = d3.scaleSqrt().domain([0, 10]).range([3, 20]);
 
@@ -407,6 +505,8 @@ function chart() {
 			gEnter.append('g').attr('class', 'lollipops'); // Boxes for the 3 key element-groups. Will only be created the time the chart gets created the first time at enter().
 
 			var g = d3.select('svg').select('g')
+				.transition()
+				.duration(1000)
 					.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')'); // Addressing the g-frame for the margins.
 
 			
@@ -441,11 +541,69 @@ function chart() {
 				// the staggered axis delay pattern is: select the whole axis and transition/duration on it, 
 				// then sub-select all g's (the individual ticks) and delay on it's data-indeces.
 
+
+
 			d3.selectAll('g.x.axis > g.tick > text')
 				.style('text-anchor', 'start');
+
+			if (onlyYaxis) {
+
+				var t = d3.transition().duration(1000);
+
+				d3.selectAll('.x.axis text').transition(t).style('fill-opacity', 0);
+				d3.selectAll('.x.axis line').transition(t).style('stroke-opacity', 0);
+
+			} else {
+
+				d3.selectAll('.x.axis text').transition(t).style('fill-opacity', 1);
+				d3.selectAll('.x.axis line').transition(t).style('stroke-opacity', 1);
+
+			} // Axis specs for first plotpoint
 				
 		
 			// ==== Chart === //
+
+
+			// --- Lines --- //
+
+			// join
+			var lines = d3.select('g.lollipops')
+					.selectAll('.lines')
+					.data(dataNest, function(d) { return d[objY.values]; });
+
+			// enter
+			lines
+					.enter()
+				.append('line')
+					.attr('class', 'lines')
+					.attr('x1', scaleX(0))
+					.attr('y1', function(d) { return scaleY(d[objY.values]); })
+					.attr('x2', scaleX(0))
+					.attr('y2', function(d) { return scaleY(d[objY.values]); })
+					.style('stroke', '#ccc')
+				.transition()
+				.duration(dur)
+				.delay(function(d,i) { return i * dur /n; })
+					.attr('x2', function(d) { return scaleX(d[objX.values]); });
+
+
+				// update
+				lines
+					.transition()
+					.duration(dur)
+					.delay(function(d,i) { return i * dur / n; })
+						.attr('y1', function(d) { return scaleY(d[objY.values]); })
+						.attr('x2', function(d) { return scaleX(d[objX.values]); })
+						.attr('y2', function(d) { return scaleY(d[objY.values]); })
+						.style('stroke','#ccc');
+
+				lines
+						.exit()
+						.transition()
+						.duration(dur)
+							.style('opacity', 1e-6)
+							.remove();
+
 
 			
 			// --- Circles --- //
@@ -488,46 +646,6 @@ function chart() {
 					.remove();
 
 			
-			// --- Lines --- //
-
-			// join
-			var lines = d3.select('g.lollipops')
-					.selectAll('.lines')
-					.data(dataNest, function(d) { return d[objY.values]; });
-
-			// enter
-			lines
-					.enter()
-				.append('line')
-					.attr('class', 'lines')
-					.attr('x1', scaleX(0))
-					.attr('y1', function(d) { return scaleY(d[objY.values]); })
-					.attr('x2', scaleX(0))
-					.attr('y2', function(d) { return scaleY(d[objY.values]); })
-					.style('stroke', '#ccc')
-				.transition()
-				.duration(dur)
-				.delay(function(d,i) { return i * dur /n; })
-					.attr('x2', function(d) { return scaleX(d[objX.values]); });
-
-
-				// update
-				lines
-					.transition()
-					.duration(dur)
-					.delay(function(d,i) { return i * dur / n; })
-						.attr('y1', function(d) { return scaleY(d[objY.values]); })
-						.attr('x2', function(d) { return scaleX(d[objX.values]); })
-						.attr('y2', function(d) { return scaleY(d[objY.values]); })
-						.style('stroke','#ccc');
-
-				lines
-						.exit()
-						.transition()
-						.duration(dur)
-							.style('opacity', 1e-6)
-							.remove();
-
 
 			// === Specific plotpoint actions === //
 
@@ -544,7 +662,7 @@ function chart() {
 						.attr('cy', function(d) { return scaleY(d.yValues); })
 						.attr('cx', function(d) { return scaleX(d.xValues); })
 						.attr('r', 5)
-						.style('fill', 'steelblue')
+						.style('fill', '#4161F0')
 						.style('opacity', 1e-6);
 
 				}
@@ -556,7 +674,7 @@ function chart() {
 						.duration(dur)
 						.delay(function(d,i) { return i * dur / n; })
 							.style('opacity', 1e-6)
-							.remove()
+							.remove();
 
 				}
 
@@ -571,8 +689,6 @@ function chart() {
 
 				}
 
-
-
 				if (plotpoint.ratingsIMDB) {
 
 					circles
@@ -585,7 +701,6 @@ function chart() {
 						.transition()
 						.duration(dur)
 							.style('stroke', function(d) { return scaleZCol(d[objZ.values]); });
-
 
 				}
 
@@ -619,9 +734,9 @@ function chart() {
 						'<h1 class="tooltipText">' + d.movie + '</h1>\
 						<p class="tooltipText">Realeased: ' + d.release_date.getFullYear() + '</p>\
 						<p class="tooltipText">Rank in category: ' + d.rank + ' in ' + d.categoryNice + '</p>\
-						<p class="tooltipText">Production Budget: ' + format(d.production_budget) + '</p>\
-						<p class="tooltipText">Domestic reveneu: ' + format(d.domestic_gross) + '</p>\
-						<p class="tooltipText">Worldwide reveneu: ' + format(d.worldwide_gross) + '</p>';
+						<p class="tooltipText">Production budget: ' + format(d.production_budget) + '</p>\
+						<p class="tooltipText">Domestic revenue: ' + format(d.domestic_gross) + '</p>\
+						<p class="tooltipText">Worldwide revenue: ' + format(d.worldwide_gross) + '</p>';
 
 					d3.select('.tooltip')
 							.html(html)
@@ -706,6 +821,12 @@ function chart() {
 	my.height = function(_) {
 		if(!arguments.length) return height;
 		height = _;
+		return my;
+	}
+
+	my.onlyYaxis = function(_) {
+		if(!arguments.length) return onlyYaxis;
+		onlyYaxis = _;
 		return my;
 	}
 

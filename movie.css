@@ -1,18 +1,34 @@
-/* Meyer Reset (in moderation) */
-/*html, body, h1, h2, h3, h4, h5, h6, p {*/
+
+
+/* === Meyer Reset & border box (in moderation) === */
+
 html, body {
 	margin: 0;
 	padding: 0;
 	border: 0;
-	font-family: Arial;
+	font-family: Questrial, Arial, sans-serif;
 	font-size: 100%;
 	vertical-align: baseline;
 	height: 100%;
+	box-sizing: border-box;
+	background: #151515;
+	color: #D9D9CE;
+}
+
+*, *:before, *:after{
+	box-sizing: inherit;	
 }
 
 a:link, a:visited, a:hover, a:active {
-	color: #000;
+	color: inherit;
 }
+
+/* .stop-scrolling {
+	overflow: hidden;
+} */
+
+
+/* === SVG === */
 
 .axis path,
 .axis line {
@@ -21,7 +37,7 @@ a:link, a:visited, a:hover, a:active {
 }
 
 .tick > line {
-  stroke: #ccc;
+  stroke: #333;
 	stroke-width: 1px;
   shape-rendering: crispEdges;
 }
@@ -30,8 +46,12 @@ a:link, a:visited, a:hover, a:active {
 	stroke: none;	
 } 
 
-.axis text {
-	fill: #444;
+.y.axis text {
+	fill: #D9D9CE;
+}
+
+.x.axis text {
+	fill: #BABAB1;
 }
 
 .lines {
@@ -41,6 +61,126 @@ a:link, a:visited, a:hover, a:active {
 }
 
 
+
+
+/* === Chart area === */
+
+
+div#graph {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+	width: 100vw;
+	background: rgba(21,21,21,.98);
+	z-index: 1;
+}
+
+div#container {
+	width: 100vw;
+}
+
+div#controls {
+	position:  absolute;
+	right: 0;
+	margin-right: 0;
+	width:  10vw;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+div.controlWrapper {
+	display: flex;
+	flex-direction: column;
+}
+
+div.controlWrapper > p {
+	padding: 0;
+	margin: 0;
+	margin-top: 10px;
+	margin-bottom: 4px;
+	font-size: 0.7em;
+}
+
+button {
+	text-align: left;
+	margin:  2px 0;
+	padding: 4px 4px;
+	outline: none;
+	font-family: Arial;
+	font-size: 11px;
+	color:  #777;
+	background-color: rgba(0, 0, 0, .7);
+	border: none;
+	transition: all 0.3s ease;
+	cursor: pointer;
+}
+
+.pressed {
+	background-color: #333;
+	color: #aaa;
+}
+
+
+
+/* --- Select nav --- */
+
+.selectNav {
+	margin: 2px 0;
+	padding: 0;
+	font-family: Arial;
+	color: #aaa;
+	font-size: 11px;
+	background-color: #333;
+	cursor: pointer;
+}
+
+div.headline {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.selectNav p {
+	margin:  2px 0;
+	padding: 4px 4px;
+}
+
+.selectNav i {
+	margin-right: 6px;
+}
+
+.selectNav > ul {
+	padding: 0;
+	margin: 0;
+	position: absolute;
+	z-index: 2;
+}
+
+.hide {
+	display: none;
+}
+
+li.selectItems {
+	color: #aaa;
+	background: #333;
+
+	margin: 0;
+	padding: 4px 4px;
+
+	border-top: 1px dotted #555;
+
+	list-style-type: none;
+}
+
+
+
+/* === Storytelling sections === */
+
+
 div#intro {
 	display: flex;
 	flex-direction: column;
@@ -48,28 +188,10 @@ div#intro {
 	justify-content: center;
 }
 
-div#graph {
-	display: flex;
-	align-items: center;
-
-	width: 100vw;
-	border: 1px dashed steelblue;
-	background: rgba(255,255,255,1);
-	z-index: 1;
-}
-
-div#controls {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-}
-
 div#main {
-	/* display: none; */
 	position: absolute;
-	/* top:  100vh; */
-	height: 30vh;
 	width:  100vw;
+	height: 30vh;
 }
 
 div#explanations {
@@ -79,35 +201,44 @@ div#explanations {
 	justify-content: center;
 }
 
+
 div.story, p.story {
-	border: 3px dashed #ccc;
-	width: 50vw;
-	padding: 80px 0;
+	width: 100vw;
+	line-height: 200%;
 }
 
-#explanations .story {
-	padding: 15vh 0 60vh;
-}
-
-#explanations .story:last-child {
-
-	padding: 15vh 0 10vh;
-	
-}
-
-#intro * {
+.story {
+	padding: 5vh 25vw 45vh;
 	text-align: center;
 }
 
+#intro .story {
+	padding-top: 10vh;
+	padding-bottom: 10vh;
+}
 
-/* Tooltip */
+#explanations h1.story {
+	padding-top: 5vh;
+	padding-bottom: 5vh;
+}
+
+#explanations .story:last-child {
+	padding-bottom: 10vh;	
+}
+
+
+
+
+
+/* === Tooltip === */
+
 
 div.tooltip {
   position: absolute;        
 	display: inline-block;
 	max-width: 20vw;
 	padding: 10px;
-	font-family: Arial;
+	font-family: Arial, sans-serif;
 	color: #000;
   background-color: #fff;
 	border: 1px solid #999;
@@ -116,7 +247,6 @@ div.tooltip {
 	opacity: 0;
 	z-index: 2;
 }
-
 
 h1.tooltipText, p.tooltipText {
 	margin-top: 4px;
@@ -129,3 +259,50 @@ h1.tooltipText {
 	border-bottom: 1px solid #ccc;
 	padding-bottom: 0.2em;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* === Debug === */
+
+/*
+div#graph {
+	border: 1px dashed steelblue;
+}
+
+#container {
+	border:  1px solid red;
+}
+	
+#controls {
+	border:  1px solid green;	
+}
+
+div.story, p.story {
+	border: 3px dashed #ccc;
+}
+
+#selectNav {
+	border: 1px solid yellow;
+}
+
+.selectItems {
+	border: 1px solid white;
+}
+
+i {
+	border: 1px solid green;
+}
+
+*/
