@@ -4,10 +4,11 @@
 		"introduction": [
 			{
 				"id": 0,
-				"action": [],
-				"headlineText": "The Film, the money and the ratings",
-				"sublineText": "Or why Avatar will see 4 sequels, while John Carter calls its off (and Deep Throat might want to have another go…)",
-				"text": "Films cost money. However, they hope to make some money back and often do. When they do, it can be a lot and when they don’t it can be bitter. Sometimes they don’t expect to make any money and do. The joy of looking at Film costs and revenues comes from 2 main properties: Being stunned at how a sizeable investment can in fact accrue mountains of returned gold as well as dropping the same jaw at how lakes of invested money sometimes evaporate through empty screens. Films are bets on human taste that must entertain a lot of people. They often consume rhinoculous amounts of effort, people, skill, scream and shout to get into the public sphere which decides about their rise or fall. This modest piece offers a glimpse into this world of ups and downs, portraying a handful of stories, surprises and failures. (<a href=''>you can read about the data here</a>)"			}		
+				"action": [100],
+				"headlineText": "Film money",
+				"sublineText": "or why Avatar will see 4 sequels and John Carter none",
+				"text": "Films cost money. <br>However, they hope to make that money back and often do. When they do, it can be a lot and when they don’t it can be bitter. Sometimes they don’t expect to make money but they unexpectadly do. They often consume ridiculous amounts of effort, people and skill; they scream and shout to get into the public sphere which in turn decides their rise or fall. Films are bets on human taste and they ought to entertain to succeed. It's fickle relationship between business interests and public taste that can make it joyous or painful to look at films and their money-harvest. Sizeable investments can in fact accrue mountains of gold while sometimes money just evaporates in front of empty screens. This little visual shows the ups and downs (or rather rights and lefts) of the film business, portraying a handful of stories, surprises and failures. Just keep on scrolling... (data from <a href='http://www.the-numbers.com/' target='_blank'>here</a>, <a href='www.imdb.com/' target='_blank'>here</a> and <a href='https://www.rottentomatoes.com/' target='_blank'>here</a>)"
+			}		
 		],
 		"main": [
 			{
@@ -20,181 +21,199 @@
 				"id": 1,
 				"action": [],
 				"headline": 0,
-				"text": "First let’s look at the big fish. These are the 20 films with the biggest production budgets recorded so far."
+				"text": "First let’s look at the big fish.<br> Up there are the 20 films with the biggest production budgets ever recorded."
 			},
 			{
 				"id": 2,
 				"action": [1],
 				"headline": 0,
-				"text": "<span class='film'>Avatar</span> is already a mature guest in this list being released in 2009. But it’s earned it’s top spot with a whopping $425 million budget. Exactly 6 years later on the day (the 18th of December that is) <span class='film'>Star Wars’ The Force Awakens</span> tried hard but stays significantly behind with a mere $306 million. An interesting feature that even made the headline of this very piece is <span class='film'>John Carter</span> – or (not much better) <span class='film'>John Carter of Mars</span>. In general you might notice that all films are what one would call Action Blockbusters – apart from <span class='film'>Tangled</span>, the only Animation that cost $260 million. Decent… <br><br> Now let’s see what they managed to get in."
+				"text": "<span class='film' data-filmname='Avatar' id=''>Avatar</span> is already a mature guest in this list being released in 2009. But it’s earned its top spot with a whopping $425 million budget. Exactly 6 years later on the day (the 18th of December that is) <span class='film' data-filmname='Star Wars Ep. VII: The Force Awakens'>Star Wars’ The Force Awakens</span> tried hard but stays significantly behind with a mere $306 million production budget. An interesting feature for us to watch will be <span class='film' data-filmname='John Carter'>John Carter</span> (previously known as <span class='film' data-filmname='John Carter'>John Carter of Mars</span>) checking in at $280 million as the 6th biggest production so far."
 			},
 			{
 				"id": 3,
-				"action": [2],
+				"action": [12],
 				"headline": 0,
-				"text": "First from domestic screenings (the US) <span class='subline'>...and eventually from globe-wide screenings including the US<span>. <br><br>Keeping the production budget on screen, we can already see how some films lost all worry-lines after just counting the domestic revenue. <span class='film'>Avatar</span> and <span class='film'>Star Wars</span> could’ve just packed up to lay back and stay at home, while others were surely hoping for more international dollars."
+				"text": "In general you might notice that all films are what one would call Action or its close friend Adventure &mdash; apart from <span class='film' data-filmname='Tangled'>Tangled</span>, the only Animation that cost the indecent sum of $260 million. <br>Play around with above genre buttons to see which films are what...<br><br>Now let’s see what they managed to get in."
 			},
 			{
 				"id": 4,
-				"action": [4],
+				"action": [2],
 				"headline": 0,
-				"text": "Let's sort by domestic revenue. <br> <br><span class='film'>Star Wars</span> looks hopeful? But much more importantly our animated friend <span class='film'>Tangled</span> didn’t quite break even in the US while <span class='film'>John Carter</span> wouldn't find any sleep only looking at the US revenues"
+				"text": "First from domestic screenings (the US) <br><span class='subline'>...and eventually from globe-wide screenings including the US.</span> <br><br>Keeping the production budget on screen in blue, we can already see how some films lost all worry-lines after just counting the domestic revenue. <span class='film' data-filmname='Avatar'>Avatar</span>, <span class='film' data-filmname='Star Wars Ep. VII: The Force Awakens'>Star Wars</span>, <span class='film' data-filmname='The Avengers'>Avengers</span> and some other friends could’ve just packed up to lay back and stay at home, while others were surely hoping for more international dollars."
 			},
 			{
 				"id": 5,
-				"action": [5],
+				"action": [4],
 				"headline": 0,
-				"text": "Re-sorting by production budget we should now lift our eyes up towards Avatar – and enjoy the ride bringing in the overall, total and full worldwide box-office revenues."
+				"text": "Let's sort by domestic revenue. <br> <br><span class='film' data-filmname='Star Wars Ep. VII: The Force Awakens'>Star Wars</span> looks a hopeful winner raking in more than double its costs. <span class='film' data-filmname='Avatar'>Avatar</span> didn't quite get that far at home. But much more importantly our animated friend <span class='film' data-filmname='Tangled'>Tangled</span> didn’t quite break even in the US while <span class='film' data-filmname='John Carter'>John Carter</span> can't have been very pleased with its US performance."
 			},
 			{
 				"id": 6,
-				"action": [3],
+				"action": [5],
 				"headline": 0,
-				"text": "Overall <span class='film'>Avatar</span> made a mind boggling $2.78 billion. Stacking the money would lift you up 303 km or 189 miles (<a href='http://www.ehd.org/science_technology_largenumbers.php' target='_blank'>it would apparently</a>). Less than a Marathon away from the <a href='https://upload.wikimedia.org/wikipedia/commons/8/82/Orbitalaltitudes.jpg' target='_blank'>International Space Station 340 km away</a>. Anyhow. <span class='film'>Star Wars</span> is pretty jaw-dropping as well, but you would need to run a little further to the ISS (130 km).<br><br>In other news we’re happy <span class='film'>Tangled</span> as our lonesome premium animation made it comfortably to the safe zone, while it seems <span class='film'>John Carter</span> actually just got it’s money worth. However – the production budget doesn’t show the marketing cost, which is pretty much exactly what it lost: around $150-200 million. Hurty. Wouldn’t quite make it to Mars.<br><br>So far this only shows the mass attractiveness. But how much in tune are film ratings with the revenue? Let’s have a look at 2 of them…"
+				"text": "Re-sorting by production budget we should now lift our eyes up towards <span class='film' data-filmname='Avatar'>Avatar</span> &mdash; and enjoy the ride bringing in the overall, total and full worldwide box-office revenues."
 			},
 			{
 				"id": 7,
-				"action": [6],
+				"action": [3],
 				"headline": 0,
-				"text": "The size and saturation of these bubbles show the <a href='http://www.imdb.com/help/show_leaf?votestopfaq' target='_blank'>IMDb rating</a>. IMDb ratings are close to the masses (of at least film-aficionados) as every registered IMDb user can vote. You can hover over the circles to get more info. Not that much surprises here. <span class='film'>Pirates of the Caribbean</span> wasn’t really as much loved as the income suggested and – well – <span class='film'>John Carter</span> and <span class='film'>The Lone Ranger</span> weren’t exactly embraced."
+				"text": "Overall <span class='film' data-filmname='Avatar'>Avatar</span> made a mind boggling $2.78 billion. Stacking the money would lift you up 303 km or 189 miles above sea-level (<a href='http://www.ehd.org/science_technology_largenumbers.php' target='_blank'>it would apparently</a>). Less than a marathon from the <a href='https://upload.wikimedia.org/wikipedia/commons/8/82/Orbitalaltitudes.jpg' target='_blank'>International Space Station 340 km away</a>. Anyhow. <span class='film' data-filmname='Star Wars Ep. VII: The Force Awakens'>Star Wars</span> is pretty jaw-dropping as well, but you would need to run a little further to the ISS (130 km)."
+			},
+			{
+				"id": 7,
+				"action": [10],
+				"headline": 0,
+				"text": "In other news <span class='subline'>(while sorting by worldwide revenue)</span> we’re happy <span class='film' data-filmname='Tangled'>Tangled</span> as our lonesome premium animation made it comfortably to the safe zone, while it seems <span class='film' data-filmname='John Carter'>John Carter</span> actually just got its money worth. However &mdash; the production budget doesn’t show the marketing cost, which is pretty much exactly what it lost: around $150-200 million. Hurty. Wouldn’t quite make it to Mars.<br><br>So far this only shows the mass attractiveness. But how much in tune are film ratings with the revenue? Let’s have a look at 2 of them…"
 			},
 			{
 				"id": 8,
-				"action": [7],
+				"action": [6, 13],
 				"headline": 0,
-				"text": "<a href='https://www.rottentomatoes.com/'>Rotten Tomatoes</a> is further away from the populous and closer to the distinguished film taste, one would hope, as only people who earn their money with going to the cinema are allowed to elaborate and <a href='http://www.mtv.com/news/1939097/rotten-tomatoes-youre-doing-it-wrong/'>cast their votes</a> from 1 (sad) to 10 (happy). It’s interesting to see how the same pattern we saw from IMDb is reflected, yet more pronounced. Much more variation in the data but the general structure follows the money."
+				"text": "The size and saturation of these bubbles show the <a href='http://www.imdb.com/help/show_leaf?votestopfaq' target='_blank'>IMDb rating</a> <span class='subline'>(the length of of these lollipops still show worldwide revenue, but we sorted the data by IMDb rating)</span>. IMDb ratings are close to the masses (of at least film-aficionados) as every registered IMDb user can vote. You can hover over the circles to get more info. Not that much surprises here. <span class='film' data-filmname='Pirates of the Caribbean: At World's End'>Pirates of the Caribbean</span> wasn’t really as much loved as the income suggested and &mdash; well &mdash; <span class='film' data-filmname='John Carter'>John Carter</span> and <span class='film' data-filmname='The Lone Ranger'>The Lone Ranger</span> weren’t exactly embraced by the public either."
 			},
 			{
 				"id": 9,
+				"action": [7,14],
+				"headline": 0,
+				"text": "<a href='https://www.rottentomatoes.com/'>Rotten Tomatoes</a> is further away from the populace and closer to the distinguished film taste, one would hope, as only people who earn their money with going to the cinema are allowed to elaborate and <a href='http://www.mtv.com/news/1939097/rotten-tomatoes-youre-doing-it-wrong/'>cast their votes</a> from 1 (dismal) to 10 (blissful). There are some disconnects between IMDb and Rotten Tomatoes like Superman Returns, but in general it’s interesting to see how the patterns are more or less matching, yet more pronounced at Rotten Tomatoes. Much more variation in the data but both distributions follow the money."
+			},
+			{
+				"id": 10,
 				"action": [],
 				"headline": 1,
 				"text": "The most profitable films"
 			},
 			{
-				"id": 10,
+				"id": 11,
 				"action": [5, 8],
 				"headline": 0,
 				"text": "Now, let’s keep on the road of success, accelerating our trip a little. More surprises to come, though ! Let’s look at the top 20 most profitable films."
 			},
 			{
-				"id": 11,
+				"id": 12,
 				"action": [1],
 				"headline": 0,
-				"text": "If I wanted to make film with a big budget, I’d surely try Action as a Genre. If I wanted to make a profitable film, I’d probably go for an Animation. Frozen, Minions, Despicable Me, The Lion King – all there. Where are the domestic bubbles off to?"
-			},
-			{
-				"id": 12,
-				"action": [2],
-				"headline": 0,
-				"text": "All eyes to the right. The worldwide revenue?"
+				"text": "If I wanted to make film with a big budget, I’d surely try Action as a Genre. If I wanted to make a profitable film, I’d probably go for an Animation. <span class='film' data-filmname='Frozen'>Frozen</span>, <span class='film' data-filmname='Minions'>Minions</span>, <span class='film' data-filmname='Despicable Me 2'>Despicable Me</span>, <span class='film' data-filmname='The Lion King'>The Lion King</span> &mdash; all there.<br><br>Where are the domestic bubbles off to?"
 			},
 			{
 				"id": 13,
-				"action": [3, 10],
+				"action": [2],
 				"headline": 0,
-				"text": "…onwards. <br><span class='subline'>this is also sorted by worldwide revenues</span><br><br><span class='film'>Avatar</span> dwarves the rest but <span class='film'>Frozen</span> would make it quite far on their tower of dollars. Check the ratings if you wish – All not too bad, with the <span class='film'>Twilight Saga</span> counting the money while not really caring much about their ratings probably."
+				"text": "All eyes to the right. <br><br>The worldwide revenue?"
 			},
 			{
 				"id": 14,
+				"action": [3, 10],
+				"headline": 0,
+				"text": "…onwards. <br><span class='subline'>this is also sorted by worldwide revenues</span><br><br><span class='film' data-filmname='Avatar'>Avatar</span> dwarves the rest but <span class='film' data-filmname='Frozen'>Frozen</span> would make it quite far on their tower of dollars."
+			},
+			{
+				"id": 15,
+				"action": [7, 14],
+				"headline": 0,
+				"text": "The ratings (IMDb in this case) are all relatively decent with the <span class='film' data-filmname='The Twilight Saga: New Moon'>Twilight</span> <span class='film' data-filmname='The Twilight Saga: Eclipse'>Saga</span> probably choosing to count the money rather than caring about their dismal ratings. <br> <span class='subline'>lollipop length shows worldwide revenue - bubble size and saturation show IMDb rating</span>"
+			},
+			{
+				"id": 16,
 				"action": [],
 				"headline": 1,
 				"text": "The biggest money losers"
 			},
 			{
-				"id": 15,
+				"id": 17,
 				"action": [9, 5],
 				"headline": 0,
 				"text": "Now let’s look at the bottom of the pile. Not necessarily in terms of quality (we’ll see…) but in terms of money made. Here are the top 20 money losers."
 			},
 			{
-				"id": 16,
+				"id": 18,
 				"action": [1],
 				"headline": 0,
 				"text": "Here are their production budgets…"
 			},
 			{
-				"id": 14,
+				"id": 19,
 				"action": [2],
 				"headline": 0,
 				"text": "…and their domestic gross moving to the shameful left. Can the worldwide gross help?"
 			},
 			{
-				"id": 17,
+				"id": 20,
 				"action": [3],
 				"headline": 0,
-				"text": "Not in many cases. Again, apologies for the rough ride here, some worldwide revenues in fact supersede the production budgets but the marketing costs are not party to this data, so you have to believe me (and the numbers) that we’re indeed seeing losses for all these films.<br><br>So what genre should I opt for in case I wanted to make sure to lose as much money as possible? This is a little harder. I’m inclined to go Sci-Fi/Fantasy? At least I should not let much reality into my film. <span class='film'>John Carter</span> (I won’t mention him again), <span class='film'>Green Lantern</span>, <span class='film'>Jack the Giant Slayer</span>, <span class='film'>Jupiter Ascending</span>, <span class='film'>Gods of Egypt</span> (who doesn't like Greek mythology action?) etc. Should be the safe choice…"
-			},
-			{
-				"id": 18,
-				"action": [7],
-				"headline": 0,
-				"text": "<span class='film'>Hugo</span> is a sad guest on this list as it's undoubtedly one of the better films in this bitter list but some directors should probably be decoupled from business."
-			},
-			{
-				"id": 19,
-				"action": [],
-				"headline": 1,
-				"text": "The low budget winners"
-			},
-			{
-				"id": 20,
-				"action": [11],
-				"headline": 0,
-				"text": "Let’s end on a high note, though. An unexpectedly high note. Some films don’t cost anything, compared to the money guzzlers we’ve been looking at but turn out to make hay.<br><br>Here are the 20 films with the lowest costs and the biggest margins recorded."
+				"text": "Not in many cases. As you can see some worldwide revenues in fact supersede the production budgets but the marketing costs are not party to this data, so you have to trust me (and the numbers) that we’re indeed seeing losses for each film above. As a mild disclaimer it should further be mentioned that Studios don't exactly spell out their Profit &amp; Loss sheets &mdash; introducing a level of uncertainty. <br><br>So what genre should I opt for in case I wanted to make sure to lose as much money as possible? This is a little harder. I’m inclined to go Sci-Fi/Fantasy? At least I should not let much reality into my film. <span class='film' data-filmname='John Carter'>John Carter</span> (I won’t mention him again), <span class='film' data-filmname='Green Lantern'>Green Lantern</span>, <span class='film' data-filmname='Jack the Giant Slayer'>Jack the Giant Slayer</span>, <span class='film' data-filmname='Jupiter Ascending'>Jupiter Ascending</span>, <span class='film' data-filmname='Gods of Egypt'>Gods of Egypt</span> (who doesn't like mythological action, though?) etc. Should be the safe choice…"
 			},
 			{
 				"id": 21,
-				"action": [1],
+				"action": [7],
 				"headline": 0,
-				"text": "How high were their production budgets?"
+				"text": "<span class='film' data-filmname='Hugo'>Hugo</span> is a sad guest here as it's undoubtedly one of the better films in this bitter list but some directors should probably be decoupled from money pressures."
 			},
 			{
 				"id": 22,
-				"action": [0],
-				"headline": 0,
-				"text": "Nothing happened?"
+				"action": [11],
+				"headline": 1,
+				"text": "The low budget winners"
 			},
 			{
 				"id": 23,
 				"action": [1],
 				"headline": 0,
-				"text": "Let's try again. Here are their production budgets..."
+				"text": "Let’s end on a high note, though. An unexpectedly high note. Some films don’t cost anything, compared to the money guzzlers we’ve been looking at but turn out to make hay.<br><br>Here are the 20 films with the lowest costs and the biggest margins recorded."
 			},
 			{
 				"id": 24,
 				"action": [],
 				"headline": 0,
-				"text": "No?"
+				"text": "How high were their production budgets?"
 			},
 			{
 				"id": 25,
-				"action": [],
+				"action": [0],
 				"headline": 0,
-				"text": "Actually yes. But you can't see it on this scale (which is tighter than what we've seen before) as the budgets are tiny. Hover over them to see their budgets. <span class='film'>El Mariachi </span>cost $7000 US. That could’ve bought us 0.16 seconds of Avatar. Not 16, 0.16 seconds."
+				"text": "Nothing happened?"
 			},
 			{
 				"id": 26,
+				"action": [1],
+				"headline": 0,
+				"text": "Let's try again. Here are their production budgets..."
+			},
+			{
+				"id": 27,
+				"action": [],
+				"headline": 0,
+				"text": "No?"
+			},
+			{
+				"id": 28,
+				"action": [],
+				"headline": 0,
+				"text": "Actually yes. But you can't see it on this scale (which is tighter than what we've seen before) as the budgets are tiny. Hover over them to see their budgets. <span class='film' data-filmname='El Mariachi'>El Mariachi</span> cost $7000 US. That could’ve bought us 0.16 seconds of Avatar. Not 16 seconds. No no no: 0.16 seconds..."
+			},
+			{
+				"id": 29,
 				"action": [2],
 				"headline": 0,
 				"text": "Here come their domestic revenues…"
 			},
 			{
-				"id": 27,
+				"id": 30,
 				"action": [3],
 				"headline": 0,
 				"text": "…and their worldwide total all-in revenue"
 			},
 			{
-				"id": 28,
+				"id": 31,
 				"action": [10],
 				"headline": 0,
-				"text": "…sorted by worldwide revenue. <br><br>I can’t claim to know all the films listed here and will not try to suggest what genre you should pick to produce a low budget winner (even though this might be the most realistic chance to shine), but maybe a sequel of Deep Throat might be a worthy thought?"
+				"text": "…sorted by worldwide revenue. <br><br>I can’t claim to know all the films listed but if you want to make a low budget winner you should probably produce a Comedy. 7 of 20 low budget winners are of the light-hearted kind while we only had 1 in our previous loser's list. <br><br> But then of course... maybe a sequel of <span class='film' data-filmname='Deep Throat'>Deep Throat</span> might be a worthy thought?"
 			},
 			{
-				"id": 29,
+				"id": 32,
 				"action": [],
 				"headline": 0,
-				"text": "Thanks for sticking around... Let me know what you liked or disliked <a href='mailto:lars@datamake.io?Subject=Film%20budgets' target='_top'>right here</a>"
+				"text": "Thanks for sticking around... <br> Have a play with the controls that just flew in, <br> <a href='https://twitter.com/lverspohl'>follow me</a>, and/or let me know what you disliked (or even liked) <a href='mailto:lars@datamake.io?Subject=Film%20budgets' target='_top'>right here</a>"
 			}
 		]		
 	} 
