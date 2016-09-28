@@ -52,7 +52,7 @@ var globals = (function() {
 	// hashtables for lookups
 	window.hashSort = {};
 	hashSort.production_budget = 'Production Budget';
-	hashSort.domestic_gross = 'Domestic Gross';
+	hashSort.domestic_gross = 'US Gross';
 	hashSort.worldwide_gross = 'Worldwide Gross';
 	hashSort.rating_imdb = 'Rating IMDb (1-10)';
 	hashSort.rating_rt = 'Rating Rotten Tomatoes (1-10)';
@@ -1002,7 +1002,7 @@ function chart() {
 								'<p class="tooltipText break">Realeased: ' + d.release_date.getFullYear() + '</p>' +
 								'<p class="tooltipText">Rank in category: ' + d.rank + ' in ' + d.categoryNice + '</p>' +
 								'<p class="tooltipText break">Production budget: ' + format(d.production_budget) + '</p>' +
-								'<p class="tooltipText">Domestic revenue: ' + format(d.domestic_gross) + '</p>' +
+								'<p class="tooltipText">US revenue: ' + format(d.domestic_gross) + '</p>' +
 								'<p class="tooltipText">Worldwide revenue: ' + format(d.worldwide_gross) + '</p>' +
 								'<p class="tooltipText break">IMDb rating: ' + d.rating_imdb + ' of 10</p>' +
 								'<p class="tooltipText">Rotten Tomatoes: ' + d.rating_rt + ' of 10</p>' +
