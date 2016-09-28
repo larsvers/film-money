@@ -23,7 +23,7 @@ If you feel inclined there's more on this [here](http://www.mtv.com/news/1939097
 
 
 #### The visualisation motivation 
-##### Scrollytelling and Lollipos
+###### Scrollytelling and Lollipos
 
 Telling a story with data is anything but new. The 18th and mainly the 19th century has seen the start of this with many great examples of how to use data and their visuals to tell impactful stories. [William Playfair](https://en.wikipedia.org/wiki/William_Playfair), [Florence Nightingale](https://www.theguardian.com/news/datablog/2010/aug/13/florence-nightingale-graphics) and [Charles Minard](https://en.wikipedia.org/wiki/Charles_Joseph_Minard) were fantastic data storytellers. But it required the visual being exceptional in including a visual narrative (like [Minard’s map of Napoleon’s Russia campaign](https://upload.wikimedia.org/wikipedia/commons/2/29/Minard.png)) or an exceptional narrator who could in fact tell the story to the right people to have an impact (Nightingale).
 
@@ -41,7 +41,7 @@ However, there are clear cases for scrollytelling. One use-case is simply when t
 
 Also taking some advice from the Olymp of data journalism:
 
-![readers just want to scroll](https://github.com/larsvers/tree-of-charts/blob/master/images/github/tree_of_charts_search.png)
+![readers just want to scroll](images/readme/archie_tse_quote.png)
 <sub>Malofiej 2016, Archie Tse, New York Times, [Why we are doing fewer interactives](https://github.com/archietse/malofiej-2016/blob/master/tse-malofiej-2016-slides.pdf)</sub>
 
 So there. Those are my bipolar thoughts to scrollytelling. Looking at the chart alone, I’m pretty unipolar though:
@@ -56,7 +56,7 @@ Now to add to this, lollipops are a natural choice for this particular visual st
 
 
 #### The technical motivation V4
-##### D3 version 4, Reusable chart pattern and Scrollytelling
+###### D3 version 4, Reusable chart pattern and Scrollytelling
 
 The visual is no technical firework. Lollipop charts are rather predictable concoctions of visual primitives (lines and circles). But there were some technical challenges (at least for me) on mainly three other levels: 
 
