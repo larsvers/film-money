@@ -215,11 +215,11 @@ var handler = (function() {
 
 In a stepper we could build this structure differently. We would be binding a handler to a button which would trigger text and action. So in a time-line of state and events we would have the 
 
-button first &#10145; then the click &#10145; then the text and the action
+button first &#8594; then the click &#8594; then the text and the action
 
 In a scroll-story, we have the 
 
-text first &#10145; then a scroll passed a certain point on the screen &#10145; triggering the action 
+text first &#8594; then a scroll passed a certain point on the screen &#8594; triggering the action 
 
 So the text element’s position functions as the button. 
 
