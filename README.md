@@ -1,9 +1,9 @@
 ### Film money 
 ---
 
-Film money is a visual story about film successes and failures. It looks at a number of Top 20 lists from the Top 20 Biggest Budgets to the Top 20 Biggest Money Losers and guides the reader through the film’s history of spending and earning money as well as approval.
+Film money is a visual story about film successes and failures. It looks at a number of Top 20 lists from the Top 20 Biggest Budgets to the Top 20 Biggest Money Losers and guides the reader through the film’s history of spending and earning money as well as gaining and not gaining approval.
 
-Back in 2012 there has been a spree of visuals and interactives about the relationship of film budgets, revenues and ratings when [*Information is beautiful*](http://www.informationisbeautiful.net/) invited visualizers from around the planet to descend on a dataset called **‘Hollywood Stories’** showing film budgets, revenues, profits, ratings and some more metadata and some marvelous stuff has been created (see a [list of visuals below](#a-totally-incomplete-list-of-other-film-/-money-/-rating-visuals)). This visual uses a different dataset comprising a wider selection of films and a different angle, focusing on one particular story: the monetary evolution from budget to US revenues to worldwide revenues to ratings. Lots of other different angles to highlight and many other questions to ask the data, but the following tries to explain how we ended up where we did…
+Back in 2012 there has been a spree of visuals and interactives about the relationship of film budgets, revenues and ratings when [*Information is beautiful*](http://www.informationisbeautiful.net/) invited visualizers from around the planet to descend on a dataset called **‘Hollywood Stories’** showing film budgets, revenues, profits, ratings and some more metadata. Some marvelous stuff has been created (see a [list of visuals below](#-totally-incomplete-list-of-other-film--money--rating-visuals)), but it's been a while and I thought the topic needs a data story. So here's my tuppence using a slightly different dataset comprising a wider selection of films and a different angle, focusing on one particular story: the monetary evolution from the production budget via the US revenues to the worldwide revenues and the film's ratings. Some background to [the data](#the-data), [the visual](#the-visualisation-motivation) and the [technical motivation](#the-technical-motivation)...
 
 
 #### The Data
@@ -55,7 +55,7 @@ In comparison to the common bar chart they elegantly focus the eye on the import
 Now to add to this, lollipops are a natural choice for this particular visual story. What we’re doing here is telling a story of growth and decline (the revenues) from a certain baseline (the production budget). The lines allow us to emphasize animated growth and loss in a brain-friendly way. We can literally follow the path the money takes. The circles are the focus when the visual is static – the lines are the focus when the visual is animated. Lastly, we can easily keep the baseline in view. The baseline circles (the film’s production budget) just lose their lines and can be kept in the visual without disrupting the rest of the visual. 
 
 
-#### The technical motivation V4
+#### The technical motivation
 ###### D3 version 4, Reusable chart pattern and Scrollytelling
 
 The visual is no technical firework. Lollipop charts are rather predictable concoctions of visual primitives (lines and circles). But there were some technical challenges (at least for me) on mainly three other levels: 
