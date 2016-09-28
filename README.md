@@ -103,7 +103,7 @@ A story.json file holding essentially the text, and the actions – codified as 
 
 		}
 
-		....
+	....
 
 
 	]		
@@ -127,7 +127,8 @@ storyLookup[0] = function(data) { handler.pressed(undefined, 'pp_start_value'); 
 storyLookup[1] = function(data) { handler.pressed(undefined, 'pp_production_budget'); handler.plotpoint.pp_production_budget(data); };
 storyLookup[2] = function(data) { handler.pressed(undefined, 'pp_domestic_gross'); handler.plotpoint.pp_domestic_gross(data); };
 storyLookup[3] = function(data) { handler.pressed(undefined, 'pp_worldwide_gross'); handler.plotpoint.pp_worldwide_gross(data); };
-….
+
+// .... more lookups .... //
 
 ```
 
@@ -214,11 +215,11 @@ var handler = (function() {
 
 In a stepper we could build this structure differently. We would be binding a handler to a button which would trigger text and action. So in a time-line of state and events we would have the 
 
-button first > then the click > then the text and the action
+button first &#10145; then the click &#10145; then the text and the action
 
 In a scroll-story, we have the 
 
-text first > then a scroll passed a certain point on the screen > triggering the action 
+text first &#10145; then a scroll passed a certain point on the screen &#10145; triggering the action 
 
 So the text element’s position functions as the button. 
 
