@@ -22,5 +22,5 @@ storyLookup[14] = function(data) { handler.sort(undefined, data, 'rating_rt'); }
 
 storyLookup[100] = function(data) { 
 	handler.pressed(undefined, 'pp_start_value'); 
-	setTimeout(function() { handler.plotpoint.initial(data); }, 250); // a little delay to let the globals change (specifically onlyYaxis needs a tick to change and disallow the x-axis to show)
+	setTimeout(function() { handler.plotpoint.initial(data); }, 300); // a little delay to let the globals change (specifically onlyYaxis needs a tick to change and disallow the x-axis to show)
 };

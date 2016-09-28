@@ -43,8 +43,8 @@ d3.json('data/story.json', function(error, storyData) {
 	// add go-up button with reload to start over again
 
 	var lastItem = d3.select('#explanations p:last-child');
-	lastItem.append('br')
-	lastItem.append('br')
+	lastItem.append('br');
+	lastItem.append('br');
 	lastItem.append('button')
 			.classed('top', true)
 			.html('go back up')
@@ -81,9 +81,9 @@ d3.json('data/story.json', function(error, storyData) {
 	
 	var scrollStoryMain = $('#explanations').scrollStory({
 
-		triggerOffset: window.innerHeight *.9
+		triggerOffset: window.innerHeight * 0.9
 
-	}).data('plugin_scrollStory'); ; // plotpoint scroll detection
+	}).data('plugin_scrollStory'); // plotpoint scroll detection
 
 
 
