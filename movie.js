@@ -263,8 +263,6 @@ var handler = (function() {
 		config.baseline = false;
 		config.rating = false;
 
-		log(config.onlyYaxis);
-
 		var newChart = chart()
 				.key(config.key)
 				.keyValue(config.keyValue)
@@ -767,8 +765,6 @@ function chart() {
 
 				d3.selectAll('.x.axis text').transition(t).style('fill-opacity', 1);
 				d3.selectAll('.x.axis line').transition(t).style('stroke-opacity', 1);
-
-				log(d3.select('.x.axis text').style('fill-opacity'));
 
 			} // Axis specs for first plotpoint
 				
