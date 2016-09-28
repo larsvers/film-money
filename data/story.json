@@ -39,13 +39,13 @@
 				"id": 4,
 				"action": [2],
 				"headline": 0,
-				"text": "First from domestic screenings (the US) <br><span class='subline'>...and eventually from globe-wide screenings including the US.</span> <br><br>Keeping the production budget on screen in blue, we can already see how some films lost all worry-lines after just counting the domestic revenue. <span class='film' data-filmname='Avatar'>Avatar</span>, <span class='film' data-filmname='Star Wars Ep. VII: The Force Awakens'>Star Wars</span>, <span class='film' data-filmname='The Avengers'>Avengers</span> and some other friends could’ve just packed up to lay back and stay at home, while others were surely hoping for more international dollars."
+				"text": "First from North American screenings (it's including United States, Canada, Puerto Rico and Guam. For brevity I shall call these revenues the US revenues - well aware how rude that is) <br><span class='subline'>...and eventually from globe-wide screenings including the US.</span> <br><br>Keeping the production budget on screen in blue, we can already see how some films lost all worry-lines after just counting the US revenue. <span class='film' data-filmname='Avatar'>Avatar</span>, <span class='film' data-filmname='Star Wars Ep. VII: The Force Awakens'>Star Wars</span>, <span class='film' data-filmname='The Avengers'>Avengers</span> and some other friends could’ve just packed up to lay back and stay at home, while others were surely hoping for more international dollars."
 			},
 			{
 				"id": 5,
 				"action": [4],
 				"headline": 0,
-				"text": "Let's sort by domestic revenue. <br> <br><span class='film' data-filmname='Star Wars Ep. VII: The Force Awakens'>Star Wars</span> looks a hopeful winner raking in more than double its costs. <span class='film' data-filmname='Avatar'>Avatar</span> didn't quite get that far at home. But much more importantly our animated friend <span class='film' data-filmname='Tangled'>Tangled</span> didn’t quite break even in the US while <span class='film' data-filmname='John Carter'>John Carter</span> can't have been very pleased with its US performance."
+				"text": "Let's sort by US revenue. <br> <br><span class='film' data-filmname='Star Wars Ep. VII: The Force Awakens'>Star Wars</span> looks a hopeful winner raking in more than double its costs. <span class='film' data-filmname='Avatar'>Avatar</span> didn't quite get that far at home. But much more importantly our animated friend <span class='film' data-filmname='Tangled'>Tangled</span> didn’t quite break even in the US while <span class='film' data-filmname='John Carter'>John Carter</span> can't have been very pleased with its US performance."
 			},
 			{
 				"id": 6,
@@ -93,7 +93,7 @@
 				"id": 12,
 				"action": [1],
 				"headline": 0,
-				"text": "If I wanted to make film with a big budget, I’d surely try Action as a Genre. If I wanted to make a profitable film, I’d probably go for an Animation. <span class='film' data-filmname='Frozen'>Frozen</span>, <span class='film' data-filmname='Minions'>Minions</span>, <span class='film' data-filmname='Despicable Me 2'>Despicable Me</span>, <span class='film' data-filmname='The Lion King'>The Lion King</span> &mdash; all there.<br><br>Where are the domestic bubbles off to?"
+				"text": "If I wanted to make film with a big budget, I’d surely try Action as a Genre. If I wanted to make a profitable film, I’d probably go for an Animation. <span class='film' data-filmname='Frozen'>Frozen</span>, <span class='film' data-filmname='Minions'>Minions</span>, <span class='film' data-filmname='Despicable Me 2'>Despicable Me</span>, <span class='film' data-filmname='The Lion King'>The Lion King</span> &mdash; all there.<br><br>Where are the US bubbles off to?"
 			},
 			{
 				"id": 13,
@@ -135,7 +135,7 @@
 				"id": 19,
 				"action": [2],
 				"headline": 0,
-				"text": "…and their domestic gross moving to the shameful left. Can the worldwide gross help?"
+				"text": "…and their US gross moving to the shameful left. Can the worldwide gross help?"
 			},
 			{
 				"id": 20,
@@ -195,7 +195,7 @@
 				"id": 29,
 				"action": [2],
 				"headline": 0,
-				"text": "Here come their domestic revenues…"
+				"text": "Here come their US revenues…"
 			},
 			{
 				"id": 30,
