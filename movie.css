@@ -1,26 +1,25 @@
 
-
 /* +++ Colours +++
 
 
-#151515 Background
+#151515 dark grey Background
 
-#ffffff white Font-colour intro h1
-#0000AD blue	Glitch effect blue
-#E33F96 pink	Glitch effect pink
-#aaaaaa grey  Font-colour intro h2 and p
-#D9D9CE grey  Font-colour main description text
-#D9D9CE grey  Font-colour y axis
-#BABAB1 grey  Font-colour x axis
-#000000 black Background buttons
-#aaaaaa grey  Font-colour Buttons with data
-#777777 grey  Font-colour Buttons w/o data
-#333333 grey  Background button side-menu pressed
+#ffffff white 		Font-colour intro h1
+#0000AD blue			Glitch effect blue
+#E33F96 pink			Glitch effect pink
+#aaaaaa grey  		Font-colour intro h2 and p
+#D9D9CE grey  		Font-colour main description text
+#D9D9CE grey  		Font-colour y axis
+#BABAB1 grey  		Font-colour x axis
+#000000 black 		Background buttons
+#aaaaaa grey  		Font-colour Buttons with data
+#777777 grey  		Font-colour Buttons w/o data
+#333333 grey  		Background button side-menu pressed
 
 
-#cccccc grey  Circle/lines
-#4161f0 blue  Baseline circles
-#E33F96 pink	Highlighted text
+#cccccc grey  		Circle/lines
+#4161f0 blue  		Baseline circles
+#E33F96 pink			Highlighted text
 d3.interpolatePuRd white>purple Colour Scale rating
 
 
@@ -98,10 +97,14 @@ a:link, a:visited, a:hover, a:active {
 
 
 div#graph {
+	display: -ms-flexbox;
 	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
+	-ms-flex-direction: column;
+	    flex-direction: column;
+	-ms-flex-align: center;
+	    align-items: center;
+	-ms-flex-pack: center;
+	    justify-content: center;
 
 	width: 100vw;
 	background: rgba(21,21,21,1);
@@ -119,14 +122,18 @@ div#controls {
 	width:  10vw;
 
 	display: none;
-	flex-direction: column;
-	justify-content: center;
+	-ms-flex-direction: column;
+	    flex-direction: column;
+	-ms-flex-pack: center;
+	    justify-content: center;
 }
 
 
 div.controlWrapper {
+	display: -ms-flexbox;
 	display: flex;
-	flex-direction: column;
+	-ms-flex-direction: column;
+	    flex-direction: column;
 }
 
 div.controlWrapper > p {
@@ -164,15 +171,11 @@ button {
 #genreMenu button {
 	pointer-events: none;
 	cursor: default;
+	margin-bottom: 10px;
 }
 
 #legend {
 	opacity: 0;
-}
-
-
-button.genres {
-	margin-bottom: 10px;
 }
 
 
@@ -190,9 +193,12 @@ button.genres {
 }
 
 div.headline {
+	display: -ms-flexbox;
 	display: flex;
-	justify-content: space-between;
-	align-items: center;
+	-ms-flex-pack: justify;
+	    justify-content: space-between;
+	-ms-flex-align: center;
+	    align-items: center;
 }
 
 .selectNav p {
@@ -233,10 +239,14 @@ li.selectItems {
 
 
 div#intro {
+	display: -ms-flexbox;
 	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
+	-ms-flex-direction: column;
+	    flex-direction: column;
+	-ms-flex-align: center;
+	    align-items: center;
+	-ms-flex-pack: center;
+	    justify-content: center;
 
 	color: #aaa;
 }
@@ -248,10 +258,14 @@ div#main {
 }
 
 div#explanations {
+	display: -ms-flexbox;
 	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
+	-ms-flex-direction: column;
+	    flex-direction: column;
+	-ms-flex-align: center;
+	    align-items: center;
+	-ms-flex-pack: center;
+	    justify-content: center;
 }
 
 div.story, p.story {
@@ -411,6 +425,7 @@ p.tooltipText.break {
 }
 
 #ttWrap {
+	display: -ms-flexbox;
 	display: flex;
 }
 

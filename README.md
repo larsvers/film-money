@@ -16,6 +16,9 @@ Regarding the ratings, the IMDb rating is taken straight from IMDb and it is the
 
 The Rotten Tomato rating used is not the more famous **Tomatometer** but the **Average rating**. The Tomatometer metric is a percentage between 0 and 100%. To calculate the percentage value for a film, each critic is asked to vote a film up (fresh) or down (rotten). The number of fresh films is then divided by all votes to get a simple percentage form 0-100%. The average rating, however, is asking all critics to rate each film on a scale from 1 to 10. I took the latter as it’s a deeper metric summarizing a wider distribution. 
 
+![rt](images/readme/rt.png)
+
+
 If you feel inclined there's more on this [here](http://www.mtv.com/news/1939097/rotten-tomatoes-youre-doing-it-wrong/) and [here](https://www.rottentomatoes.com/about/)
 
 
@@ -55,7 +58,7 @@ Now to add to this, lollipops are a natural choice for this particular visual st
 #### The technical motivation V4
 ##### D3 version 4, Reusable chart pattern and Scrollytelling
 
-The visual is no technical firework. Lollipop charts are rather predictable pieces of visual primitives (lines and circles). But there were some technical challenges (at least for me) on mainly three other levels: 
+The visual is no technical firework. Lollipop charts are rather predictable concoctions of visual primitives (lines and circles). But there were some technical challenges (at least for me) on mainly three other levels: 
 
 1. D3 version 4 (link),
 2. the reusable chart pattern for a whole chart rather than only chart-parts 
@@ -222,6 +225,8 @@ So the text element’s position functions as the button.
 Lastly, I looked into a number of scrolling libraries and plug-ins. I considered vanilla Javascript which would have worked just fine, I guess, but I wanted to see what libraries can offer beyond the built in events. I played around with a number of tools, like [Adam Pearce](https://twitter.com/adamrpearce)’s [graph-scroll](https://github.com/1wheel/graph-scroll) which is built with and for D3, but didn’t play that nicely with V4 (my fault). Then I had a look at [ScrollMagic](https://github.com/janpaepke/ScrollMagic/tree/development#availability) and [skrollr](https://github.com/Prinzhorn/skrollr) but settled eventually for [scrollstory](https://github.com/sjwilliams/scrollstory) which seemed best documented and was a pointer from Adam Pearce who used it for this [nice example here](http://www.nytimes.com/interactive/2016/08/01/us/elections/nine-percent-of-america-selected-trump-and-clinton.html?_r=0).
 
 While it’s a jQuery plugin and hence adds a little more overhead if you like to pristinely code in vanilla flavor it has a set of properties that were nice to work with. It turns the text segments (ie. div’s or the like) into “story items” - objects that allow saving additional data. You can also bind data to the items which can be used during scrolling. I used these item-properties to pass through the actions for the handlers to read from, but it’s surely worth to read through the documentation and try.
+
+Now one challenge I didn't and totally should have tackled was the mobile-readyness. In short: it's not. It's a desktop story. The next one will be mobile-first again...
 
 Well, well. I’m sure there are many ways I went wrong – and even more ways I can improve the base. Always is. If you spot any, please let me know. We live to learn… 
 
