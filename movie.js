@@ -49,7 +49,7 @@ var globals = (function() {
 	config.compareTo = 'production_budget';
 
 	config.windowSizeFlag = window.innerWidth < 750 | window.innerHeight < 500 ? true : false;
-	window.onresize = function() { log(config.windowSizeFlag); config.windowSizeFlag = window.innerWidth < 750 | window.innerHeight < 500 ? true : false;	};
+	window.onresize = function() { config.windowSizeFlag = window.innerWidth < 750 | window.innerHeight < 500 ? true : false;	};
 
 	// hashtables for lookups
 	window.hashSort = {};
@@ -525,6 +525,8 @@ function chart() {
 	var margin = { top: 50, right: (window.innerWidth*0.25) , bottom: 10, left: (window.innerWidth*0.25) },
 			width = (window.innerWidth) - margin.left - margin.right,
 			height = (window.innerHeight/2) - margin.top - margin.bottom;
+
+			log(width);
 
 	var onlyYaxis = false,
 			baseline = false,
@@ -1170,4 +1172,4 @@ function type(d) {
 // Also Highest worldwide gross earner wouldn't be Avatar, but Snow White and the Seven Dwarfs (yay). 
 // Gone with  wind and Bambi would've pushed passed Avatar. So there...
 
-// Where is Blair Witch Project?
+
