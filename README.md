@@ -18,7 +18,7 @@ Regarding the ratings, the IMDb rating is taken straight from IMDb and it is the
 
 The Rotten Tomato rating used is not the more famous **Tomatometer** but the **Average rating**. The Tomatometer metric is a percentage between 0 and 100%. To calculate the percentage value for a film, each critic is asked to vote a film up (fresh) or down (rotten). The number of fresh films is then divided by all votes to get a simple percentage form 0-100%. The average rating, however, is asking all critics to rate each film on a scale from 1 to 10. I took the latter as it’s a deeper metric summarizing a wider distribution. 
 
-![rt](images/readme/rt.png)
+![rt](images/readme/rotten_rating.png)
 
 
 If you feel inclined there's more on this [here](http://www.mtv.com/news/1939097/rotten-tomatoes-youre-doing-it-wrong/) and [here](https://www.rottentomatoes.com/about/)

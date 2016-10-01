@@ -48,6 +48,8 @@ var globals = (function() {
 
 	config.compareTo = 'production_budget';
 
+	config.windowSizeFlag = window.innerWidth < 750 | window.innerHeight < 500 ? true : false;
+	window.onresize = function() { log(config.windowSizeFlag); config.windowSizeFlag = window.innerWidth < 750 | window.innerHeight < 500 ? true : false;	};
 
 	// hashtables for lookups
 	window.hashSort = {};
@@ -592,21 +594,10 @@ function chart() {
 
 			scaleY = d3.scalePoint().domain(dataNest.map(function(el) { return el[objY.value]; })).range([height, 0]).padding(1);
 
-			scaleZ = d3.scaleSqrt().domain([objZ.extent[0], objZ.extent[1]]).range([3, 20]);
+			scaleZ = d3.scaleSqrt().domain([objZ.extent[0], objZ.extent[1]]).range(config.windowSizeFlag ? [2,10] : [3, 20]); // range smaller for small screens
 			
 			// scaleZCol = d3.scaleSequential(d3.interpolateOrRd).domain(objZ.extent);
 			scaleZCol = d3.scaleSequential(d3.interpolatePuRd).domain(objZ.extent);
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -681,7 +672,6 @@ function chart() {
 
 				d3.select('#legend').transition().duration(500).style('opacity', config.rating ? 1 : 0);
 
-
 			})(); // legendBuilder() namespace
 
 
@@ -702,8 +692,9 @@ function chart() {
 			d3.select('svg.svgMain')
 					.attr('width', width + margin.left + margin.right)
 					.attr('height', height + margin.top + margin.bottom) // Changing attributes of only the 'svg' element and not the 'g' element although the 'svg' element itself doesn't get added when the svg variable is being created. It seems the svg variable gets extended with the 'svg' element through gEnter, while gEnter identifies the 'g' element.
-					.attr("viewBox", "0 0 " + (width + margin.left + margin.right) + " " + (height + margin.top + margin.bottom))
-					.attr("preserveAspectRatio", "xMinYMax"); // svg with viewBox for responsiveness
+					.attr('viewBox', '0 0 ' + (width + margin.left + margin.right) + ' ' + (height + margin.top + margin.bottom))
+					.attr('preserveAspectRatio', 'xMinYMax'); // svg with viewBox for responsiveness
+
 
 
 			gEnter.append('g').attr('class', 'x axis');
@@ -819,6 +810,8 @@ function chart() {
 			
 			// --- Circles --- //
 
+			var radius = config.windowSizeFlag ? 2 : 5; // circle radius smaller for small screens
+
 			// join
 			var circles = d3.select('g.lollipops')
 					.selectAll('.circles')
@@ -836,7 +829,7 @@ function chart() {
 				.transition()
 				.duration(dur)
 				.delay(function(d,i) { return i * dur / n; })
-					.attr('r', function(d) { return rating ? scaleZ(d[objZ.value]) : 5; })
+					.attr('r', function(d) { return rating ? scaleZ(d[objZ.value]) : radius; })
 					.style('fill', function(d) { return rating ? scaleZCol(d[objZ.value]) : '#ccc'; });
 			
 			// update
@@ -846,7 +839,7 @@ function chart() {
 				.delay(function(d,i) { return i * dur / n; })
 					.attr('cx', function(d) { return scaleX(d[objX.value]); })
 					.attr('cy', function(d) { return scaleY(d[objY.value]); })
-					.attr('r', function(d) { return rating ? scaleZ(d[objZ.value]) : 5; })
+					.attr('r', function(d) { return rating ? scaleZ(d[objZ.value]) : radius; })
 					.style('fill', function(d) { return rating ? scaleZCol(d[objZ.value]) : '#ccc'; })
 					.style('opacity', 1);	
 
@@ -877,7 +870,7 @@ function chart() {
 						.classed('baseline', true)
 						.attr('cy', function(d) { return scaleY(d.yValues); })
 						.attr('cx', function(d) { return scaleX(d.xValues); })
-						.attr('r', 5)
+						.attr('r', radius)
 						.style('fill', '#4161F0')
 						.style('opacity', 1e-6);
 
