@@ -45,6 +45,7 @@ var globals = (function() {
 	config.onlyYaxis = false;
 	config.baseline = false;
 	config.rating = undefined;
+	config.scalefactor = undefined;
 
 	config.compareTo = 'production_budget';
 
@@ -393,6 +394,46 @@ var handler = (function() {
 
 	}; // worldwide gross (pp = plotpont)
 
+
+
+
+
+	my.plotpoint.pp_production_budget_scaled = function(data) {
+
+		config.varX = 'production_budget';
+		config.baseline = false;
+		config.scalefactor = 5;
+
+		var newChart = chart()
+				.key(config.key)
+				.keyValue(config.keyValue)
+				.margin({ top: 50, right: 20, bottom: 10, left: window.innerWidth/2 })
+				.varX(config.varX)
+				.varY(config.varY)
+				.varZ(config.varZ)
+				.extentX(config.extentX)
+				.extentY(config.extentY)
+				.extentZ(config.extentZ)
+				.sortBy(config.sortBy)
+				.onlyYaxis(config.onlyYaxis)
+				.baseline(config.baseline)
+				.rating(config.rating)
+				.scalefactor(config.scalefactor);
+
+		d3.select('div#container')
+				.datum(data)
+				.call(newChart);
+
+	}; // production budget (pp = plotpont)
+
+
+
+
+
+
+
+
+
 	my.ratings = function(that, data, value) {
 
 		// set the rating to choose
@@ -526,7 +567,9 @@ function chart() {
 			width = (window.innerWidth) - margin.left - margin.right,
 			height = (window.innerHeight/2) - margin.top - margin.bottom;
 
-			log(width);
+	log('before', scalefactor);
+	var scalefactor = 1;
+	log('after', scalefactor);
 
 	var onlyYaxis = false,
 			baseline = false,
@@ -703,10 +746,11 @@ function chart() {
 			gEnter.append('g').attr('class', 'y axis');
 			gEnter.append('g').attr('class', 'lollipops'); // Boxes for the 3 key element-groups. Will only be created the time the chart gets created the first time at enter().
 
+			log('just before g', scalefactor);
 			var g = d3.select('svg').select('g')
 				.transition()
 				.duration(1000)
-					.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')'); // Addressing the g-frame for the margins.
+					.attr('transform', 'translate(' + margin.left + ',' + margin.top + ') scale(' + scalefactor + ')'); // Addressing the g-frame for the margins.
 
 			
 			// ===  Axes === //
@@ -1112,6 +1156,12 @@ function chart() {
 		return my;
 	};
 
+	my.scalefactor = function(_) {
+		if(!arguments.length) return scalefactor;
+		scalefactor = _;
+		return my;
+	}
+
 	my.onlyYaxis = function(_) {
 		if(!arguments.length) return onlyYaxis;
 		onlyYaxis = _;
@@ -1160,16 +1210,38 @@ function type(d) {
 
 
 
+
+
+
+
+function scaleIt() {
+
+	// scale it up 
+	// pan it to center
+
+}
+
+function unscaleIt() {
+
+	// pan it back 
+	// scale it down
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
 // === TODO === //
 
 // about the data: inflation adjusted, hard to estimate in parts domestic gross === US
-
-
 // http://inflationdata.com/articles/2013/05/16/highest-grossing-movies-adjusted-for-inflation/
-//  
-// NOte that the figures are NOT inflation adjusted. An inflation adjusted list would bring about a 
-// rather different view of for exampe Birth of a Nation. 
-// Also Highest worldwide gross earner wouldn't be Avatar, but Snow White and the Seven Dwarfs (yay). 
-// Gone with  wind and Bambi would've pushed passed Avatar. So there...
 
 

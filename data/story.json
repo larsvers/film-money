@@ -7,7 +7,7 @@
 				"action": [100],
 				"headlineText": "Film money",
 				"sublineText": "or why Avatar will see 4 sequels and John Carter none",
-				"text": "Films cost money. <br>However, they hope to make that money back and often do. When they do, it can be a lot and when they don’t it can be bitter. Sometimes they don’t expect to make money but they unexpectadly do. They often consume ridiculous amounts of effort, people and skill; they scream and shout to get into the public sphere which in turn decides their rise or fall. Films are bets on human taste and they ought to entertain to succeed. It's fickle relationship between business interests and public taste that can make it joyous or painful to look at films and their money-harvest. Sizeable investments can in fact accrue mountains of gold while sometimes money just evaporates in front of empty screens. This little visual shows the ups and downs (or rather rights and lefts) of the film business, portraying a handful of stories, surprises and failures. Just keep on scrolling... (data from <a href='http://www.the-numbers.com/' target='_blank'>here</a>, <a href='www.imdb.com/' target='_blank'>here</a> and <a href='https://www.rottentomatoes.com/' target='_blank'>here</a>)"
+				"text": "Films cost money. <br>However, they hope to make that money back and often do. When they do, it can be a lot and when they don’t it can be bitter. Sometimes they don’t expect to make money but they unexpectadly do. They often consume ridiculous amounts of effort, people and skill; they scream and shout to get into the public sphere which in turn decides their rise or fall. Films are bets on human taste and they ought to entertain to succeed. It's the fickle relationship between business interests and public taste that can make it joyous or painful to look at films and their money-harvest. Sizeable investments can in fact accrue mountains of gold while sometimes money just evaporates in front of empty screens. This little visual shows the ups and downs (or rather rights and lefts) of the film business, portraying a handful of stories, surprises and failures. Just keep on scrolling... (data from <a href='http://www.the-numbers.com/' target='_blank'>here</a>, <a href='www.imdb.com/' target='_blank'>here</a> and <a href='https://www.rottentomatoes.com/' target='_blank'>here</a>)"
 			}		
 		],
 		"main": [
@@ -39,7 +39,7 @@
 				"id": 4,
 				"action": [2],
 				"headline": 0,
-				"text": "First from North American screenings (it's including United States, Canada, Puerto Rico and Guam. For brevity I shall call these revenues the US revenues - well aware how rude that is) <br><span class='subline'>...and eventually from globe-wide screenings including the US.</span> <br><br>Keeping the production budget on screen in blue, we can already see how some films lost all worry-lines after just counting the US revenue. <span class='film' data-filmname='Avatar'>Avatar</span>, <span class='film' data-filmname='Star Wars Ep. VII: The Force Awakens'>Star Wars</span>, <span class='film' data-filmname='The Avengers'>Avengers</span> and some other friends could’ve just packed up to lay back and stay at home, while others were surely hoping for more international dollars."
+				"text": "First from North American screenings <br><span class='subline'>it's including United States, Canada, Puerto Rico and Guam. For brevity I shall call these revenues the US revenues - well aware of how rude that is</span> <br><br>Keeping the production budget on screen in blue, we can already see how some films lost all worry-lines after just counting the US revenue. <span class='film' data-filmname='Avatar'>Avatar</span>, <span class='film' data-filmname='Star Wars Ep. VII: The Force Awakens'>Star Wars</span>, <span class='film' data-filmname='The Avengers'>Avengers</span> and some others could’ve just packed up to lay back and stay at home, while others were surely hoping for more international dollars."
 			},
 			{
 				"id": 5,
@@ -93,7 +93,7 @@
 				"id": 12,
 				"action": [1],
 				"headline": 0,
-				"text": "If I wanted to make film with a big budget, I’d surely try Action as a Genre. If I wanted to make a profitable film, I’d probably go for an Animation. <span class='film' data-filmname='Frozen'>Frozen</span>, <span class='film' data-filmname='Minions'>Minions</span>, <span class='film' data-filmname='Despicable Me 2'>Despicable Me</span>, <span class='film' data-filmname='The Lion King'>The Lion King</span> &mdash; all there.<br><br>Where are the US bubbles off to?"
+				"text": "If I wanted to make a film with a big budget, I’d surely try Action as a Genre. If I wanted to make a profitable film, I’d probably go for an Animation. <span class='film' data-filmname='Frozen'>Frozen</span>, <span class='film' data-filmname='Minions'>Minions</span>, <span class='film' data-filmname='Despicable Me 2'>Despicable Me</span>, <span class='film' data-filmname='The Lion King'>The Lion King</span> &mdash; all there.<br><br>Where are the US bubbles off to?"
 			},
 			{
 				"id": 13,
@@ -135,7 +135,7 @@
 				"id": 19,
 				"action": [2],
 				"headline": 0,
-				"text": "…and their US gross moving to the shameful left. Can the worldwide gross help?"
+				"text": "…and their US gross moving to the shameful left. Can the worldwide revenue help?"
 			},
 			{
 				"id": 20,
@@ -145,9 +145,9 @@
 			},
 			{
 				"id": 21,
-				"action": [7],
+				"action": [7,14],
 				"headline": 0,
-				"text": "<span class='film' data-filmname='Hugo'>Hugo</span> is a sad guest here as it's undoubtedly one of the better films in this bitter list but some directors should probably be decoupled from money pressures."
+				"text": "<span class='film' data-filmname='Hugo'>Hugo</span> is a sad guest here as it's undoubtedly one of the better films in this bitter list but some directors should probably be decoupled from money pressures.<br><br><span class='subline'>Bubbles showing Rotten Tomatoes ratings, which the data is also sortedby</span>"
 			},
 			{
 				"id": 22,
@@ -187,33 +187,45 @@
 			},
 			{
 				"id": 28,
-				"action": [],
+				"action": [0],
 				"headline": 0,
-				"text": "Actually yes. But you can't see it on this scale (which is tighter than what we've seen before) as the budgets are tiny. Hover over them to see their budgets. <span class='film' data-filmname='El Mariachi'>El Mariachi</span> cost $7000 US. That could’ve bought us 0.16 seconds of Avatar. Not 16 seconds. No no no: 0.16 seconds..."
+				"text": "Actually yes. But you can't see it on this scale (which is actually much tighter than what we've seen before). So one last (magnified) time..."
 			},
 			{
 				"id": 29,
+				"action": [15],
+				"headline": 0,
+				"text": "There you go. Cute..."
+			},
+			{
+				"id": 30,
+				"action": [1],
+				"headline": 0,
+				"text": "You can hover over them to see their budgets. <span class='film' data-filmname='El Mariachi'>El Mariachi</span> cost $7000 US. That could’ve bought us 0.16 seconds of Avatar. Not 16 seconds, no no no: 0.16 seconds..."
+			},
+			{
+				"id": 31,
 				"action": [2],
 				"headline": 0,
 				"text": "Here come their US revenues…"
 			},
 			{
-				"id": 30,
+				"id": 32,
 				"action": [3],
 				"headline": 0,
 				"text": "…and their worldwide total all-in revenue"
 			},
 			{
-				"id": 31,
+				"id": 33,
 				"action": [10],
 				"headline": 0,
 				"text": "…sorted by worldwide revenue. <br><br>I can’t claim to know all the films listed but if you want to make a low budget winner you should probably produce a Comedy. 7 of 20 low budget winners are of the light-hearted kind while we only had 1 in our previous loser's list. <br><br> But then of course... maybe a sequel of <span class='film' data-filmname='Deep Throat'>Deep Throat</span> might be a worthy thought?"
 			},
 			{
-				"id": 32,
+				"id": 34,
 				"action": [],
 				"headline": 0,
-				"text": "Thanks for sticking around... <br> Have a play with the controls that just flew in, <br> <a href='https://twitter.com/lverspohl'>follow me</a>, and/or let me know what you disliked (or even liked) <a href='mailto:lars@datamake.io?Subject=Film%20budgets' target='_top'>right here</a>"
+				"text": "Thanks for sticking around... <br> Have a play with the controls that just flew in, <br> <a href='https://twitter.com/lars_vers'>follow me</a>, and/or let me know what you disliked (or even liked) <a href='mailto:lars@datamake.io?Subject=Film%20budgets' target='_top'>right here</a>"
 			}
 		]		
 	} 

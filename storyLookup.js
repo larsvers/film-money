@@ -19,6 +19,8 @@ storyLookup[11] = function(data) { handler.changeDataset(undefined, data, 'low_b
 storyLookup[12] = function(data) { handler.showGenreBar(); };
 storyLookup[13] = function(data) { handler.sort(undefined, data, 'rating_imdb'); };
 storyLookup[14] = function(data) { handler.sort(undefined, data, 'rating_rt'); };
+storyLookup[15] = function(data) { handler.plotpoint.pp_production_budget_scaled(data); };
+storyLookup[16] = function(data) {  };
 
 storyLookup[100] = function(data) { 
 	handler.pressed(undefined, 'pp_start_value'); 

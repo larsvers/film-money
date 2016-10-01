@@ -52,9 +52,6 @@ d3.json('data/story.json', function(error, storyData) {
 				$('html, body').animate({scrollTop: 0}, 2000); // scroll up
 			});
 
-
-
-
 	// set up #main top position dynamically
 	// so in order for the #main div with all the text to appear flush under the #graph div I need to dynamically calculate the top position of #main as the bottom position of #graph (which is top of #graph + height as I can't get bottom)
 	// we could say: why? could you not just have #main in the document flow and it would just come after #graph? And yes you would. But as soon as #intro is out of sight, #graph will get a position: fixed and will be taken out of the document flow, which will move any non-absolute div straight to the top pf the page

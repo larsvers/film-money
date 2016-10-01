@@ -384,7 +384,20 @@ span.film {
 
 
 
+/* === Tooltip === */
 
+div#logo {
+	text-align: center;
+}
+
+div#logo a {
+	border: none;
+	padding: 0;	
+}
+
+div#logo img {
+	width: 15vw;
+}
 
 
 
