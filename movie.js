@@ -49,8 +49,18 @@ var globals = (function() {
 
 	config.compareTo = 'production_budget';
 
+	// small screen detector
 	config.windowSizeFlag = window.innerWidth < 750 | window.innerHeight < 500 ? true : false;
 	window.onresize = function() { config.windowSizeFlag = window.innerWidth < 750 | window.innerHeight < 500 ? true : false;	};
+
+	// pageload flag to not fire plotpoint.initial twice
+	config.pageload = true;	
+	// On pageload the chart gets rendered before anything else - including the story in text - get added underneath the chart.
+	// If the story got added before the chart, the chart space wouldn't be taken and the explanations would move up - overlapping the chart.
+	// Hence on pageload we must trigger the chart before. However, the chart gets build every time we hit the top of the page (intro item index = 0)
+	// So on pageload the chart gets rendered twice ! Because it's the first that happens after loading the data and the intro item index is 0.
+	// To avoid this we also set this global to true when the page got loaded and turn it to false after a second. \
+	// Within this second we won't fire the intro item index = 0 trigger. Easy.
 
 	// hashtables for lookups
 	window.hashSort = {};
@@ -82,7 +92,8 @@ d3.csv("data/movies.csv", type, function(data){
 	data = _.sortBy(data, function(el) { return el.production_budget; }); // Sort before feeding into any function. Otherwise the data won't be sorted descendingly but ascendingly
 	
 	handler.pressed(undefined, 'pp_start_value');
-	handler.plotpoint.initial(data);
+	handler.plotpoint.initial(data); // I'm aware this is fired twice upon reload
+	setTimeout(function() { config.pageload = false }, 2000);
 	
 	var listener = (function() {
 
@@ -394,10 +405,6 @@ var handler = (function() {
 
 	}; // worldwide gross (pp = plotpont)
 
-
-
-
-
 	my.plotpoint.pp_production_budget_scaled = function(data) {
 
 		config.varX = 'production_budget';
@@ -425,13 +432,6 @@ var handler = (function() {
 				.call(newChart);
 
 	}; // production budget (pp = plotpont)
-
-
-
-
-
-
-
 
 
 	my.ratings = function(that, data, value) {
@@ -567,9 +567,7 @@ function chart() {
 			width = (window.innerWidth) - margin.left - margin.right,
 			height = (window.innerHeight/2) - margin.top - margin.bottom;
 
-	log('before', scalefactor);
 	var scalefactor = 1;
-	log('after', scalefactor);
 
 	var onlyYaxis = false,
 			baseline = false,
@@ -746,7 +744,6 @@ function chart() {
 			gEnter.append('g').attr('class', 'y axis');
 			gEnter.append('g').attr('class', 'lollipops'); // Boxes for the 3 key element-groups. Will only be created the time the chart gets created the first time at enter().
 
-			log('just before g', scalefactor);
 			var g = d3.select('svg').select('g')
 				.transition()
 				.duration(1000)
@@ -1214,20 +1211,6 @@ function type(d) {
 
 
 
-function scaleIt() {
-
-	// scale it up 
-	// pan it to center
-
-}
-
-function unscaleIt() {
-
-	// pan it back 
-	// scale it down
-
-}
-
 
 
 
@@ -1244,4 +1227,5 @@ function unscaleIt() {
 // about the data: inflation adjusted, hard to estimate in parts domestic gross === US
 // http://inflationdata.com/articles/2013/05/16/highest-grossing-movies-adjusted-for-inflation/
 
-
+// reverse story line
+// Trailing garbage

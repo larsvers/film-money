@@ -4,7 +4,7 @@
 
 var storyLookup = {};
 
-storyLookup[0] = function(data) { handler.pressed(undefined, 'pp_start_value'); handler.plotpoint.pp_start_value(data); };
+storyLookup[0] = function(data) { handler.pressed(undefined, 'pp_start_value'); handler.plotpoint.pp_start_value(data); }; 
 storyLookup[1] = function(data) { handler.pressed(undefined, 'pp_production_budget'); handler.plotpoint.pp_production_budget(data); };
 storyLookup[2] = function(data) { handler.pressed(undefined, 'pp_domestic_gross'); handler.plotpoint.pp_domestic_gross(data); };
 storyLookup[3] = function(data) { handler.pressed(undefined, 'pp_worldwide_gross'); handler.plotpoint.pp_worldwide_gross(data); };
@@ -20,9 +20,10 @@ storyLookup[12] = function(data) { handler.showGenreBar(); };
 storyLookup[13] = function(data) { handler.sort(undefined, data, 'rating_imdb'); };
 storyLookup[14] = function(data) { handler.sort(undefined, data, 'rating_rt'); };
 storyLookup[15] = function(data) { handler.plotpoint.pp_production_budget_scaled(data); };
-storyLookup[16] = function(data) {  };
 
 storyLookup[100] = function(data) { 
-	handler.pressed(undefined, 'pp_start_value'); 
-	setTimeout(function() { handler.plotpoint.initial(data); }, 300); // a little delay to let the globals change (specifically onlyYaxis needs a tick to change and disallow the x-axis to show)
+	if (!config.pageload) {
+		handler.pressed(undefined, 'pp_start_value'); 
+		setTimeout(function() { handler.plotpoint.initial(data); }, 1000); // a little delay to let the globals change (specifically onlyYaxis needs a tick to change and disallow the x-axis to show)		
+	}
 };
