@@ -78,154 +78,180 @@ Building a reusable core chart in V3.5 was no problem as ample examples can be f
 
 The third challenge was to divide the text into narrative segments and connect each segment to the respective chart actions in the most sensible manner. The structure I used integrates 3 key elements:
 
-A story.json file holding essentially the text, and the actions – codified as numbers in an array (so we can fire one or more actions):
+##### Stream 1: the chart and its parts
 
-```JavaScript
+First we load the data and build the initial chart in the reusable chart parttern
+
+```Javascript
+
+function chart() {
+    
+  var colour, 
+      size;
+      
+      // more exposed variables
+
+  function my(selection) {
+      
+    selection.each(data) {
+        
+      // build chart ...
+
+      circles 
+        .attr('r', size)
+        .style('color', colour);
+
+      // ... build chart
+
+    }
+
+  }
+
+  my.colour = function(_) {
+    if (!arguments.length) return colour;
+    colour = _;
+    return my;
+  };
+
+  my.size = function(_) {
+    if (!arguments.length) return size;
+    size = _;
+    return my;
+  };
+
+}
+
+```
+
+All exposed chart parts (parts that state can change) are kept in globals (let them be globals for simplicity terms)
+
+```Javascript
+
+window.globals = window.globals || {};
+
+globals.colour = 'green';
+globals.size = 3;
+
+```
+
+##### Stream 2: The story and its actions
+
+The story gets written in a JSON file - one JSON-object per segment
+
+```Javascript
 
 {
-	"story": [
-		{
-			"id": 0,
-			"action": [],
-			"text": "First let’s look at the big fish.<br> Up there are the 20 films with the biggest production budgets ever recorded."
-		},
-		{
-			"id": 1,
-			"action": [1],
-			"text": "<span class='film' data-filmname='Avatar' id=''>Avatar</span> is already a mature guest in this list being released in 2009. But it’s earned its top spot with a whopping $425 million budget. Exactly 6 years later on the day (the 18th of December that is) <span class='film' data-filmname='Star Wars Ep. VII: The Force Awakens'>Star Wars’ The Force Awakens</span> tried hard but stays significantly behind with a mere $306 million production budget. An interesting feature for us to watch will be <span class='film' data-filmname='John Carter'>John Carter</span> (previously known as <span class='film' data-filmname='John Carter'>John Carter of Mars</span>) checking in at $280 million as the 6th biggest production so far."
-		},
-		{
-			"id": 2,
-			"action": [12,3],
-			"text": "In general you might notice that all films are what one would call Action or its close friend Adventure &mdash; apart from <span class='film' data-filmname='Tangled'>Tangled</span>, the only Animation that cost the indecent sum of $260 million. <br>Play around with above genre buttons to see which films are what...<br><br>Now let’s see what they managed to get in."
-		},
-		{
-		
-		....
+  "story":
+  {
+    "main": [
+      {
+        "id": 0,
+        "action": [0],
+        "text": "This is the first segment of my scroll-story, triggering action 0"
+      },
+      {
+        "id": 1,
+        "action": [1],
+        "text": "This would be the second segment triggering action 1"
+      },
+      {
+        "id": 2,
+        "action": [],
+        "text": "This story segment doesn't trigger any action"
+      },
+      {
+        "id": 3,
+        "action": [3],
+        "text": "And this fourth segment triggers action 3..."
+      },
 
-		}
+      ... more story segments ...
 
-	....
+    ]       
+  } 
+}
 
+```
 
-	]		
+As you can see each segment has an increasing ID and an action property which coincides with the ID for better readability/debugging.
+Next, we build the DOM on the back of the JSON. Each DOM element holds the text and the action-index. Something like:
+
+```Javascript
+
+d3.select('#explanations').selectAll('p.story')
+    .data(story)
+    .enter()
+  .append('p')
+    .classed('story', true)
+    .attr('data-action', function(d) { return d.action; }) // add data to markup which we use later in events to trigger actions
+    .html(function(d) { return d.text; });
+
+```
+
+##### Stream 3: Connecting the story and the chart
+
+A lookup-table holds a bespoke set of actions per action-index
+
+A generic handler (1) has access to each global and (2) re-draws the chart with the global settings (either changed or not)
+
+A timeline of user and application events might go like so:
+
+1. Scroll to element 1
+2. A scroll-listener (which has access to the data - as in sitting within the ajax load function) listens to the index number
+3. and will access the appropriate lookup-table as in <code>lookup[1]</code>
+4. the lookup table will run the function (equipped with our data). For element 1, for example:
+
+```Javascript
+
+lookup[1] = function(data) {
+    
+  // --- change the state --- //
+
+  global.colour = 'red'; // change the global.colour
+  global.size = global.size; // don't change global.size
+  
+  // --- run the handler --- //
+
+  handler(data);
+
+}
+
+```
+
+5. now the handler will build the chart with the changed global parameters
+
+```Javascript
+
+handler = function(data) {
+
+    // --- compose the chart --- //
+
+    var newChart = chart()
+        .colour(global.colour)
+        .size(global.size);
+
+    // --- render the chart --- //
+
+    d3.select('#container')
+        .datum(data)
+        .call(newChart);
+    
 }
 
 ```
 
 
-A story lookup table which reads the action of the data and triggers:
+In a stepper we could build this structure differently. We would be binding a handler to a button which would trigger text and action. So in a time-line of state and events we would have the
 
+button first → then the click → then the text and the action
 
-```JavaScript
+In a scroll-story, we have the
 
-// Each story item (or p/div element telling the story) gets a data-action attribute when set-up, defining the action that it triggers.
-// These actions are just integers from 0 to x - an index - but stand for an event handler defined in the handler namespace.
-// This hash-table associates the right handler ('action') to this action-index.
+text first → then a scroll passed a certain point on the screen → triggering the action
 
-var storyLookup = {};
+So the text element’s position functions as the button.
 
-storyLookup[0] = function(data) { handler.pressed(undefined, 'pp_start_value'); handler.plotpoint.pp_start_value(data); };
-storyLookup[1] = function(data) { handler.pressed(undefined, 'pp_production_budget'); handler.plotpoint.pp_production_budget(data); };
-storyLookup[2] = function(data) { handler.pressed(undefined, 'pp_domestic_gross'); handler.plotpoint.pp_domestic_gross(data); };
-storyLookup[3] = function(data) { handler.pressed(undefined, 'pp_worldwide_gross'); handler.plotpoint.pp_worldwide_gross(data); };
-
-// .... more lookups .... //
-
-```
-
-And eventually the handler that composes a new chart which eventually gets rendered:
-
-```JavaScript
-
-var handler = (function() {
-
-	var my = {};
-
-	my.plotpoint = {};
-
-	my.plotpoint.initial = function(data) {
-
-		config.keyValue = 'biggest_budgets'
-		config.varX = 'start_value';
-		config.sortBy = 'production_budget'
-		config.onlyYaxis = true;
-		config.baseline = false;
-		config.rating = false;
-
-		var newChart = chart()
-				.key(config.key)
-				.keyValue(config.keyValue)
-				.margin({ top: 50, right: 20, bottom: 10, left: window.innerWidth/2 })
-				.varX(config.varX)
-				.varY(config.varY)
-				.varZ(config.varZ)
-				.extentX(config.extentX)
-				.extentY(config.extentY)
-				.extentZ(config.extentZ)
-				.sortBy(config.sortBy)
-				.onlyYaxis(config.onlyYaxis)
-				.baseline(config.baseline)
-				.rating(config.rating);
-
-		d3.select('div#container')
-				.datum(data)
-				.call(newChart);
-
-		config.onlyYaxis = false;
-
-
-		d3.select('#keyValue > .headline > p').html(hashKeyValue[config.keyValue]);
-		d3.select('#sort > .headline > p').html(hashSort[config.sortBy]);
-		d3.selectAll('button.rating').classed('pressed', false);
-
-	} // no axes
-
-	my.plotpoint.pp_start_value = function(data) {
-
-		config.varX = 'start_value';
-		config.baseline = false;
-
-		var newChart = chart()
-				.key(config.key)
-				.keyValue(config.keyValue)
-				.varX(config.varX)
-				.varY(config.varY)
-				.varZ(config.varZ)
-				.extentX(config.extentX)
-				.extentY(config.extentY)
-				.extentZ(config.extentZ)
-				.sortBy(config.sortBy)
-				.onlyYaxis(config.onlyYaxis)
-				.baseline(config.baseline)
-				.rating(config.rating);
-
-		d3.select('div#container')
-				.datum(data)
-				.call(newChart);
-
-	} // films (pp = plotpont)
-
-	// … more handlers … //
-
-
-	return my;
-
-})(); // handler namespace
-
-```
-
-In a stepper we could build this structure differently. We would be binding a handler to a button which would trigger text and action. So in a time-line of state and events we would have the 
-
-button first &#8594; then the click &#8594; then the text and the action
-
-In a scroll-story, we have the 
-
-text first &#8594; then a scroll passed a certain point on the screen &#8594; triggering the action 
-
-So the text element’s position functions as the button. 
-
-Lastly, I looked into a number of scrolling libraries and plug-ins. I considered vanilla Javascript which would have worked just fine, I guess, but I wanted to see what libraries can offer beyond the built in events. I played around with a number of tools, like [Adam Pearce](https://twitter.com/adamrpearce)’s [graph-scroll](https://github.com/1wheel/graph-scroll) which is built with and for D3, but didn’t play nicely with V4 (my fault). Then I had a look at [ScrollMagic](https://github.com/janpaepke/ScrollMagic/tree/development#availability) and [skrollr](https://github.com/Prinzhorn/skrollr) but settled eventually for [scrollstory](https://github.com/sjwilliams/scrollstory) which seemed best documented and came recommended from Adam Pearce who used it for this [nice example here](http://www.nytimes.com/interactive/2016/08/01/us/elections/nine-percent-of-america-selected-trump-and-clinton.html?_r=0).
+For implementation, I looked into a number of scrolling libraries and plug-ins. I considered vanilla Javascript which would have worked just fine, I guess, but I wanted to see what libraries can offer beyond the built in events. I played around with a number of tools, like [Adam Pearce](https://twitter.com/adamrpearce)’s [graph-scroll](https://github.com/1wheel/graph-scroll) which is built with and for D3, but didn’t play nicely with V4 (my fault). Then I had a look at [ScrollMagic](https://github.com/janpaepke/ScrollMagic/tree/development#availability) and [skrollr](https://github.com/Prinzhorn/skrollr) but settled eventually for [scrollstory](https://github.com/sjwilliams/scrollstory) which seemed best documented and came recommended from Adam Pearce who used it for this [nice example here](http://www.nytimes.com/interactive/2016/08/01/us/elections/nine-percent-of-america-selected-trump-and-clinton.html?_r=0).
 
 While it’s a jQuery plugin and hence adds a little more overhead if you like to pristinely code in vanilla flavor it has a set of properties that were nice to work with. It turns the text segments (ie. div’s or the like) into “story items” - objects that allow saving additional data. You can also bind data to the items which can be used during scrolling. I used these item-properties to pass through the actions for the handlers to read from, but it’s surely worth to read through the documentation and try.
 
