@@ -196,10 +196,12 @@ A generic handler (1) has access to each global and (2) re-draws the chart with 
 
 A timeline of user and application events might go like so:
 
-1. Scroll to element 1
-2. A scroll-listener (which has access to the data - as in sitting within the ajax load function) listens to the index number
-3. and will access the appropriate lookup-table as in <code>lookup[1]</code>
-4. the lookup table will run the function (equipped with our data). For element 1, for example:
+<ol>
+
+	<li>Scroll to element 1</li>
+	<li>A scroll-listener (which has access to the data - as in sitting within the ajax load function) listens to the index number</li>
+	<li>and will access the appropriate lookup-table as in <code>lookup[1]</code></li>
+	<li>the lookup table will run the function (equipped with our data). For element 1, for example:</li>
 
 ```Javascript
 
@@ -218,7 +220,7 @@ lookup[1] = function(data) {
 
 ```
 
-5. now the handler will build the chart with the changed global parameters
+	<li>now the handler will build the chart with the changed global parameters</li>
 
 ```Javascript
 
@@ -239,7 +241,7 @@ handler = function(data) {
 }
 
 ```
-
+</ol>
 
 In a stepper we could build this structure differently. We would be binding a handler to a button which would trigger text and action. So in a time-line of state and events we would have the
 
