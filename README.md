@@ -218,9 +218,11 @@ lookup[1] = function(data) {
 }
 
 ```
+
 <ol start="5">
 	<li>now the handler will build the chart with the changed global parameters</li>
 </ol>
+
 ```Javascript
 
 handler = function(data) {
