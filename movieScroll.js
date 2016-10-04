@@ -70,7 +70,7 @@ d3.json('data/story.json', function(error, storyData) {
 		triggerOffset: 0
 
 	}).data('plugin_scrollStory'); 
-	// Can't save the instance with this data() method. 
+	// Can't save the instance without this data() method. 
 	// Unsure as to why but let's just add it, I guess? 
 	// The benefit of saving it is that we can now access the instance with properties, info and methods just by calling the name.
 

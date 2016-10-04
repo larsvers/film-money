@@ -122,6 +122,7 @@ div#controls {
 	width:  10vw;
 
 	display: none;
+	/* display: flex; */ /* switch on for debugging */
 	-ms-flex-direction: column;
 	    flex-direction: column;
 	-ms-flex-pack: center;
@@ -384,7 +385,7 @@ span.film {
 
 
 
-/* === Tooltip === */
+/* === Logo === */
 
 div#logo {
 	text-align: center;

@@ -24,6 +24,7 @@ var getAxisLabel = function(name) {
 };
 
 
+
 // === Globals === //
 
 var globals = (function() {
@@ -45,7 +46,7 @@ var globals = (function() {
 	config.onlyYaxis = false;
 	config.baseline = false;
 	config.rating = undefined;
-	config.scalefactor = undefined;
+	config.scalefactor = 1;
 
 	config.compareTo = 'production_budget';
 
@@ -65,8 +66,8 @@ var globals = (function() {
 	// hashtables for lookups
 	window.hashSort = {};
 	hashSort.production_budget = 'Production Budget';
-	hashSort.domestic_gross = 'US Gross';
-	hashSort.worldwide_gross = 'Worldwide Gross';
+	hashSort.domestic_gross = 'US Revenue';
+	hashSort.worldwide_gross = 'Worldwide Revenue';
 	hashSort.rating_imdb = 'Rating IMDb (1-10)';
 	hashSort.rating_rt = 'Rating Rotten Tomatoes (1-10)';
 
@@ -77,102 +78,6 @@ var globals = (function() {
 	hashKeyValue.low_budget_winners = 'Low budget winners';
 
 })(); // global namespace
-
-
-
-
-
-// === Load data, Initial state, Listeners === //
-
-d3.csv("data/movies.csv", type, function(data){
-
-
-	// --- Initial state --- //
-
-	data = _.sortBy(data, function(el) { return el.production_budget; }); // Sort before feeding into any function. Otherwise the data won't be sorted descendingly but ascendingly
-	
-	handler.pressed(undefined, 'pp_start_value');
-	handler.plotpoint.initial(data); // I'm aware this is fired twice upon reload
-	setTimeout(function() { config.pageload = false }, 2000);
-	
-	var listener = (function() {
-
-	// --- Click listener of graph elements (story elements come on specific .js file) --- //
-
-		d3.select('button#pp_start_value').on('mousedown', function() { handler.pressed(this); handler.plotpoint.pp_start_value(data); });
-
-		d3.select('button#pp_production_budget').on('mousedown', function() { handler.pressed(this); handler.plotpoint.pp_production_budget(data); });
-
-		d3.select('button#pp_domestic_gross').on('mousedown', function() { handler.pressed(this); handler.plotpoint.pp_domestic_gross(data); });
-
-		d3.select('button#pp_worldwide_gross').on('mousedown', function() { handler.pressed(this); handler.plotpoint.pp_worldwide_gross(data); });
-
-
-		d3.selectAll('button.rating').on('mousedown', function() { 
-
-			handler.pressed(this);
-			handler.ratings(this, data); 
-
-		}); // button listener
-		
-		d3.selectAll('li.sortItems').on('mousedown', function() { 
-		
-			handler.pressed(this);
-			handler.sort(this, data); 
-		
-		}); // sort listener and handler
-
-		d3.selectAll('li.keyValueItems').on('mousedown', function() {
-
-			handler.pressed(this);
-			handler.changeDataset(this, data); 
-
-		}); // category = keyValue listener and handler
-
-
-
-		// --- Scroll listener --- //
-
-		$('#intro').on('itemfocus', function(event, item) {
-
-			log('intro item index', item.index);
-
-			if (item.data.action === "") return;
-
-			var action = isNaN(item.data.action) ? item.data.action.split(',').map(Number) : [item.data.action]; // convert single number or number of strings to array
-
-			action.forEach(function(el) { storyLookup[el](data); });
-
-			// --- scroll stop if we feel inclined that way - feels a little wrong --- //
-			// d3.select('body').classed('stop-scrolling', true);
-			// setTimeout(function() { d3.select('body').classed('stop-scrolling', false); }, 1000);
-
-		}); // when item (= element with class .story) gets into focus
-
-
-		$('#explanations').on('itemfocus', function(event, item) {
-		
-			log('item index', item.index);
-
-			if (item.data.action === "") return;
-
-			var action = isNaN(item.data.action) ? item.data.action.split(',').map(Number) : [item.data.action]; // convert single number or number of strings to array
-
-			// setTimeout(function() { 
-				action.forEach(function(el) { storyLookup[el](data); }); 
-			// }, 250);
-			
-
-			// --- scroll stop if we feel inclined that way - feels a little wrong --- //
-			// d3.select('body').classed('stop-scrolling', true);
-			// setTimeout(function() { d3.select('body').classed('stop-scrolling', false); }, 1000);
-
-		}); // when item (= element with class .story) gets into focus
-
-	})(); // click listener namespace
-
-}); // d3.csv() 
-
 
 
 
@@ -233,6 +138,145 @@ var navBuilder = (function() {
 
 
 
+// === Load data, Initial state, Listeners === //
+
+d3.csv("data/movies.csv", type, function(data){
+
+
+	// --- Initial state --- //
+
+	data = _.sortBy(data, function(el) { return el.production_budget; }); // Sort before feeding into any function. Otherwise the data won't be sorted descendingly but ascendingly
+	
+	handler.pressed(undefined, 'pp_start_value');
+	handler.plotpoint.initial(data); // I'm aware this is fired twice upon reload
+	setTimeout(function() { config.pageload = false }, 2000);
+	
+	var listener = (function() {
+
+	// --- Click listener of graph elements (story elements come on specific .js file) --- //
+
+
+		d3.selectAll('button.value').on('mousedown', function() { 
+
+			var x = this.id.replace('pp_','');
+
+			x === 'start_value' || x === 'production_budget' ? config.baseline = false : config.baseline = true;
+
+			handler.pressed(this);
+			
+			var compObj = {};
+			compObj.data = data;
+			compObj.value = config.keyValue;
+			compObj.xVar = x; // changed
+			compObj.zVar = config.varZ;
+			compObj.yAxisFlag = config.onlyYaxis;
+			compObj.sortVar = config.sortBy;
+			compObj.baseFlag = config.baseline;
+			compObj.ratingFlag = config.rating;
+			
+			handler.plotpoint.compose(compObj); 
+
+		});
+
+		d3.selectAll('button.rating').on('mousedown', function() { 
+
+			handler.pressed(this);
+
+			var compObj = {};
+			compObj.data = data;
+			compObj.value = config.keyValue;
+			compObj.xVar = config.varX;
+			compObj.zVar = String(this.id); // changed
+			compObj.yAxisFlag = config.onlyYaxis;
+			compObj.sortVar = config.sortBy;
+			compObj.baseFlag = config.baseline;
+			compObj.ratingFlag = $('button.rating').hasClass('pressed'); // changed
+			
+			handler.plotpoint.compose(compObj); 
+
+		}); // button listener
+		
+		d3.selectAll('li.sortItems').on('mousedown', function() { 
+		
+			var compObj = {};
+			compObj.data = data;
+			compObj.value = config.keyValue;
+			compObj.xVar = config.varX;
+			compObj.zVar = config.varZ;
+			compObj.yAxisFlag = config.onlyYaxis;
+			compObj.sortVar = this.id; // changed
+			compObj.baseFlag = config.baseline;
+			compObj.ratingFlag = config.rating;
+			
+			handler.plotpoint.compose(compObj); 
+
+			d3.select('nav#sort p').html(hashSort[v]); // set the value of the nav headline
+		
+		}); // sort listener and handler
+
+		d3.selectAll('li.keyValueItems').on('mousedown', function() {
+
+			handler.pressed(this);
+			
+			var compObj = {};
+			compObj.data = data;
+			compObj.value = String(this.id);
+			compObj.xVar = 'start_value'; // changed
+			compObj.zVar = 'ratings_imdb';
+			compObj.yAxisFlag = config.onlyYaxis;
+			compObj.sortVar = 'production_budget';
+			compObj.baseFlag = false;
+			compObj.ratingFlag = false;
+			
+			handler.plotpoint.compose(compObj); 
+
+		}); // category = keyValue = dataset listener and handler
+
+
+
+		// --- Scroll listener --- //
+
+		$('#intro').on('itemfocus', function(event, item) {
+
+			log('intro item index', item.index);
+
+			if (item.data.action === "") return;
+
+			var action = isNaN(item.data.action) ? item.data.action.split(',').map(Number) : [item.data.action]; // convert single number or number of strings to array
+
+			action.forEach(function(el) { storyLookup[el](data); });
+
+			// --- scroll stop if we feel inclined that way - feels a little wrong --- //
+			// d3.select('body').classed('stop-scrolling', true);
+			// setTimeout(function() { d3.select('body').classed('stop-scrolling', false); }, 1000);
+
+		}); // when item (= element with class .story) gets into focus
+
+
+		$('#explanations').on('itemfocus', function(event, item) {
+		
+			log('item index', item.index);
+
+			if (item.data.action === "") return;
+
+			var action = isNaN(item.data.action) ? item.data.action.split(',').map(Number) : [item.data.action]; // convert single number or number of strings to array
+
+			action.forEach(function(el) { storyLookup[el](data); }); 
+			
+
+			// --- scroll stop if we feel inclined that way - feels a little wrong --- //
+			// d3.select('body').classed('stop-scrolling', true);
+			// setTimeout(function() { d3.select('body').classed('stop-scrolling', false); }, 1000);
+
+		}); // when item (= element with class .story) gets into focus
+
+	})(); // click listener namespace
+
+}); // d3.csv() 
+
+
+
+
 
 // === Click handler === //
 
@@ -242,6 +286,9 @@ var handler = (function() {
 
 	my.plotpoint = {};
 	
+	
+	// --- general handlers --- //
+
 	my.pressed = function(that, value) {
 
 		that = arguments.length === 2 ? $('button#' + value)[0] : that;
@@ -258,7 +305,7 @@ var handler = (function() {
 			$(that).toggleClass('pressed'); // toggle the pressed button
 		
 			var c = config.extentZ.slice();
-			var a = c.filter(function(el) { return el !== that.id; });
+			var a = c.filter(function(el) { return el !== that.id; }); // find the non-pressed id
 
 			a.forEach(function(el) {
 				d3.select('button#' + el).classed('pressed', false);
@@ -267,6 +314,53 @@ var handler = (function() {
 		} 
 
 	}; // button handler
+
+	my.showGenreBar = function() {
+
+		d3.select('#genreMenu').transition().duration(1000).style('opacity', 1);
+		
+		d3.selectAll('#genreMenu > button').style('pointer-events', 'all').style('cursor', 'pointer');
+
+	};
+
+	my.plotpoint.compose = function(data) {
+	
+		var newChart = chart()
+				.key(config.key)
+				.keyValue(config.keyValue)
+				.varX(config.varX)
+				.varY(config.varY)
+				.varZ(config.varZ)
+				.extentX(config.extentX)
+				.extentY(config.extentY)
+				.extentZ(config.extentZ)
+				.sortBy(config.sortBy)
+				.onlyYaxis(config.onlyYaxis)
+				.baseline(config.baseline)
+				.rating(config.rating);
+
+		d3.select('div#container')
+				.datum(data)
+				.call(newChart);
+
+		// button handling
+
+		d3.select('nav#keyValue p').html(hashKeyValue[config.keyValue]); // set the dataset value in the nav headline if programmatic
+		
+		d3.select('nav#sort p').html(hashSort[config.sortBy]); // set the sort value of the nav headline if programmatic
+		
+		$('button.value').removeClass('pressed'); 
+		$('button.value#pp_' + config.varX).addClass('pressed'); // set the value button
+		
+		// $('button.rating').removeClass('pressed'); 
+
+		d3.selectAll('button.rating').classed('pressed', false);
+		if (config.rating) { d3.select('button#' + config.varZ).classed('pressed', true); }
+
+	}; // set new category
+
+
+	// --- specific handlers --- //
 
 	my.plotpoint.initial = function(data) {
 
@@ -305,106 +399,6 @@ var handler = (function() {
 
 	}; // no axes
 
-	my.plotpoint.pp_start_value = function(data) {
-
-		config.varX = 'start_value';
-		config.baseline = false;
-
-		var newChart = chart()
-				.key(config.key)
-				.keyValue(config.keyValue)
-				.varX(config.varX)
-				.varY(config.varY)
-				.varZ(config.varZ)
-				.extentX(config.extentX)
-				.extentY(config.extentY)
-				.extentZ(config.extentZ)
-				.sortBy(config.sortBy)
-				.onlyYaxis(config.onlyYaxis)
-				.baseline(config.baseline)
-				.rating(config.rating);
-
-		d3.select('div#container')
-				.datum(data)
-				.call(newChart);
-
-	}; // films (pp = plotpont)
-
-	my.plotpoint.pp_production_budget = function(data) {
-
-		config.varX = 'production_budget';
-		config.baseline = false;
-
-		var newChart = chart()
-				.key(config.key)
-				.keyValue(config.keyValue)
-				.varX(config.varX)
-				.varY(config.varY)
-				.varZ(config.varZ)
-				.extentX(config.extentX)
-				.extentY(config.extentY)
-				.extentZ(config.extentZ)
-				.sortBy(config.sortBy)
-				.onlyYaxis(config.onlyYaxis)
-				.baseline(config.baseline)
-				.rating(config.rating);
-
-		d3.select('div#container')
-				.datum(data)
-				.call(newChart);
-
-	}; // production budget (pp = plotpont)
-
-	my.plotpoint.pp_domestic_gross = function(data) {
-
-		config.varX = 'domestic_gross';
-		config.baseline = true;
-
-		var newChart = chart()
-				.key(config.key)
-				.keyValue(config.keyValue)
-				.varX(config.varX)
-				.varY(config.varY)
-				.varZ(config.varZ)
-				.extentX(config.extentX)
-				.extentY(config.extentY)
-				.extentZ(config.extentZ)
-				.sortBy(config.sortBy)
-				.onlyYaxis(config.onlyYaxis)
-				.baseline(config.baseline)
-				.rating(config.rating);
-
-		d3.select('div#container')
-				.datum(data)
-				.call(newChart);
-
-	}; // domestic gross (pp = plotpont)
-
-	my.plotpoint.pp_worldwide_gross = function(data) {
-
-		config.varX = 'worldwide_gross';
-		config.baseline = true;
-
-		var newChart = chart()
-				.key(config.key)
-				.keyValue(config.keyValue)
-				.varX(config.varX)
-				.varY(config.varY)
-				.varZ(config.varZ)
-				.extentX(config.extentX)
-				.extentY(config.extentY)
-				.extentZ(config.extentZ)
-				.sortBy(config.sortBy)
-				.onlyYaxis(config.onlyYaxis)
-				.baseline(config.baseline)
-				.rating(config.rating);
-
-		d3.select('div#container')
-				.datum(data)
-				.call(newChart);
-
-	}; // worldwide gross (pp = plotpont)
-
 	my.plotpoint.pp_production_budget_scaled = function(data) {
 
 		config.varX = 'production_budget';
@@ -433,113 +427,6 @@ var handler = (function() {
 
 	}; // production budget (pp = plotpont)
 
-
-	my.ratings = function(that, data, value) {
-
-		// set the rating to choose
-		var v = arguments.length === 2 ? String(that.id) : value;
-
-		config.varZ = v;
-		config.rating = $('button.rating').hasClass('pressed'); // The expression on the right evaluates true if any button.rating has been pressed.
-
-		var newChart = chart()
-				.key(config.key)
-				.keyValue(config.keyValue)
-				.varX(config.varX)
-				.varY(config.varY)
-				.varZ(config.varZ)
-				.extentX(config.extentX)
-				.extentY(config.extentY)
-				.extentZ(config.extentZ)
-				.sortBy(config.sortBy)
-				.onlyYaxis(config.onlyYaxis)
-				.baseline(config.baseline)
-				.rating(config.rating);
-
-		d3.select('div#container')
-				.datum(data)
-				.call(newChart);
-
-
-		if (arguments.length === 3) {
-			d3.selectAll('button.rating').classed('pressed', false);
-			d3.select('button#' + v).classed('pressed', true);
-		}
-
-	}; // set new rating
-
-	my.sort = function(that, data, value) {
-
-		var v = arguments.length === 2 ? String(that.id) : value; // check for manual or programmatic input
-
-		config.sortBy = v;
-
-		var newChart = chart()
-				.key(config.key)
-				.keyValue(config.keyValue)
-				.varX(config.varX)
-				.varY(config.varY)
-				.varZ(config.varZ)
-				.extentX(config.extentX)
-				.extentY(config.extentY)
-				.extentZ(config.extentZ)
-				.sortBy(config.sortBy)
-				.onlyYaxis(config.onlyYaxis)
-				.baseline(config.baseline)
-				.rating(config.rating);
-
-		d3.select('div#container')
-				.datum(data)
-				.call(newChart);
-
-		d3.select('nav#sort p').html(hashSort[v]); // set the value of the nav headline if programmatic
-
-	}; // set new sort
-
-	my.changeDataset = function(that, data, value) {
-
-		var v = arguments.length === 2 ? String(that.id) : value; // check for manual or programmatic input
-
-		config.keyValue = v;
-		config.varX = 'start_value';
-		config.sortBy = 'production_budget';
-		config.baseline = false;
-		config.rating = false;
-
-		var newChart = chart()
-				.key(config.key)
-				.keyValue(config.keyValue)
-				.varX(config.varX)
-				.varY(config.varY)
-				.varZ(config.varZ)
-				.extentX(config.extentX)
-				.extentY(config.extentY)
-				.extentZ(config.extentZ)
-				.sortBy(config.sortBy)
-				.onlyYaxis(config.onlyYaxis)
-				.baseline(config.baseline)
-				.rating(config.rating);
-
-		d3.select('div#container')
-				.datum(data)
-				.call(newChart);
-
-
-		d3.select('nav#keyValue p').html(hashKeyValue[v]); // set the dataset value in the nav headline if programmatic
-		d3.select('nav#sort p').html(hashSort[config.sortBy]); // set the sort value of the nav headline if programmatic
-		$('button.value').removeClass('pressed'); 
-		$('button.rating').removeClass('pressed'); 
-		$('#pp_' + config.varX).addClass('pressed'); 
-
-	}; // set new category
-
-	my.showGenreBar = function() {
-
-		d3.select('#genreMenu').transition().duration(1000).style('opacity', 1);
-		
-		d3.selectAll('#genreMenu > button').style('pointer-events', 'all').style('cursor', 'pointer');
-
-	};
 
 	return my;
 
@@ -872,6 +759,7 @@ function chart() {
 				.transition()
 				.duration(dur)
 				.delay(function(d,i) { return i * dur / n; })
+					.attr('cx', function(d) { return scaleX(d[objX.value]); })
 					.attr('r', function(d) { return rating ? scaleZ(d[objZ.value]) : radius; })
 					.style('fill', function(d) { return rating ? scaleZCol(d[objZ.value]) : '#ccc'; });
 			
@@ -1227,5 +1115,6 @@ function type(d) {
 // about the data: inflation adjusted, hard to estimate in parts domestic gross === US
 // http://inflationdata.com/articles/2013/05/16/highest-grossing-movies-adjusted-for-inflation/
 
-// reverse story line
+
+
 // Trailing garbage
