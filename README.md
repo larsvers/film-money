@@ -44,7 +44,7 @@ However, there are clear cases for scrollytelling. One use-case is simply when t
 Also taking some advice from the Olymp of data journalism:
 
 ![readers just want to scroll](images/readme/archie_tse_quote.png)
-<sub>Malofiej 2016, Archie Tse, New York Times, [Why we are doing fewer interactives](https://github.com/archietse/malofiej-2016/blob/master/tse-malofiej-2016-slides.pdf)</sub>
+<sub>Archie Tse, New York Times, Malofiej 2016 presentation: [Why we are doing fewer interactives](https://github.com/archietse/malofiej-2016/blob/master/tse-malofiej-2016-slides.pdf)</sub>
 
 So there. Those are my bipolar thoughts to scrollytelling. Looking at the chart alone, I’m pretty unipolar though:
 
