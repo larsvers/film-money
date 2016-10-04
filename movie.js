@@ -164,17 +164,15 @@ d3.csv("data/movies.csv", type, function(data){
 
 			handler.pressed(this);
 			
-			var compObj = {};
-			compObj.data = data;
-			compObj.value = config.keyValue;
-			compObj.xVar = x; // changed
-			compObj.zVar = config.varZ;
-			compObj.yAxisFlag = config.onlyYaxis;
-			compObj.sortVar = config.sortBy;
-			compObj.baseFlag = config.baseline;
-			compObj.ratingFlag = config.rating;
+			config.keyValue = config.keyValue;
+			config.varX = x; // changed
+			config.varZ = config.varZ;
+			config.onlyYaxis = config.onlyYaxis;
+			config.sortBy = config.sortBy;
+			config.baseline = config.baseline;
+			config.rating = config.rating;
 			
-			handler.plotpoint.compose(compObj); 
+			handler.plotpoint.compose(data); 
 
 		});
 
@@ -182,33 +180,29 @@ d3.csv("data/movies.csv", type, function(data){
 
 			handler.pressed(this);
 
-			var compObj = {};
-			compObj.data = data;
-			compObj.value = config.keyValue;
-			compObj.xVar = config.varX;
-			compObj.zVar = String(this.id); // changed
-			compObj.yAxisFlag = config.onlyYaxis;
-			compObj.sortVar = config.sortBy;
-			compObj.baseFlag = config.baseline;
-			compObj.ratingFlag = $('button.rating').hasClass('pressed'); // changed
+			config.keyValue = config.keyValue;
+			config.varX = config.varX;
+			config.varZ = String(this.id); // changed
+			config.onlyYaxis = config.onlyYaxis;
+			config.sortBy = config.sortBy;
+			config.baseline = config.baseline;
+			config.rating = $('button.rating').hasClass('pressed'); // changed
 			
-			handler.plotpoint.compose(compObj); 
+			handler.plotpoint.compose(data); 
 
 		}); // button listener
 		
 		d3.selectAll('li.sortItems').on('mousedown', function() { 
 		
-			var compObj = {};
-			compObj.data = data;
-			compObj.value = config.keyValue;
-			compObj.xVar = config.varX;
-			compObj.zVar = config.varZ;
-			compObj.yAxisFlag = config.onlyYaxis;
-			compObj.sortVar = this.id; // changed
-			compObj.baseFlag = config.baseline;
-			compObj.ratingFlag = config.rating;
+			config.keyValue = config.keyValue;
+			config.varX = config.varX;
+			config.varZ = config.varZ;
+			config.onlyYaxis = config.onlyYaxis;
+			config.sortBy = this.id; // changed
+			config.baseline = config.baseline;
+			config.rating = config.rating;
 			
-			handler.plotpoint.compose(compObj); 
+			handler.plotpoint.compose(data); 
 
 			d3.select('nav#sort p').html(hashSort[v]); // set the value of the nav headline
 		
@@ -218,17 +212,15 @@ d3.csv("data/movies.csv", type, function(data){
 
 			handler.pressed(this);
 			
-			var compObj = {};
-			compObj.data = data;
-			compObj.value = String(this.id);
-			compObj.xVar = 'start_value'; // changed
-			compObj.zVar = 'ratings_imdb';
-			compObj.yAxisFlag = config.onlyYaxis;
-			compObj.sortVar = 'production_budget';
-			compObj.baseFlag = false;
-			compObj.ratingFlag = false;
+			config.keyValue = String(this.id);
+			config.varX = 'start_value'; // changed
+			config.varZ = 'ratings_imdb';
+			config.onlyYaxis = config.onlyYaxis;
+			config.sortBy = 'production_budget';
+			config.baseline = false;
+			config.rating = false;
 			
-			handler.plotpoint.compose(compObj); 
+			handler.plotpoint.compose(data); 
 
 		}); // category = keyValue = dataset listener and handler
 
@@ -839,7 +831,8 @@ function chart() {
 
 
 				// --- Data prep for the genre highlight --- //
-
+				log(data);
+				log(_.uniq);
 				var genres = _.uniq(data.map(function(d) { return d.genreMain; })); // unique list of genres
 				var arrAxis = d3.select('.y.axis').selectAll('g > text').data(); // all films from axis
 
