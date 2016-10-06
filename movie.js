@@ -1,5 +1,6 @@
 var log = console.log.bind(console);
 var dir = console.dir.bind(console);
+var translateG = function(x,y) { return 'translate(' + x + ', ' + y + ')'; }
 var hashToObjects = function(_) {
 
 	var keys = d3.keys(_);
@@ -47,6 +48,7 @@ var globals = (function() {
 	config.baseline = false;
 	config.rating = undefined;
 	config.scalefactor = 1;
+	config.scatterplot = false;
 
 	config.compareTo = 'production_budget';
 
@@ -148,12 +150,61 @@ d3.csv("data/movies.csv", type, function(data){
 	data = _.sortBy(data, function(el) { return el.production_budget; }); // Sort before feeding into any function. Otherwise the data won't be sorted descendingly but ascendingly
 	
 	handler.pressed(undefined, 'pp_start_value');
-	handler.plotpoint.initial(data); // I'm aware this is fired twice upon reload
-	setTimeout(function() { config.pageload = false }, 2000);
+	handler.plotpoint.initial(data); 
+	setTimeout(function() { config.pageload = false }, 2000); // pageload flag makes sure this isn't getting fired from the scrol listener as well
 	
 	var listener = (function() {
 
-	// --- Click listener of graph elements (story elements come on specific .js file) --- //
+		
+		// --- Click listener of graph elements (story elements come on specific .js file) --- //
+		
+		d3.selectAll('li.keyValueItems').on('mousedown', function() {
+
+			handler.pressed(this);
+			
+			config.keyValue = String(this.id);
+			config.varX = 'start_value'; // changed
+			config.varZ = 'ratings_imdb';
+			config.onlyYaxis = config.onlyYaxis;
+			config.sortBy = 'production_budget';
+			config.baseline = false;
+			config.rating = false;
+
+			// re-set in case we come from scatterplot
+			config.scatterplot = false;
+			config.varY = 'movie';
+			config.extentX = ['start_value', 'production_budget', 'domestic_gross', 'worldwide_gross'];
+			config.extentY = ['movie']; // not really needed in our case
+			
+			handler.plotpoint.compose(data); 
+
+		}); // category = keyValue = dataset listener and handler
+
+
+		d3.selectAll('li.sortItems').on('mousedown', function() { 
+		
+			handler.pressed(this);
+
+			config.keyValue = config.keyValue;
+			config.varX = config.varX;
+			config.varZ = config.varZ;
+			config.onlyYaxis = config.onlyYaxis;
+			config.sortBy = this.id; // changed
+			config.baseline = config.baseline;
+			config.rating = config.rating;
+
+			// re-set in case we come from scatterplot
+			config.scatterplot = false;
+			config.varY = 'movie';
+			config.extentX = ['start_value', 'production_budget', 'domestic_gross', 'worldwide_gross'];
+			config.extentY = ['movie']; // not really needed in our case
+
+			
+			handler.plotpoint.compose(data); 
+
+			d3.select('nav#sort p').html(hashSort[this.id]); // set the value of the nav headline
+		
+		}); // sort listener and handler
 
 
 		d3.selectAll('button.value').on('mousedown', function() { 
@@ -171,10 +222,17 @@ d3.csv("data/movies.csv", type, function(data){
 			config.sortBy = config.sortBy;
 			config.baseline = config.baseline;
 			config.rating = config.rating;
-			
+		
+			// re-set in case we come from scatterplot
+			config.scatterplot = false;
+			config.varY = 'movie';
+			config.extentX = ['start_value', 'production_budget', 'domestic_gross', 'worldwide_gross'];
+			config.extentY = ['movie']; // not really needed in our case
+
 			handler.plotpoint.compose(data); 
 
 		});
+
 
 		d3.selectAll('button.rating').on('mousedown', function() { 
 
@@ -191,39 +249,48 @@ d3.csv("data/movies.csv", type, function(data){
 			handler.plotpoint.compose(data); 
 
 		}); // button listener
-		
-		d3.selectAll('li.sortItems').on('mousedown', function() { 
-		
-			config.keyValue = config.keyValue;
-			config.varX = config.varX;
-			config.varZ = config.varZ;
-			config.onlyYaxis = config.onlyYaxis;
-			config.sortBy = this.id; // changed
-			config.baseline = config.baseline;
-			config.rating = config.rating;
-			
-			handler.plotpoint.compose(data); 
 
-			d3.select('nav#sort p').html(hashSort[v]); // set the value of the nav headline
-		
-		}); // sort listener and handler
 
-		d3.selectAll('li.keyValueItems').on('mousedown', function() {
+	 	var saveState = {};
+		d3.select('button.scatterplot').on('mousedown', function() {
 
-			handler.pressed(this);
-			
-			config.keyValue = String(this.id);
-			config.varX = 'start_value'; // changed
-			config.varZ = 'ratings_imdb';
-			config.onlyYaxis = config.onlyYaxis;
-			config.sortBy = 'production_budget';
-			config.baseline = false;
-			config.rating = false;
-			
-			handler.plotpoint.compose(data); 
+			$(this).toggleClass('pressed');
 
-		}); // category = keyValue = dataset listener and handler
+			if ($(this).hasClass('pressed')) {
 
+				saveState.scatterplot = config.scatterplot;
+				saveState.varX = config.varX;
+				saveState.varY = config.varY;
+				saveState.extentX = config.extentX;
+				saveState.extentY = config.extentY;
+				saveState.baseline = config.baseline;
+				saveState.rating = config.rating;
+
+				config.scatterplot = true;
+				config.varX = 'rating_imdb';
+				config.varY = 'rating_rt';
+				config.extentX = ['rating_imdb', 'rating_rt'];
+				config.extentY = ['rating_imdb', 'rating_rt']; // not really needed in our case
+				config.baseline = false;
+				config.rating = false;
+
+				handler.plotpoint.compose(data)
+
+			} else {
+
+				config.scatterplot = saveState.scatterplot;
+				config.varX = saveState.varX;
+				config.varY = saveState.varY;
+				config.extentX = saveState.extentX;
+				config.extentY = saveState.extentY;
+				config.baseline = saveState.baseline;
+				config.rating = saveState.rating;
+
+				handler.plotpoint.compose(data)				
+
+			}
+
+		});
 
 
 		// --- Scroll listener --- //
@@ -255,7 +322,6 @@ d3.csv("data/movies.csv", type, function(data){
 
 			action.forEach(function(el) { storyLookup[el](data); }); 
 			
-
 			// --- scroll stop if we feel inclined that way - feels a little wrong --- //
 			// d3.select('body').classed('stop-scrolling', true);
 			// setTimeout(function() { d3.select('body').classed('stop-scrolling', false); }, 1000);
@@ -303,6 +369,13 @@ var handler = (function() {
 				d3.select('button#' + el).classed('pressed', false);
 			}); // un-presses all other rating buttons
 			
+		}
+
+		// if any button but the rating's buttons are pressed
+		if (d3.select(that).classed('rating') === false) {
+
+			$('button.scatterplot').removeClass('pressed'); // the scatterplot needs to go.
+
 		} 
 
 	}; // button handler
@@ -329,7 +402,8 @@ var handler = (function() {
 				.sortBy(config.sortBy)
 				.onlyYaxis(config.onlyYaxis)
 				.baseline(config.baseline)
-				.rating(config.rating);
+				.rating(config.rating)
+				.scatterplot(config.scatterplot);
 
 		d3.select('div#container')
 				.datum(data)
@@ -440,7 +514,8 @@ function chart() {
 			extentX,
 			extentY,
 			extentZ,
-			sortBy;
+			sortBy,
+			scatterplot;
 
 	var margin = { top: 50, right: (window.innerWidth*0.25) , bottom: 10, left: (window.innerWidth*0.25) },
 			width = (window.innerWidth) - margin.left - margin.right,
@@ -480,10 +555,10 @@ function chart() {
 
 			// log('objX',objX);
 			// log('objY',objY);
-			// log('objZ',objZ.extent);
+			// log('objZ',objZ);
 
 			function measureVars(varsExtent, variable) {
-
+				
 				// error handling
 				try 				{ if(varsExtent.constructor !== Array) throw 'Pls input an array of variable(s) in the chart composition'; } 
 				catch(err) 	{ console.error(err); }
@@ -512,9 +587,11 @@ function chart() {
 
 			// ===  Scales === //
 
-			scaleX = d3.scaleLinear().domain([0, objX.extent[1]]).range([0, width]);
+			scaleX = d3.scaleLinear().domain(objX.extent).range([0, width]);
 
 			scaleY = d3.scalePoint().domain(dataNest.map(function(el) { return el[objY.value]; })).range([height, 0]).padding(1);
+
+			if (scatterplot) { scaleY = d3.scaleLinear().domain(objY.extent).range([height, 0]); }
 
 			scaleZ = d3.scaleSqrt().domain([objZ.extent[0], objZ.extent[1]]).range(config.windowSizeFlag ? [2,10] : [3, 20]); // range smaller for small screens
 			
@@ -596,9 +673,6 @@ function chart() {
 
 			})(); // legendBuilder() namespace
 
-
-			function translateG(x,y) { return 'translate(' + x + ', ' + y + ')'; }
-
 			// === Init === //
 
 			var svg = d3.select(this)
@@ -640,8 +714,8 @@ function chart() {
 					.tickSize(-height)
 					.tickPadding(10);
 
-			axisY = d3.axisLeft(scaleY).tickPadding(10);
-
+			axisY = d3.axisLeft(scaleY).tickSize(-width).tickPadding(10); // y ticks will only be shown for scatterplot
+			
 			d3.select('.x.axis')
 					.attr('transform', 'translate(0, 0)')
 				.transition()
@@ -664,6 +738,8 @@ function chart() {
 			d3.selectAll('g.x.axis > g.tick > text')
 				.style('text-anchor', 'start');
 
+
+			var t = d3.transition().duration(1000);
 			
 
 			if (onlyYaxis) {
@@ -673,8 +749,6 @@ function chart() {
 
 			} else {
 
-				var t = d3.transition().duration(1000);
-				// var t2 = d3.transition().duration(0);
 
 				d3.selectAll('.x.axis text').transition(t).style('fill-opacity', 1);
 				d3.selectAll('.x.axis line').transition(t).style('stroke-opacity', 1);
@@ -682,32 +756,41 @@ function chart() {
 			} // Axis specs for first plotpoint
 				
 		
+			if (scatterplot) {
+
+				d3.selectAll('.y.axis line').transition(t).style('stroke-opacity', 1);
+
+			} else {
+
+				d3.selectAll('.y.axis line').transition(t).style('stroke-opacity', 0);
+			}
 
 			// ==== Chart === //
 
 
 			// --- Lines --- //
 
-			// join
-			var lines = d3.select('g.lollipops')
-					.selectAll('.lines')
-					.data(dataNest, function(d) { return d[objY.value]; });
+			if (!scatterplot) {
+				
+				// join
+				var lines = d3.select('g.lollipops')
+						.selectAll('.lines')
+						.data(dataNest, function(d) { return d.rank; });
 
-			// enter
-			lines
-					.enter()
-				.append('line')
-					.attr('class', 'lines')
-					.attr('x1', scaleX(0))
-					.attr('y1', function(d) { return scaleY(d[objY.value]); })
-					.attr('x2', scaleX(0))
-					.attr('y2', function(d) { return scaleY(d[objY.value]); })
-					.style('stroke', function(d) { return rating ? scaleZCol(d[objZ.value]) : '#ccc'; })
-				.transition()
-				.duration(dur)
-				.delay(function(d,i) { return i * dur /n; })
-					.attr('x2', function(d) { return scaleX(d[objX.value]); });
-
+				// enter
+				lines
+						.enter()
+					.append('line')
+						.attr('class', 'lines')
+						.attr('x1', scaleX(0))
+						.attr('y1', function(d) { return scaleY(d[objY.value]); })
+						.attr('x2', scaleX(0))
+						.attr('y2', function(d) { return scaleY(d[objY.value]); })
+						.style('stroke', function(d) { return rating ? scaleZCol(d[objZ.value]) : '#ccc'; })
+					.transition()
+					.duration(dur)
+					.delay(function(d,i) { return i * dur /n; })
+						.attr('x2', function(d) { return scaleX(d[objX.value]); });
 
 				// update
 				lines
@@ -728,6 +811,7 @@ function chart() {
 							.style('opacity', 1e-6)
 							.remove();
 
+			} // no lines for any scatterplot
 
 			
 			// --- Circles --- //
@@ -737,7 +821,7 @@ function chart() {
 			// join
 			var circles = d3.select('g.lollipops')
 					.selectAll('.circles')
-					.data(dataNest, function(d) { return d[objY.value]; });
+					.data(dataNest, function(d) { return d.rank; });
 
 			// enter
 			circles
@@ -776,7 +860,8 @@ function chart() {
 
 
 
-			// === Specific plotpoint actions === //
+
+			// === Specific actions and interactions === //
 
 
 			// --- Baseline circles --- //
@@ -825,14 +910,63 @@ function chart() {
 
 
 
+
+			// --- What happens if we show a scatterplot --- //
+
+			var buildScatterplot = (function() {
+
+				if (scatterplot) {
+
+					d3.selectAll('.lines').transition().style('opacity', 0).remove(); // if lines were drawn before the scatter, remove them
+				
+					// add pulsating circles
+
+					var circlesPuls = d3.select('g.lollipops')
+							.selectAll('.pulse')
+							.data(dataNest, function(d) { return d.rank; })
+							.enter()
+						.append('circle')
+							.classed('pulse', true)
+							.classed('remove', function(d) { return 1 - d.rating_outlier; })
+							.attr('cx', function(d) { return scaleX(d[objX.value]); })
+							.attr('cy', function(d) { return scaleY(d[objY.value]); })
+							.attr('r', 0)
+							.style('fill', '#ccc')
+							.lower()
+						.transition()
+						.duration(dur*2)
+						.delay(function(d,i) { return i * dur / n; })
+							.attr('r', function(d) { return radius; })
+							.style('fill', function(d) { 
+								if (d.rating_outlier_between) {
+									return '#FFFF33';
+								} else if (d.rating_higher) {
+									return '#4DAF4A';
+								} else if (d.rating_lower) {
+									return '#FF7F00';
+								} // pulse colour dependning on type of outlier 
+							});
+
+						d3.selectAll('.remove').remove();
+
+
+				} else {
+
+					d3.selectAll('.pulse').remove();
+				
+				}
+
+			})(); // scatterplot specs namespace (there are some more scattered around - find 'scatterplot' to check on them)
+
+
+
 			// --- Highlight axis labels by genre --- //
 
 			var genreHighlight = (function() {
 
 
 				// --- Data prep for the genre highlight --- //
-				log(data);
-				log(_.uniq);
+
 				var genres = _.uniq(data.map(function(d) { return d.genreMain; })); // unique list of genres
 				var arrAxis = d3.select('.y.axis').selectAll('g > text').data(); // all films from axis
 
@@ -1058,6 +1192,12 @@ function chart() {
 		return my;
 	};
 
+	my.scatterplot = function(_) {
+		if(!arguments.length) return scatterplot;
+		scatterplot = _;
+		return my;
+	};
+
 return my;
 
 } // chart()
@@ -1077,6 +1217,14 @@ function type(d) {
 	d.worldwide_gross = parseFloat(d.worldwide_gross);
 	d.rating_imdb = parseFloat(d.rating_imdb);
 	d.rating_rt = parseFloat(d.rating_rt);
+	d.rating_higher_imdb = parseFloat(d.rating_higher_imdb);
+	d.rating_higher_rt = parseFloat(d.rating_higher_rt);
+	d.rating_lower_imdb = parseFloat(d.rating_lower_imdb);
+	d.rating_lower_rt = parseFloat(d.rating_lower_rt);
+	d.rating_higher = parseFloat(d.rating_higher);
+	d.rating_lower = parseFloat(d.rating_lower);
+	d.rating_outlier_between = parseFloat(d.rating_outlier_between);
+	d.rating_outlier = parseFloat(d.rating_outlier);
 	d.approx_income = parseFloat(d.approx_income);
 	d.approx_expense = parseFloat(d.approx_expense);
 	d.profit = parseFloat(d.profit);
@@ -1084,8 +1232,6 @@ function type(d) {
 	d.genres = d.genres.split(",");
 	return d;
 }
-
-
 
 
 

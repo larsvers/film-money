@@ -73,9 +73,15 @@ a:link, a:visited, a:hover, a:active {
 }
 
 .y.axis line {
-	stroke: none;	
+	stroke-opacity: 0;	
 } 
 
+/* .y.axis line.show {
+  stroke: #333;
+
+	transition: all;
+}
+ */
 .y.axis text {
 	fill: #D9D9CE;
 }
@@ -121,8 +127,8 @@ div#controls {
 	margin-right: 0;
 	width:  10vw;
 
-	display: none;
-	/* display: flex; */ /* switch on for debugging */
+	/* display: none; */
+	display: flex; /* switch on for debugging */
 	-ms-flex-direction: column;
 	    flex-direction: column;
 	-ms-flex-pack: center;
@@ -235,6 +241,32 @@ li.selectItems {
 	list-style-type: none;
 }
 
+
+
+/* --- Scatterplot outlier pulse --- */
+
+.pulse {
+	-webkit-animation: pulse 2.5s ease infinite;
+	-o-animation: pulse 2.5s ease infinite;
+	animation: pulse 2.5s ease infinite;
+}
+
+
+@keyframes pulse {
+
+	0% {
+		transform: scale(0);
+		transform-origin: center center;
+		opacity: 0.8;
+	}
+
+	100% {
+		transform: scale(3);
+		transform-origin: center center;
+		opacity: 0;
+	}
+	
+}
 
 
 /* === Storytelling sections === */
