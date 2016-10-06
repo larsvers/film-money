@@ -21,6 +21,10 @@
 #E33F96 pink			Highlighted text
 d3.interpolatePuRd white>purple Colour Scale rating
 
+#FFFF33	yellow		scatter: rating_outlier_between
+#4DAF4A	green			scatter: rating_higher
+#FF7F00 orange		scatter: rating_higher
+
 
 */
 
@@ -182,10 +186,23 @@ button {
 	margin-bottom: 10px;
 }
 
-#legend {
+#legendWrap {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	height:  38px;
+}
+
+#legend-ratings,
+#legend-scatter {
 	opacity: 0;
 }
 
+#legend-scatter img {
+	display: none;
+	height: 38px;
+}
 
 
 /* --- Select nav --- */

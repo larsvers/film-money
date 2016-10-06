@@ -600,12 +600,13 @@ function chart() {
 
 
 
+
 			var legendBuilder = (function() {
 			
 
 				// --- Data prep --- //
 
-				// I want to show a series of 10 circles growing from smallest to largest for teh legend
+				// I want to show a series of 10 circles growing from smallest to largest for the legend
 				// in order to do that I need a uniform distribution of 10 numbers between the lowest to the largest extent
 				// d3.range is my friend ! However, d3.range omits the last step (the max value)
 				// In order to include it, we have to add the delta between each step to the max value. 
@@ -622,7 +623,7 @@ function chart() {
  
 				// Create an element only once after page-load (with the enter selection) - regardless of how many times the data gets updated
 				
-				var svgL = d3.select('#legend')
+				var svgL = d3.select('#legend-ratings')
 						.selectAll('svg.svgL')
 						.data([dataLegend]); // data join with a single data element
 
@@ -669,9 +670,44 @@ function chart() {
 
 				// --- Show/hide --- //
 
-				d3.select('#legend').transition().duration(500).style('opacity', config.rating ? 1 : 0);
+				var legendWidth = $('#legend-ratings svg').width();
+
+				if (config.rating) {
+
+					d3.select('#legend-ratings')
+						.style('display','inherit')
+						.style('width', scatterplot ? 0 : legendWidth + 'px')
+						.transition().duration(500)
+						.style('width', legendWidth + 'px')
+						.style('opacity', 1);
+
+				} else {
+
+					d3.select('#legend-ratings')
+						.style('width', legendWidth + 'px')
+						.transition().duration(500)
+						.style('width', '0px')
+						// .style('width', scatterplot ? legendWidth + 'px' : 0)
+						.style('opacity', 0)
+						.transition().delay(500)
+						.style('display','none');
+
+				}
 
 			})(); // legendBuilder() namespace
+
+
+
+			/*
+
+			
+
+
+			*/
+
+
+
+
 
 			// === Init === //
 
@@ -707,15 +743,21 @@ function chart() {
 
 			var n = dataNest.length;
 			var dur = 1000; 	
-			var formatValue = d3.format('.2s');
+			var formatValue = d3.format('.1s');
 
 			axisX = d3.axisTop(scaleX)
 					.tickFormat(function(d) { return formatValue(d).replace('M', ' mil').replace('G', ' bil'); })
 					.tickSize(-height)
 					.tickPadding(10);
 
-			axisY = d3.axisLeft(scaleY).tickSize(-width).tickPadding(10); // y ticks will only be shown for scatterplot
+			axisY = d3.axisLeft(scaleY)
+					.tickSize(-width)
+					.tickPadding(10); // y ticks will only be shown for scatterplot
+
+			if (scatterplot) { axisY.tickFormat(function(d) { return formatValue(d); }); }
 			
+
+
 			d3.select('.x.axis')
 					.attr('transform', 'translate(0, 0)')
 				.transition()
@@ -789,7 +831,7 @@ function chart() {
 						.style('stroke', function(d) { return rating ? scaleZCol(d[objZ.value]) : '#ccc'; })
 					.transition()
 					.duration(dur)
-					.delay(function(d,i) { return i * dur /n; })
+					.delay(function(d,i) { return i * dur / n; })
 						.attr('x2', function(d) { return scaleX(d[objX.value]); });
 
 				// update
@@ -913,9 +955,11 @@ function chart() {
 
 			// --- What happens if we show a scatterplot --- //
 
-			var buildScatterplot = (function() {
+			var scatterplotProperties = (function() {
 
 				if (scatterplot) {
+
+					// line removal
 
 					d3.selectAll('.lines').transition().style('opacity', 0).remove(); // if lines were drawn before the scatter, remove them
 				
@@ -950,9 +994,20 @@ function chart() {
 						d3.selectAll('.remove').remove();
 
 
+						// legend
+
+						d3.select('#legend-scatter img').style('display','inherit');
+						d3.select('#legend-scatter').transition().style('opacity', 1);
+
+
+
 				} else {
 
 					d3.selectAll('.pulse').remove();
+
+					d3.select('#legend-scatter').transition().style('opacity', 0);
+					d3.select('#legend-scatter img').transition().delay(250).style('display','none');
+
 				
 				}
 
