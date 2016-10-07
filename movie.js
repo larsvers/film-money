@@ -1,5 +1,7 @@
 var log = console.log.bind(console);
 var dir = console.dir.bind(console);
+var noDecimal = d3.format('.1s');
+var singleDecimal = d3.format('.2s');
 var translateG = function(x,y) { return 'translate(' + x + ', ' + y + ')'; }
 var hashToObjects = function(_) {
 
@@ -254,6 +256,8 @@ d3.csv("data/movies.csv", type, function(data){
 	 	var saveState = {};
 		d3.select('button.scatterplot').on('mousedown', function() {
 
+			handler.pressed(this);
+
 			$(this).toggleClass('pressed');
 
 			if ($(this).hasClass('pressed')) {
@@ -351,13 +355,81 @@ var handler = (function() {
 
 		that = arguments.length === 2 ? $('button#' + value)[0] : that;
 
-		// if the value is changed
+		// --- If the value is changed --- //
+		
 		if ($(that).hasClass('value')) {
 			$('button.value').removeClass('pressed');			
 			$(that).addClass('pressed');
 		} 
 
-		// if the rating is changed
+
+		// --- Legend display logic --- //
+
+		// logic showing and hiding the ratings and scatterplot legend 
+		// this took a little moment as it's a little invoved with 3 rating button states and 2 scatterplot states interacting
+		// is all dependent on the previous state of the button. Which is why the button.pressed additions/removals come after this
+		
+		// get the width of the legend elements (the images, svgs or whatever we use) 
+		var legendRatingSvgWidth = $('#legend-ratings svg').width();
+		var legendScatterImgWidth = $('#legend-scatter img').width();
+
+		
+		// If this has .rating
+		if (d3.select(that).classed('rating')) {
+
+			// if none of the .rating buttons has pressed
+			if ($('.rating.pressed').length === 0) { // checks for multiple elements with .pressed
+				
+				// show legend
+				d3.select('#legend-ratings')
+					.transition().style('width', legendRatingSvgWidth + 'px')
+					.transition().delay(300).style('opacity', 1);
+
+			}
+			
+			// if this .rating button has pressed
+			if (d3.select(that).classed('pressed')) {			
+				
+				// hide legend
+				d3.select('#legend-ratings')
+					.transition().style('opacity', 0)
+					.transition().delay(300).style('width', '0px')
+
+			}
+			
+			// if the other .rating button has pressed
+				// do nothing (legend is already there)
+
+		}
+
+		// If this has .scatterplot
+		if (d3.select(that).classed('scatterplot')) {
+
+			// if the .scatterplot button is not pressed
+			if ($('.scatterplot.pressed').length === 0) { // checks for multiple elements with .pressed
+				
+				// show legend (see below)
+				d3.select('#legend-scatter')
+					.transition().style('width', legendScatterImgWidth + 'px')
+					.transition().delay(300).style('opacity', 1);
+
+			}
+
+			// if the .scatterplot button is pressed
+			if (d3.select(that).classed('pressed')) {			
+
+				// hide legend
+				d3.select('#legend-scatter')
+					.transition().style('opacity', 0)
+					.transition().delay(300).style('width', '0px')
+
+			}
+
+		}
+
+
+		// --- If the rating is changed --- //
+
 		if ($(that).hasClass('rating')) {
 
 			$(that).toggleClass('pressed'); // toggle the pressed button
@@ -371,10 +443,13 @@ var handler = (function() {
 			
 		}
 
-		// if any button but the rating's buttons are pressed
-		if (d3.select(that).classed('rating') === false) {
 
-			$('button.scatterplot').removeClass('pressed'); // the scatterplot needs to go.
+		// --- Remove scatterplot when any other button is pressed --- //
+
+		// if any button but the ratings or the scatterplot buttons are pressed remove the scatterplot
+		if (d3.select(that).classed('rating') === false && d3.select(that).classed('scatterplot') === false) {
+
+			$('button.scatterplot').removeClass('pressed');
 
 		} 
 
@@ -667,43 +742,8 @@ function chart() {
 				
 				gL.exit().remove();
 
-
-				// --- Show/hide --- //
-
-				var legendWidth = $('#legend-ratings svg').width();
-
-				if (config.rating) {
-
-					d3.select('#legend-ratings')
-						.style('display','inherit')
-						.style('width', scatterplot ? 0 : legendWidth + 'px')
-						.transition().duration(500)
-						.style('width', legendWidth + 'px')
-						.style('opacity', 1);
-
-				} else {
-
-					d3.select('#legend-ratings')
-						.style('width', legendWidth + 'px')
-						.transition().duration(500)
-						.style('width', '0px')
-						// .style('width', scatterplot ? legendWidth + 'px' : 0)
-						.style('opacity', 0)
-						.transition().delay(500)
-						.style('display','none');
-
-				}
-
 			})(); // legendBuilder() namespace
 
-
-
-			/*
-
-			
-
-
-			*/
 
 
 
@@ -743,10 +783,9 @@ function chart() {
 
 			var n = dataNest.length;
 			var dur = 1000; 	
-			var formatValue = d3.format('.1s');
 
 			axisX = d3.axisTop(scaleX)
-					.tickFormat(function(d) { return formatValue(d).replace('M', ' mil').replace('G', ' bil'); })
+					.tickFormat(function(d) { return scatterplot ? singleDecimal(d) : noDecimal(d).replace('M', ' mil').replace('G', ' bil'); })
 					.tickSize(-height)
 					.tickPadding(10);
 
@@ -754,7 +793,7 @@ function chart() {
 					.tickSize(-width)
 					.tickPadding(10); // y ticks will only be shown for scatterplot
 
-			if (scatterplot) { axisY.tickFormat(function(d) { return formatValue(d); }); }
+			if (scatterplot) { axisY.tickFormat(function(d) { return singleDecimal(d); }); }
 			
 
 
@@ -781,6 +820,67 @@ function chart() {
 				.style('text-anchor', 'start');
 
 
+			// --- Axis specifics: labelling lollipops and scatterpots --- //
+
+			// Clear all previous axes labels. Not sure why that's necessary, but it keeps previous labels upon new-built
+			
+			d3.selectAll('.label').remove(); 
+
+
+			// Write the axis label text 
+
+			var xLabelText;
+			if (scatterplot) {
+
+				xLabelText = hashSort[config.varX];
+
+			} else if (!scatterplot && config.varX === 'start_value') {
+
+				xLabelText = '';
+
+			} else {
+
+				xLabelText = 'Top 20 ' + hashKeyValue[config.keyValue] + ' - ' + hashSort[config.varX] + ' in US$';
+
+			}
+
+			// Add the labels depending on scatterplot - lollipops
+
+			d3.select('.x.axis')
+				.append('text')
+					.attr('class', 'label xLabel')
+					.text(xLabelText)
+					.attr('text-anchor', 'start')
+					.attr('transform', 'translate(' + 0 + ',' + (-margin.top * 0.75) + ')');
+
+			if (scatterplot) {
+
+				d3.select('.y.axis')
+					.append('text')
+						.attr('class', 'label yLabel')
+						.text(hashSort[config.varY])						
+						.attr('text-anchor', 'end')
+						.attr('transform', 'translate(' + (0-40) + ',' + 0 + ') rotate(270)');						
+
+				d3.selectAll('.y.axis text')
+						.style('fill', '#BABAB1');
+
+			}
+
+			// Show the y-axis ticklines for scatterplot
+
+			if (scatterplot) {
+
+				d3.selectAll('.y.axis line').transition(t).style('stroke-opacity', 1);
+
+			} else {
+
+				d3.selectAll('.y.axis line').transition(t).style('stroke-opacity', 0);
+			}
+
+
+			// don't show any ticklines for start_value
+
 			var t = d3.transition().duration(1000);
 			
 
@@ -796,16 +896,8 @@ function chart() {
 				d3.selectAll('.x.axis line').transition(t).style('stroke-opacity', 1);
 
 			} // Axis specs for first plotpoint
-				
+
 		
-			if (scatterplot) {
-
-				d3.selectAll('.y.axis line').transition(t).style('stroke-opacity', 1);
-
-			} else {
-
-				d3.selectAll('.y.axis line').transition(t).style('stroke-opacity', 0);
-			}
 
 			// ==== Chart === //
 
@@ -996,8 +1088,8 @@ function chart() {
 
 						// legend
 
-						d3.select('#legend-scatter img').style('display','inherit');
-						d3.select('#legend-scatter').transition().style('opacity', 1);
+						// d3.select('#legend-scatter img').style('display','inherit');
+						// d3.select('#legend-scatter').transition().style('opacity', 1);
 
 
 
@@ -1005,8 +1097,8 @@ function chart() {
 
 					d3.selectAll('.pulse').remove();
 
-					d3.select('#legend-scatter').transition().style('opacity', 0);
-					d3.select('#legend-scatter img').transition().delay(250).style('display','none');
+					// d3.select('#legend-scatter').transition().style('opacity', 0);
+					// d3.select('#legend-scatter img').transition().delay(250).style('display','none');
 
 				
 				}
@@ -1095,8 +1187,7 @@ function chart() {
 
 				d3.selectAll('.circles').on('mouseover', function(d) {
 
-					var formatValue = d3.format('.2s');
-					function format(num) { return '$ ' + formatValue(num).replace('M', ' mil').replace('G', ' bil'); }
+					function format(num) { return '$ ' + singleDecimal(num).replace('M', ' mil').replace('G', ' bil'); }
 
 					var html = 						
 					  '<div id="ttWrap">' +

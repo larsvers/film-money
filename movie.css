@@ -194,15 +194,35 @@ button {
 	height:  38px;
 }
 
-#legend-ratings,
+
+
+#legend-ratings {
+	opacity: 0;
+	width: 0;
+	/* display: none; */
+}
+
 #legend-scatter {
 	opacity: 0;
+	width: 0;
+	/* display: none; */
+	
 }
 
 #legend-scatter img {
-	display: none;
 	height: 38px;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* --- Select nav --- */
