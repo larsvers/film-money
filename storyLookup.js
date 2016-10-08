@@ -22,7 +22,7 @@ storyLookup[100] = function(data) {
 
 	if (!config.pageload) {
 
-		handler.pressed(undefined, '#pp_start_value'); 
+		handler.pressed(undefined, '#start_value'); 
 		
 		setTimeout(function() { handler.plotpoint.initial(data); }, 1000); // a little delay to let the globals change (specifically onlyYaxis needs a tick to change and disallow the x-axis to show)		
 
@@ -54,8 +54,10 @@ storyLookup[2] = function(data) {
 	config.sortBy = 'production_budget';
 	config.baseline = false;
 	config.rating = false;
+
+	handler.pressed(undefined, '#' + config.varX);
 	
-	handler.plotpoint.compose(data); 
+	handler.plotpoint.compose(data);
 
 }; 
 
@@ -69,6 +71,8 @@ storyLookup[3] = function(data) {
 	config.baseline = false;
 	config.rating = false;
 	
+	handler.pressed(undefined, '#' + config.varX);
+
 	handler.plotpoint.compose(data); 
 
 	handler.legend(true);
@@ -85,7 +89,10 @@ storyLookup[4] = function(data) {
 	config.baseline = true;
 	config.rating = false;
 	
+	handler.pressed(undefined, '#' + config.varX);
+
 	handler.plotpoint.compose(data); 
+
 
 }; 
 
@@ -99,6 +106,8 @@ storyLookup[5] = function(data) {
 	config.baseline = true;
 	config.rating = false;
 	
+	handler.pressed(undefined, '#' + config.varX);
+
 	handler.plotpoint.compose(data); 
 
 }; 
@@ -119,6 +128,8 @@ storyLookup[7] = function(data) {
 	config.baseline = true;
 	config.rating = false;
 	
+	handler.pressed(undefined, '#' + config.varX);
+
 	handler.plotpoint.compose(data); 
 
 }; 
@@ -132,6 +143,8 @@ storyLookup[8] = function(data) {
 	config.sortBy = 'worldwide_gross';
 	config.baseline = true;
 	config.rating = false;
+
+	handler.pressed(undefined, '#' + config.varX);
 	
 	handler.plotpoint.compose(data); 
 
@@ -147,6 +160,8 @@ storyLookup[9] = function(data) {
 	config.baseline = true;
 	config.rating = true;
 	
+	handler.pressed(undefined, '#' + config.varZ); // pressing varZ not varX
+
 	handler.plotpoint.compose(data); 
 
 }; 
@@ -161,6 +176,8 @@ storyLookup[10] = function(data) {
 	config.baseline = true;
 	config.rating = true;
 	
+	handler.pressed(undefined, '#' + config.varZ); // pressing varZ not varX
+
 	handler.plotpoint.compose(data); 
 
 }; 
@@ -175,6 +192,8 @@ storyLookup[11] = function(data) {
 	config.baseline = false;
 	config.rating = false;
 	
+	handler.pressed(undefined, '#' + config.varX);
+
 	handler.plotpoint.compose(data); 
 
 }; 
@@ -231,6 +250,8 @@ storyLookup[13] = function(data) {
 	config.baseline = false;
 	config.rating = false;
 	
+	handler.pressed(undefined, '#' + config.varX);
+
 	handler.plotpoint.compose(data); 
 
 }; 
@@ -245,6 +266,8 @@ storyLookup[14] = function(data) {
 	config.baseline = true;
 	config.rating = false;
 	
+	handler.pressed(undefined, '#' + config.varX);
+
 	handler.plotpoint.compose(data); 
 
 }; 
@@ -258,6 +281,8 @@ storyLookup[15] = function(data) {
 	config.sortBy = 'worldwide_gross';
 	config.baseline = true;
 	config.rating = false;
+
+	handler.pressed(undefined, '#' + config.varX);
 	
 	handler.plotpoint.compose(data); 
 
@@ -273,6 +298,8 @@ storyLookup[16] = function(data) {
 	config.baseline = true;
 	config.rating = true;
 	
+	handler.pressed(undefined, '#' + config.varZ); // pressing varZ not varX
+
 	handler.plotpoint.compose(data); 
 
 }; 
@@ -287,6 +314,8 @@ storyLookup[17] = function(data) {
 	config.baseline = false;
 	config.rating = false;
 	
+	handler.pressed(undefined, '#' + config.varX);
+
 	handler.plotpoint.compose(data); 
 
 }; 
@@ -301,6 +330,8 @@ storyLookup[18] = function(data) {
 	config.baseline = false;
 	config.rating = false;
 	
+	handler.pressed(undefined, '#' + config.varX);
+
 	handler.plotpoint.compose(data); 
 
 }; 
@@ -315,6 +346,8 @@ storyLookup[19] = function(data) {
 	config.baseline = false;
 	config.rating = false;
 	
+	handler.pressed(undefined, '#' + config.varX);
+
 	handler.plotpoint.compose(data); 
 
 }; 
@@ -329,6 +362,8 @@ storyLookup[20] = function(data) {
 	config.baseline = true;
 	config.rating = false;
 	
+	handler.pressed(undefined, '#' + config.varX);
+
 	handler.plotpoint.compose(data); 
 
 }; 
@@ -343,6 +378,8 @@ storyLookup[21] = function(data) {
 	config.baseline = true;
 	config.rating = false;
 	
+	handler.pressed(undefined, '#' + config.varX);
+
 	handler.plotpoint.compose(data); 
 
 }; 
@@ -357,6 +394,8 @@ storyLookup[22] = function(data) {
 	config.baseline = true;
 	config.rating = true;
 	
+	handler.pressed(undefined, '#' + config.varZ); // pressing varZ not varX
+
 	handler.plotpoint.compose(data); 
 
 }; 
@@ -371,6 +410,8 @@ storyLookup[23] = function(data) {
 	config.baseline = false;
 	config.rating = false;
 	
+	handler.pressed(undefined, '#' + config.varX);
+
 	handler.plotpoint.compose(data); 
 
 }; 
@@ -391,6 +432,8 @@ storyLookup[25] = function(data) {
 	config.baseline = false;
 	config.rating = false;
 	
+	handler.pressed(undefined, '#' + config.varX);
+
 	handler.plotpoint.compose(data); 
 
 }; 
@@ -405,6 +448,8 @@ storyLookup[26] = function(data) {
 	config.baseline = false;
 	config.rating = false;
 	
+	handler.pressed(undefined, '#' + config.varX);
+
 	handler.plotpoint.compose(data); 
 
 }; 
@@ -419,6 +464,8 @@ storyLookup[27] = function(data) {
 	config.baseline = false;
 	config.rating = false;
 	
+	handler.pressed(undefined, '#' + config.varX);
+
 	handler.plotpoint.compose(data); 
 
 }; 
@@ -433,6 +480,8 @@ storyLookup[28] = function(data) {
 	config.baseline = false;
 	config.rating = false;
 	
+	handler.pressed(undefined, '#' + config.varX);
+
 	handler.plotpoint.compose(data); 
 
 }; 
@@ -446,7 +495,7 @@ storyLookup[29] = function(data) {
 storyLookup[30] = function(data) { 
 
 	
-	handler.plotpoint.pp_production_budget_scaled(data);
+	handler.plotpoint.production_budget_scaled(data);
 
 }; 
 
@@ -460,6 +509,8 @@ storyLookup[31] = function(data) {
 	config.baseline = false;
 	config.rating = false;
 	
+	handler.pressed(undefined, '#' + config.varX);
+
 	handler.plotpoint.compose(data); 
 
 }; 
@@ -474,6 +525,8 @@ storyLookup[32] = function(data) {
 	config.baseline = true;
 	config.rating = false;
 	
+	handler.pressed(undefined, '#' + config.varX);
+
 	handler.plotpoint.compose(data); 
 
 }; 
@@ -488,6 +541,8 @@ storyLookup[33] = function(data) {
 	config.baseline = true;
 	config.rating = false;
 	
+	handler.pressed(undefined, '#' + config.varX);
+
 	handler.plotpoint.compose(data); 
 
 }; 
@@ -502,6 +557,8 @@ storyLookup[34] = function(data) {
 	config.baseline = true;
 	config.rating = false;
 	
+	handler.pressed(undefined, '#' + config.varX);
+
 	handler.plotpoint.compose(data); 
 
 }; 

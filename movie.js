@@ -34,7 +34,7 @@ var globals = (function() {
 
 	// plotpoint object used to trigger stages of narrative 
 	window.plotpoint = {};
-	plotpoint.plotpointSequence = ['pp_start_value', 'pp_production_budget', 'pp_domestic_gross', 'pp_worldwide_gross'];
+	plotpoint.plotpointSequence = ['start_value', 'production_budget', 'domestic_gross', 'worldwide_gross'];
 
 	window.config = window.config || {};
 	config.key = 'category';
@@ -151,7 +151,7 @@ d3.csv("data/movies.csv", type, function(data){
 
 	data = _.sortBy(data, function(el) { return el.production_budget; }); // Sort before feeding into any function. Otherwise the data won't be sorted descendingly but ascendingly
 	
-	handler.pressed(undefined, '#pp_start_value');
+	handler.pressed(undefined, '#start_value');
 	handler.plotpoint.initial(data); 
 	setTimeout(function() { config.pageload = false }, 2000); // pageload flag makes sure this isn't getting fired from the scrol listener as well
 	
@@ -211,7 +211,8 @@ d3.csv("data/movies.csv", type, function(data){
 
 		d3.selectAll('button.value').on('mousedown', function() { 
 
-			var x = this.id.replace('pp_','');
+			// var x = this.id.replace('','');
+			var x = this.id;
 
 			x === 'start_value' || x === 'production_budget' ? config.baseline = false : config.baseline = true;
 
@@ -359,8 +360,14 @@ var handler = (function() {
 
 		that = arguments.length === 2 ? $('button' + value)[0] : that;
 
+		// --- Dataset and sort headline --- //
 
-		// --- If the value is changed --- //
+		d3.select('nav#keyValue p').html(hashKeyValue[config.keyValue]); // set the dataset value in the nav headline if programmatic
+		
+		d3.select('nav#sort p').html(hashSort[config.sortBy]); // set the sort value of the nav headline if programmatic
+
+
+		// --- Changed x variable --- //
 		
 		if ($(that).hasClass('value')) {
 			$('button.value').removeClass('pressed');			
@@ -368,7 +375,7 @@ var handler = (function() {
 		} 
 
 
-		// --- If the rating is changed --- //
+		// --- Changed rating --- //
 
 		if ($(that).hasClass('rating')) {
 
@@ -384,7 +391,7 @@ var handler = (function() {
 		}
 
 		
-		// --- If the scatterplot button is pressed --- //
+		// --- Changed scatterplot --- //
 
 		if ($(that).hasClass('scatterplot')) {
 			
@@ -463,8 +470,6 @@ var handler = (function() {
 
 
 
-
-
 	my.plotpoint.compose = function(data) {
 	
 		var newChart = chart()
@@ -485,22 +490,6 @@ var handler = (function() {
 		d3.select('div#container')
 				.datum(data)
 				.call(newChart);
-
-		
-		// button handling
-
-		d3.select('nav#keyValue p').html(hashKeyValue[config.keyValue]); // set the dataset value in the nav headline if programmatic
-		
-		d3.select('nav#sort p').html(hashSort[config.sortBy]); // set the sort value of the nav headline if programmatic
-		
-		$('button.value').removeClass('pressed'); 
-		$('button.value#pp_' + config.varX).addClass('pressed'); // set the value button
-		
-		d3.selectAll('button.rating').classed('pressed', false);
-		if (config.rating) { d3.select('button#' + config.varZ).classed('pressed', true); }
-
-		d3.select('button.scatterplot').classed('pressed', false);
-		if (config.scatterplot) { d3.select('.scatterplot').classed('pressed', true); }
 
 	}; // set new category
 
@@ -537,13 +526,13 @@ var handler = (function() {
 		config.onlyYaxis = false;
 
 
-		d3.select('#keyValue > .headline > p').html(hashKeyValue[config.keyValue]);
-		d3.select('#sort > .headline > p').html(hashSort[config.sortBy]);
+		// d3.select('#keyValue > .headline > p').html(hashKeyValue[config.keyValue]);
+		// d3.select('#sort > .headline > p').html(hashSort[config.sortBy]);
 		d3.selectAll('button.rating').classed('pressed', false);
 
 	}; // no axes
 
-	my.plotpoint.pp_production_budget_scaled = function(data) {
+	my.plotpoint.production_budget_scaled = function(data) {
 
 		config.varX = 'production_budget';
 		config.baseline = false;
@@ -1347,6 +1336,7 @@ return my;
 // === Format data === //
 
 function type(d) {
+
 	d.rank = parseFloat(d.rank);
 	d.start_value = parseFloat(d.start_value);
 	d.production_budget = parseFloat(d.production_budget);
@@ -1368,6 +1358,7 @@ function type(d) {
 	d.release_date = new Date(Date.parse(d.release_date));
 	d.genres = d.genres.split(",");
 	return d;
+
 }
 
 
