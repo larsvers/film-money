@@ -278,7 +278,7 @@ d3.csv("data/movies.csv", type, function(data){
 				config.baseline = false;
 				config.rating = false;
 
-				handler.legend();
+				handler.legend(false);
 
 				handler.plotpoint.compose(data)
 
@@ -292,7 +292,7 @@ d3.csv("data/movies.csv", type, function(data){
 				config.baseline = saveState.baseline;
 				config.rating = saveState.rating;
 
-				handler.legend();
+				handler.legend(true);
 
 				handler.plotpoint.compose(data)				
 
@@ -408,12 +408,14 @@ var handler = (function() {
 
 		if(!arguments.length) genreFlag = true;
 
-		if (genreFlag) {
+		if (genreFlag && !config.scatterplot) {
 
 			d3.select('#genreMenu').transition().duration(1000).style('opacity', 1);
 			d3.selectAll('#genreMenu > button').style('pointer-events', 'all').style('cursor', 'pointer');
 
-		} else {
+		}
+
+		if (!genreFlag || config.scatterplot) {
 
 			d3.select('#genreMenu').transition().duration(1000).style('opacity', 0);
 			d3.selectAll('#genreMenu > button').style('pointer-events', 'none').style('cursor', 'default');
