@@ -151,7 +151,7 @@ d3.csv("data/movies.csv", type, function(data){
 
 	data = _.sortBy(data, function(el) { return el.production_budget; }); // Sort before feeding into any function. Otherwise the data won't be sorted descendingly but ascendingly
 	
-	handler.pressed(undefined, 'pp_start_value');
+	handler.pressed(undefined, '#pp_start_value');
 	handler.plotpoint.initial(data); 
 	setTimeout(function() { config.pageload = false }, 2000); // pageload flag makes sure this isn't getting fired from the scrol listener as well
 	
@@ -247,18 +247,18 @@ d3.csv("data/movies.csv", type, function(data){
 			config.sortBy = config.sortBy;
 			config.baseline = config.baseline;
 			config.rating = $('button.rating').hasClass('pressed'); // changed
+
+			handler.legend();
 			
 			handler.plotpoint.compose(data); 
 
 		}); // button listener
 
 
-	 	var saveState = {};
+	 	var saveState = saveState || {};
 		d3.select('button.scatterplot').on('mousedown', function() {
 
 			handler.pressed(this);
-
-			$(this).toggleClass('pressed');
 
 			if ($(this).hasClass('pressed')) {
 
@@ -278,6 +278,8 @@ d3.csv("data/movies.csv", type, function(data){
 				config.baseline = false;
 				config.rating = false;
 
+				handler.legend();
+
 				handler.plotpoint.compose(data)
 
 			} else {
@@ -290,11 +292,13 @@ d3.csv("data/movies.csv", type, function(data){
 				config.baseline = saveState.baseline;
 				config.rating = saveState.rating;
 
+				handler.legend();
+
 				handler.plotpoint.compose(data)				
 
 			}
 
-		});
+		}); // scatterplot button listener
 
 
 		// --- Scroll listener --- //
@@ -353,7 +357,8 @@ var handler = (function() {
 
 	my.pressed = function(that, value) {
 
-		that = arguments.length === 2 ? $('button#' + value)[0] : that;
+		that = arguments.length === 2 ? $('button' + value)[0] : that;
+
 
 		// --- If the value is changed --- //
 		
@@ -361,71 +366,6 @@ var handler = (function() {
 			$('button.value').removeClass('pressed');			
 			$(that).addClass('pressed');
 		} 
-
-
-		// --- Legend display logic --- //
-
-		// logic showing and hiding the ratings and scatterplot legend 
-		// this took a little moment as it's a little invoved with 3 rating button states and 2 scatterplot states interacting
-		// is all dependent on the previous state of the button. Which is why the button.pressed additions/removals come after this
-		
-		// get the width of the legend elements (the images, svgs or whatever we use) 
-		var legendRatingSvgWidth = $('#legend-ratings svg').width();
-		var legendScatterImgWidth = $('#legend-scatter img').width();
-
-		
-		// If this has .rating
-		if (d3.select(that).classed('rating')) {
-
-			// if none of the .rating buttons has pressed
-			if ($('.rating.pressed').length === 0) { // checks for multiple elements with .pressed
-				
-				// show legend
-				d3.select('#legend-ratings')
-					.transition().style('width', legendRatingSvgWidth + 'px')
-					.transition().delay(300).style('opacity', 1);
-
-			}
-			
-			// if this .rating button has pressed
-			if (d3.select(that).classed('pressed')) {			
-				
-				// hide legend
-				d3.select('#legend-ratings')
-					.transition().style('opacity', 0)
-					.transition().delay(300).style('width', '0px')
-
-			}
-			
-			// if the other .rating button has pressed
-				// do nothing (legend is already there)
-
-		}
-
-		// If this has .scatterplot
-		if (d3.select(that).classed('scatterplot')) {
-
-			// if the .scatterplot button is not pressed
-			if ($('.scatterplot.pressed').length === 0) { // checks for multiple elements with .pressed
-				
-				// show legend (see below)
-				d3.select('#legend-scatter')
-					.transition().style('width', legendScatterImgWidth + 'px')
-					.transition().delay(300).style('opacity', 1);
-
-			}
-
-			// if the .scatterplot button is pressed
-			if (d3.select(that).classed('pressed')) {			
-
-				// hide legend
-				d3.select('#legend-scatter')
-					.transition().style('opacity', 0)
-					.transition().delay(300).style('width', '0px')
-
-			}
-
-		}
 
 
 		// --- If the rating is changed --- //
@@ -443,7 +383,15 @@ var handler = (function() {
 			
 		}
 
+		
+		// --- If the scatterplot button is pressed --- //
 
+		if ($(that).hasClass('scatterplot')) {
+			
+			$($(that)).toggleClass('pressed');
+		
+		}
+		
 		// --- Remove scatterplot when any other button is pressed --- //
 
 		// if any button but the ratings or the scatterplot buttons are pressed remove the scatterplot
@@ -455,13 +403,65 @@ var handler = (function() {
 
 	}; // button handler
 
-	my.showGenreBar = function() {
 
-		d3.select('#genreMenu').transition().duration(1000).style('opacity', 1);
-		
-		d3.selectAll('#genreMenu > button').style('pointer-events', 'all').style('cursor', 'pointer');
+	my.legend = function(genreFlag) {
 
-	};
+		if(!arguments.length) genreFlag = true;
+
+		if (genreFlag) {
+
+			d3.select('#genreMenu').transition().duration(1000).style('opacity', 1);
+			d3.selectAll('#genreMenu > button').style('pointer-events', 'all').style('cursor', 'pointer');
+
+		} else {
+
+			d3.select('#genreMenu').transition().duration(1000).style('opacity', 0);
+			d3.selectAll('#genreMenu > button').style('pointer-events', 'none').style('cursor', 'default');
+
+		}
+
+
+		// get the width of the legend elements (the images, svgs or whatever we use) 
+		var legendRatingSvgWidth = $('#legend-ratings svg').width();
+		var legendScatterImgWidth = $('#legend-scatter img').width();
+
+		if (config.rating) {
+
+			// show legend
+			d3.select('#legend-ratings')
+				.transition().style('width', legendRatingSvgWidth + 'px')
+				.transition().delay(300).style('opacity', 1);
+
+		} else {
+
+			// hide legend
+			d3.select('#legend-ratings')
+				.transition().style('opacity', 0)
+				.transition().delay(300).style('width', '0px');
+
+		}
+
+		if (config.scatterplot) {
+				
+			// show legend
+			d3.select('#legend-scatter')
+				.transition().style('width', legendScatterImgWidth + 'px')
+				.transition().delay(300).style('opacity', 1);
+
+		} else {
+
+			// hide legend
+			d3.select('#legend-scatter')
+				.transition().style('opacity', 0)
+				.transition().delay(300).style('width', '0px')
+
+		}
+
+	}; // legend handler
+
+
+
+
 
 	my.plotpoint.compose = function(data) {
 	
@@ -484,6 +484,7 @@ var handler = (function() {
 				.datum(data)
 				.call(newChart);
 
+		
 		// button handling
 
 		d3.select('nav#keyValue p').html(hashKeyValue[config.keyValue]); // set the dataset value in the nav headline if programmatic
@@ -493,13 +494,13 @@ var handler = (function() {
 		$('button.value').removeClass('pressed'); 
 		$('button.value#pp_' + config.varX).addClass('pressed'); // set the value button
 		
-		// $('button.rating').removeClass('pressed'); 
-
 		d3.selectAll('button.rating').classed('pressed', false);
 		if (config.rating) { d3.select('button#' + config.varZ).classed('pressed', true); }
 
-	}; // set new category
+		d3.select('button.scatterplot').classed('pressed', false);
+		if (config.scatterplot) { d3.select('.scatterplot').classed('pressed', true); }
 
+	}; // set new category
 
 	// --- specific handlers --- //
 
@@ -1085,22 +1086,10 @@ function chart() {
 
 						d3.selectAll('.remove').remove();
 
-
-						// legend
-
-						// d3.select('#legend-scatter img').style('display','inherit');
-						// d3.select('#legend-scatter').transition().style('opacity', 1);
-
-
-
 				} else {
 
 					d3.selectAll('.pulse').remove();
 
-					// d3.select('#legend-scatter').transition().style('opacity', 0);
-					// d3.select('#legend-scatter img').transition().delay(250).style('display','none');
-
-				
 				}
 
 			})(); // scatterplot specs namespace (there are some more scattered around - find 'scatterplot' to check on them)

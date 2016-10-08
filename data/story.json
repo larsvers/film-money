@@ -75,7 +75,13 @@
 				"id": 10,
 				"action": [10],
 				"headline": 0,
-				"text": "<a href='https://www.rottentomatoes.com/'>Rotten Tomatoes</a> is further away from the populace and closer to the distinguished film taste, one would hope, as only people who earn their money with going to the cinema are allowed to elaborate and <a href='http://www.mtv.com/news/1939097/rotten-tomatoes-youre-doing-it-wrong/'>cast their votes</a> from 1 (dismal) to 10 (blissful). There are some disconnects between IMDb and Rotten Tomatoes like Superman Returns, but in general it’s interesting to see how the patterns are more or less matching, yet more pronounced at Rotten Tomatoes. Much more variation in the data but both distributions follow the money."
+				"text": "<a href='https://www.rottentomatoes.com/'>Rotten Tomatoes</a> is further away from the populace and closer to the distinguished film taste, one would hope, as only people who earn their money with going to the cinema are allowed to elaborate and <a href='http://www.mtv.com/news/1939097/rotten-tomatoes-youre-doing-it-wrong/'>cast their votes</a> from 1 (dismal) to 10 (blissful). There are some disconnects between IMDb and Rotten Tomatoes like Superman Returns, but in general it’s interesting to see how the patterns are more or less matching, yet more pronounced at Rotten Tomatoes. Much more variation in the data but both distributions follow the money.<br><br> In fact, let's have a look..."
+			},
+			{
+				"id": 11,
+				"action": [200],
+				"headline": 0,
+				"text": "Here's a scatterplot putting the 2 in relation to each other. And indeed, they move alongside each other more or less. See the 3 blinking bubbles? They indicate films with significantly lower ratings than the average of IMDb and/or Rotten Tomatoes ratings. Orange blink means lower than average - green means higher than average and yellow means IMDb and Rotten Tomatoes ratings differ significantly more than their average discrepency. Science. Pah. Let's move on..."
 			},
 			{
 				"id": 11,

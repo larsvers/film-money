@@ -22,7 +22,7 @@ storyLookup[100] = function(data) {
 
 	if (!config.pageload) {
 
-		handler.pressed(undefined, 'pp_start_value'); 
+		handler.pressed(undefined, '#pp_start_value'); 
 		
 		setTimeout(function() { handler.plotpoint.initial(data); }, 1000); // a little delay to let the globals change (specifically onlyYaxis needs a tick to change and disallow the x-axis to show)		
 
@@ -71,7 +71,7 @@ storyLookup[3] = function(data) {
 	
 	handler.plotpoint.compose(data); 
 
-	handler.showGenreBar();
+	handler.legend(true);
 
 }; 
 
@@ -178,6 +178,42 @@ storyLookup[11] = function(data) {
 	handler.plotpoint.compose(data); 
 
 }; 
+
+
+storyLookup[200] = function(data) { 
+
+	handler.pressed(undefined, '.scatterplot');
+
+ 	var saveState = saveState || {};
+
+	saveState.scatterplot = config.scatterplot;
+	saveState.varX = config.varX;
+	saveState.varY = config.varY;
+	saveState.extentX = config.extentX;
+	saveState.extentY = config.extentY;
+	saveState.baseline = config.baseline;
+	saveState.rating = config.rating;
+
+	config.scatterplot = true;
+	config.varX = 'rating_imdb';
+	config.varY = 'rating_rt';
+	config.extentX = ['rating_imdb', 'rating_rt'];
+	config.extentY = ['rating_imdb', 'rating_rt']; // not really needed in our case
+	config.baseline = false;
+	config.rating = false;
+
+	handler.plotpoint.compose(data)
+
+	config.scatterplot = saveState.scatterplot;
+	config.varX = saveState.varX;
+	config.varY = saveState.varY;
+	config.extentX = saveState.extentX;
+	config.extentY = saveState.extentY;
+	config.baseline = saveState.baseline;
+	config.rating = saveState.rating;
+
+}; 
+
 
 storyLookup[12] = function(data) { 
 
