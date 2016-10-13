@@ -18,21 +18,19 @@
 var storyLookup = {};
 
 
+// --- Biggest budgets --- //
+
 storyLookup[100] = function(data) { 
 
 	if (!config.pageload) {
-
-		handler.pressed(undefined, '#start_value'); 
 		
-		setTimeout(function() { handler.plotpoint.initial(data); }, 1000); // a little delay to let the globals change (specifically onlyYaxis needs a tick to change and disallow the x-axis to show)		
+		setTimeout(function() { handler.plotpoint.initial(data); }, 3000); // a little delay to let the globals change (specifically onlyYaxis needs a tick to change and disallow the x-axis to show)		
 
 	} // don't run on page load, only run when scrolled to it
 
 };
 
-
 storyLookup[0] = function(data) { 
-
 	
 	handler.plotpoint.initial(data); 
 
@@ -40,7 +38,6 @@ storyLookup[0] = function(data) {
 
 storyLookup[1] = function(data) { 
 
-	
 	handler.plotpoint.initial(data); 
 
 }; 
@@ -55,10 +52,10 @@ storyLookup[2] = function(data) {
 	config.baseline = false;
 	config.rating = false;
 
-	handler.pressed(undefined, '#' + config.varX);
-	
 	handler.plotpoint.compose(data);
 
+	handler.pressed(undefined, '#' + config.varX);
+	
 }; 
 
 storyLookup[3] = function(data) { 
@@ -71,11 +68,11 @@ storyLookup[3] = function(data) {
 	config.baseline = false;
 	config.rating = false;
 	
-	handler.pressed(undefined, '#' + config.varX);
-
 	handler.plotpoint.compose(data); 
 
 	handler.legend(true);
+
+	handler.pressed(undefined, '#' + config.varX);
 
 }; 
 
@@ -89,10 +86,9 @@ storyLookup[4] = function(data) {
 	config.baseline = true;
 	config.rating = false;
 	
-	handler.pressed(undefined, '#' + config.varX);
-
 	handler.plotpoint.compose(data); 
 
+	handler.pressed(undefined, '#' + config.varX);
 
 }; 
 
@@ -106,9 +102,13 @@ storyLookup[5] = function(data) {
 	config.baseline = true;
 	config.rating = false;
 	
+	handler.plotpoint.compose(data); 
+
 	handler.pressed(undefined, '#' + config.varX);
 
-	handler.plotpoint.compose(data); 
+	// programmatic button handler
+
+	d3.select('nav#sort p').html(hashSort[config.sortBy]); // set the sort value of the nav headline if programmatic
 
 }; 
 
@@ -128,9 +128,13 @@ storyLookup[7] = function(data) {
 	config.baseline = true;
 	config.rating = false;
 	
+	handler.plotpoint.compose(data); 
+
 	handler.pressed(undefined, '#' + config.varX);
 
-	handler.plotpoint.compose(data); 
+	// programmatic button handler
+
+	d3.select('nav#sort p').html(hashSort[config.sortBy]); // set the sort value of the nav headline if programmatic
 
 }; 
 
@@ -144,10 +148,14 @@ storyLookup[8] = function(data) {
 	config.baseline = true;
 	config.rating = false;
 
-	handler.pressed(undefined, '#' + config.varX);
-	
 	handler.plotpoint.compose(data); 
 
+	handler.pressed(undefined, '#' + config.varX);
+
+	// programmatic button handler
+
+	d3.select('nav#sort p').html(hashSort[config.sortBy]); // set the sort value of the nav headline if programmatic
+	
 }; 
 
 storyLookup[9] = function(data) { 
@@ -160,9 +168,15 @@ storyLookup[9] = function(data) {
 	config.baseline = true;
 	config.rating = true;
 	
+	handler.plotpoint.compose(data); 
+
+	handler.legend(true);
+
 	handler.pressed(undefined, '#' + config.varZ); // pressing varZ not varX
 
-	handler.plotpoint.compose(data); 
+	// programmatic button handler
+
+	d3.select('nav#sort p').html(hashSort[config.sortBy]); // set the sort value of the nav headline if programmatic
 
 }; 
 
@@ -170,77 +184,92 @@ storyLookup[10] = function(data) {
 
 	config.keyValue = 'biggest_budgets';
 	config.varX = 'worldwide_gross';
+	config.varY = 'movie';
 	config.varZ = 'rating_rt';
+	config.extentX = ['start_value', 'production_budget', 'domestic_gross', 'worldwide_gross'];
+	config.extentY = ['movie'];
 	config.onlyYaxis = false;
 	config.sortBy = 'rating_imdb';
 	config.baseline = true;
 	config.rating = true;
-	
-	handler.pressed(undefined, '#' + config.varZ); // pressing varZ not varX
+	config.scatterplot = false;
 
 	handler.plotpoint.compose(data); 
+
+	handler.legend(true);
+
+	handler.pressed(undefined, '#' + config.varZ); // pressing varZ not varX
+
+		// programmatic button handler
+
+	d3.select('nav#keyValue p').html(hashKeyValue[config.keyValue]); // set the dataset value in the nav headline if programmatic
+
+	d3.select('nav#sort p').html(hashSort[config.sortBy]); // set the sort value of the nav headline if programmatic
 
 }; 
 
 storyLookup[11] = function(data) { 
 
-	config.keyValue = 'most_profitable';
-	config.varX = 'start_value';
-	config.varZ = '';
-	config.onlyYaxis = false;
-	config.sortBy = 'production_budget';
-	config.baseline = false;
-	config.rating = false;
-	
-	handler.pressed(undefined, '#' + config.varX);
-
-	handler.plotpoint.compose(data); 
-
-}; 
-
-
-storyLookup[200] = function(data) { 
-
-	handler.pressed(undefined, '.scatterplot');
-
- 	var saveState = saveState || {};
-
-	saveState.scatterplot = config.scatterplot;
-	saveState.varX = config.varX;
-	saveState.varY = config.varY;
-	saveState.extentX = config.extentX;
-	saveState.extentY = config.extentY;
-	saveState.baseline = config.baseline;
-	saveState.rating = config.rating;
-
-	config.scatterplot = true;
+	config.keyValue = 'biggest_budgets';
 	config.varX = 'rating_imdb';
 	config.varY = 'rating_rt';
 	config.extentX = ['rating_imdb', 'rating_rt'];
 	config.extentY = ['rating_imdb', 'rating_rt']; // not really needed in our case
 	config.baseline = false;
 	config.rating = false;
+	config.scatterplot = true;
 
 	handler.plotpoint.compose(data)
 
-	config.scatterplot = saveState.scatterplot;
-	config.varX = saveState.varX;
-	config.varY = saveState.varY;
-	config.extentX = saveState.extentX;
-	config.extentY = saveState.extentY;
-	config.baseline = saveState.baseline;
-	config.rating = saveState.rating;
+	handler.legend(false);
+
+	handler.pressed(undefined, '.scatterplot');
+
+	// programmatic button handler
+
+	d3.select('nav#keyValue p').html(hashKeyValue[config.keyValue]); // set the dataset value in the nav headline if programmatic
 
 }; 
 
 
+// --- Most profitable --- //
+
 storyLookup[12] = function(data) { 
+
+	config.keyValue = 'most_profitable';
+	config.varX = 'start_value';
+	config.varY = 'movie';
+	config.varZ = '';
+	config.extentX = ['start_value', 'production_budget', 'domestic_gross', 'worldwide_gross'];
+	config.extentY = ['movie'];
+	config.onlyYaxis = false;
+	config.sortBy = 'production_budget';
+	config.baseline = false;
+	config.rating = false;
+	config.scatterplot = false;
+
+	handler.plotpoint.compose(data); 
+
+	handler.legend(true);
+
+	handler.pressed(undefined, '#' + config.varX);
+
+	// programmatic button handler
+
+	d3.select('nav#keyValue p').html(hashKeyValue[config.keyValue]); // set the dataset value in the nav headline if programmatic
+
+	d3.select('nav#sort p').html(hashSort[config.sortBy]); // set the sort value of the nav headline if programmatic
+
+
+}; 
+
+storyLookup[13] = function(data) { 
 
 	// empty
 
 }; 
 
-storyLookup[13] = function(data) { 
+storyLookup[14] = function(data) { 
 
 	config.keyValue = 'most_profitable';
 	config.varX = 'production_budget';
@@ -250,13 +279,13 @@ storyLookup[13] = function(data) {
 	config.baseline = false;
 	config.rating = false;
 	
-	handler.pressed(undefined, '#' + config.varX);
-
 	handler.plotpoint.compose(data); 
+
+	handler.pressed(undefined, '#' + config.varX);
 
 }; 
 
-storyLookup[14] = function(data) { 
+storyLookup[15] = function(data) { 
 
 	config.keyValue = 'most_profitable';
 	config.varX = 'domestic_gross';
@@ -266,25 +295,13 @@ storyLookup[14] = function(data) {
 	config.baseline = true;
 	config.rating = false;
 	
-	handler.pressed(undefined, '#' + config.varX);
-
 	handler.plotpoint.compose(data); 
 
-}; 
-
-storyLookup[15] = function(data) { 
-
-	config.keyValue = 'most_profitable';
-	config.varX = 'worldwide_gross';
-	config.varZ = '';
-	config.onlyYaxis = false;
-	config.sortBy = 'worldwide_gross';
-	config.baseline = true;
-	config.rating = false;
-
 	handler.pressed(undefined, '#' + config.varX);
-	
-	handler.plotpoint.compose(data); 
+
+	// programmatic button handler
+
+	d3.select('nav#sort p').html(hashSort[config.sortBy]); // set the sort value of the nav headline if programmatic
 
 }; 
 
@@ -292,118 +309,174 @@ storyLookup[16] = function(data) {
 
 	config.keyValue = 'most_profitable';
 	config.varX = 'worldwide_gross';
-	config.varZ = 'rating_imdb';
+	config.varZ = '';
 	config.onlyYaxis = false;
 	config.sortBy = 'worldwide_gross';
 	config.baseline = true;
-	config.rating = true;
-	
-	handler.pressed(undefined, '#' + config.varZ); // pressing varZ not varX
+	config.rating = false;
 
 	handler.plotpoint.compose(data); 
 
+	handler.pressed(undefined, '#' + config.varX);
+
+	// programmatic button handler
+
+	d3.select('nav#sort p').html(hashSort[config.sortBy]); // set the sort value of the nav headline if programmatic
+	
 }; 
 
 storyLookup[17] = function(data) { 
 
-	config.keyValue = 'biggest_money_losers';
-	config.varX = 'start_value';
-	config.varZ = '';
+	config.scatterplot = false;
+	config.keyValue = 'most_profitable';
+	config.varX = 'worldwide_gross';
+	config.varY = 'movie';
+	config.varZ = 'rating_imdb';
+	config.extentX = ['start_value', 'production_budget', 'domestic_gross', 'worldwide_gross'];
+	config.extentY = ['movie'];
 	config.onlyYaxis = false;
-	config.sortBy = 'production_budget';
-	config.baseline = false;
-	config.rating = false;
-	
-	handler.pressed(undefined, '#' + config.varX);
+	config.sortBy = 'worldwide_gross';
+	config.baseline = true;
+	config.rating = true;
 
 	handler.plotpoint.compose(data); 
+
+	// programmatic button handler
+
+	d3.selectAll('.rating').classed('pressed', false);
+	d3.select('.rating#rating_imdb').classed('pressed', true); // would have loved to move this also to the handler, but not possible.
+
+	d3.select('nav#sort p').html(hashSort[config.sortBy]); // set the sort value of the nav headline if programmatic
 
 }; 
 
 storyLookup[18] = function(data) { 
 
-	config.keyValue = 'biggest_money_losers';
-	config.varX = 'start_value';
-	config.varZ = '';
-	config.onlyYaxis = false;
-	config.sortBy = 'production_budget';
+	config.scatterplot = true;
+	config.varX = 'rating_imdb';
+	config.varY = 'rating_rt';
+	config.varZ = 'rating_imdb';
+	config.extentX = ['rating_imdb', 'rating_rt'];
+	config.extentY = ['rating_imdb', 'rating_rt']; // not really needed in our case
 	config.baseline = false;
 	config.rating = false;
-	
-	handler.pressed(undefined, '#' + config.varX);
 
-	handler.plotpoint.compose(data); 
+	handler.plotpoint.compose(data)
+
+	handler.legend(false);
+
+	// programmatic button handler
+
+	d3.selectAll('.scatterplot').classed('pressed', true);
+
+	d3.selectAll('.rating').classed('pressed', false);
 
 }; 
 
 storyLookup[19] = function(data) { 
 
-	config.keyValue = 'biggest_money_losers';
-	config.varX = 'production_budget';
-	config.varZ = '';
-	config.onlyYaxis = false;
-	config.sortBy = 'production_budget';
+	config.varX = 'rating_imdb';
+	config.varY = 'rating_rt';
+	config.varZ = 'rating_imdb';	
+	config.extentX = ['rating_imdb', 'rating_rt'];
+	config.extentY = ['rating_imdb', 'rating_rt']; // not really needed in our case
 	config.baseline = false;
-	config.rating = false;
-	
-	handler.pressed(undefined, '#' + config.varX);
+	config.rating = true;
+	config.scatterplot = true;
 
-	handler.plotpoint.compose(data); 
+	handler.plotpoint.compose(data)
+
+	handler.legend(false);
+
+	// programmatic button handler
+
+	d3.selectAll('.rating').classed('pressed', false);
+	d3.select('.rating#rating_imdb').classed('pressed', true); // would have loved to move this also to the handler, but not possible.
 
 }; 
 
 storyLookup[20] = function(data) { 
 
-	config.keyValue = 'biggest_money_losers';
-	config.varX = 'domestic_gross';
-	config.varZ = '';
-	config.onlyYaxis = false;
-	config.sortBy = 'production_budget';
-	config.baseline = true;
-	config.rating = false;
-	
-	handler.pressed(undefined, '#' + config.varX);
+	config.scatterplot = true;
+	config.keyValue = 'most_profitable';
+	config.varX = 'rating_imdb';
+	config.varY = 'rating_rt';
+	config.varZ = 'rating_rt';	
+	config.extentX = ['rating_imdb', 'rating_rt'];
+	config.extentY = ['rating_imdb', 'rating_rt']; // not really needed in our case
+	config.baseline = false;
+	config.rating = true;
 
-	handler.plotpoint.compose(data); 
+	handler.plotpoint.compose(data)
+
+	handler.legend(false);
+
+	// programmatic button handler
+
+	d3.select('nav#keyValue p').html(hashKeyValue[config.keyValue]); // set the dataset value in the nav headline if programmatic
+
+	d3.select('.scatterplot').classed('pressed', true);
+
+	d3.selectAll('.rating').classed('pressed', false);
+	d3.select('.rating#rating_rt').classed('pressed', true); // would have loved to move this also to the handler, but not possible.
 
 }; 
 
+
+// --- Biggest money loosers --- //
+
 storyLookup[21] = function(data) { 
 
+	config.scatterplot = false;
 	config.keyValue = 'biggest_money_losers';
-	config.varX = 'worldwide_gross';
-	config.varZ = '';
+	config.varX = 'start_value';
+	config.varY = 'movie';
+	config.varZ = 'rating_rt';
+	config.extentX = ['start_value', 'production_budget', 'domestic_gross', 'worldwide_gross'];
+	config.extentY = ['movie'];
 	config.onlyYaxis = false;
 	config.sortBy = 'production_budget';
-	config.baseline = true;
+	config.baseline = false;
 	config.rating = false;
 	
+	handler.plotpoint.compose(data); 
+
+	handler.legend(true);
+
 	handler.pressed(undefined, '#' + config.varX);
 
-	handler.plotpoint.compose(data); 
+	// programmatic button handler
+
+	d3.select('nav#keyValue p').html(hashKeyValue[config.keyValue]); // set the dataset value in the nav headline if programmatic
+
+	d3.select('nav#sort p').html(hashSort[config.sortBy]); // set the sort value of the nav headline if programmatic
+
+	d3.select('.scatterplot').classed('pressed', false);
+
+	d3.selectAll('.rating').classed('pressed', false);
 
 }; 
 
 storyLookup[22] = function(data) { 
 
 	config.keyValue = 'biggest_money_losers';
-	config.varX = 'worldwide_gross';
-	config.varZ = 'rating_rt';
+	config.varX = 'start_value';
+	config.varZ = '';
 	config.onlyYaxis = false;
 	config.sortBy = 'production_budget';
-	config.baseline = true;
-	config.rating = true;
+	config.baseline = false;
+	config.rating = false;
 	
-	handler.pressed(undefined, '#' + config.varZ); // pressing varZ not varX
-
 	handler.plotpoint.compose(data); 
+
+	handler.pressed(undefined, '#' + config.varX);
 
 }; 
 
 storyLookup[23] = function(data) { 
 
-	config.keyValue = 'low_budget_winners';
-	config.varX = 'start_value';
+	config.keyValue = 'biggest_money_losers';
+	config.varX = 'production_budget';
 	config.varZ = '';
 	config.onlyYaxis = false;
 	config.sortBy = 'production_budget';
@@ -418,43 +491,100 @@ storyLookup[23] = function(data) {
 
 storyLookup[24] = function(data) { 
 
-	// no action here
+	config.keyValue = 'biggest_money_losers';
+	config.varX = 'domestic_gross';
+	config.varZ = '';
+	config.onlyYaxis = false;
+	config.sortBy = 'production_budget';
+	config.baseline = true;
+	config.rating = false;
+	
+	handler.plotpoint.compose(data); 
+
+	handler.pressed(undefined, '#' + config.varX);
 
 }; 
 
 storyLookup[25] = function(data) { 
 
-	config.keyValue = 'low_budget_winners';
-	config.varX = 'production_budget';
+	config.keyValue = 'biggest_money_losers';
+	config.varX = 'worldwide_gross';
 	config.varZ = '';
 	config.onlyYaxis = false;
 	config.sortBy = 'production_budget';
-	config.baseline = false;
+	config.baseline = true;
 	config.rating = false;
 	
-	handler.pressed(undefined, '#' + config.varX);
-
 	handler.plotpoint.compose(data); 
+
+	handler.pressed(undefined, '#' + config.varX);
 
 }; 
 
 storyLookup[26] = function(data) { 
 
+	config.scatterplot = true;
+	config.keyValue = 'biggest_money_losers';
+	config.varX = 'rating_imdb';
+	config.varY = 'rating_rt';
+	config.varZ = 'rating_rt';	
+	config.extentX = ['rating_imdb', 'rating_rt'];
+	config.extentY = ['rating_imdb', 'rating_rt']; // not really needed in our case
+	config.baseline = false;
+	config.rating = false;
+
+	handler.plotpoint.compose(data)
+
+	handler.legend(false);
+
+	// programmatic button handler
+
+	d3.select('nav#keyValue p').html(hashKeyValue[config.keyValue]); // set the dataset value in the nav headline if programmatic
+
+	d3.select('.scatterplot').classed('pressed', true);
+
+	d3.selectAll('.rating').classed('pressed', false);
+
+}; 
+
+
+// --- Low budget winners --- //
+
+storyLookup[27] = function(data) { 
+
 	config.keyValue = 'low_budget_winners';
 	config.varX = 'start_value';
+	config.varY = 'movie';
 	config.varZ = '';
+	config.extentX = ['start_value', 'production_budget', 'domestic_gross', 'worldwide_gross'];
+	config.extentY = ['movie'];
 	config.onlyYaxis = false;
 	config.sortBy = 'production_budget';
 	config.baseline = false;
 	config.rating = false;
-	
-	handler.pressed(undefined, '#' + config.varX);
+	config.scatterplot = false;
 
 	handler.plotpoint.compose(data); 
 
+	handler.legend(true);
+
+	handler.pressed(undefined, '#' + config.varX);
+
+	// programmatic button handler
+
+	d3.select('nav#keyValue p').html(hashKeyValue[config.keyValue]); // set the dataset value in the nav headline if programmatic
+
+	d3.selectAll('.rating').classed('pressed', false);
+
 }; 
 
-storyLookup[27] = function(data) { 
+storyLookup[28] = function(data) { 
+
+	// no action here
+
+}; 
+
+storyLookup[29] = function(data) { 
 
 	config.keyValue = 'low_budget_winners';
 	config.varX = 'production_budget';
@@ -464,13 +594,13 @@ storyLookup[27] = function(data) {
 	config.baseline = false;
 	config.rating = false;
 	
-	handler.pressed(undefined, '#' + config.varX);
-
 	handler.plotpoint.compose(data); 
+
+	handler.pressed(undefined, '#' + config.varX);
 
 }; 
 
-storyLookup[28] = function(data) { 
+storyLookup[30] = function(data) { 
 
 	config.keyValue = 'low_budget_winners';
 	config.varX = 'start_value';
@@ -480,22 +610,9 @@ storyLookup[28] = function(data) {
 	config.baseline = false;
 	config.rating = false;
 	
-	handler.pressed(undefined, '#' + config.varX);
-
 	handler.plotpoint.compose(data); 
 
-}; 
-
-storyLookup[29] = function(data) { 
-
-	// no action here
-
-}; 
-
-storyLookup[30] = function(data) { 
-
-	
-	handler.plotpoint.production_budget_scaled(data);
+	handler.pressed(undefined, '#' + config.varX);
 
 }; 
 
@@ -509,13 +626,58 @@ storyLookup[31] = function(data) {
 	config.baseline = false;
 	config.rating = false;
 	
-	handler.pressed(undefined, '#' + config.varX);
-
 	handler.plotpoint.compose(data); 
+
+	handler.pressed(undefined, '#' + config.varX);
 
 }; 
 
 storyLookup[32] = function(data) { 
+
+	config.keyValue = 'low_budget_winners';
+	config.varX = 'start_value';
+	config.varZ = '';
+	config.onlyYaxis = false;
+	config.sortBy = 'production_budget';
+	config.baseline = false;
+	config.rating = false;
+	
+	handler.plotpoint.compose(data); 
+
+	handler.pressed(undefined, '#' + config.varX);
+
+}; 
+
+storyLookup[33] = function(data) { 
+
+	// no action here
+
+}; 
+
+storyLookup[34] = function(data) { 
+
+	
+	handler.plotpoint.production_budget_scaled(data);
+
+}; 
+
+storyLookup[35] = function(data) { 
+
+	config.keyValue = 'low_budget_winners';
+	config.varX = 'production_budget';
+	config.varZ = '';
+	config.onlyYaxis = false;
+	config.sortBy = 'production_budget';
+	config.baseline = false;
+	config.rating = false;
+	
+	handler.plotpoint.compose(data); 
+
+	handler.pressed(undefined, '#' + config.varX);
+
+}; 
+
+storyLookup[36] = function(data) { 
 
 	config.keyValue = 'low_budget_winners';
 	config.varX = 'domestic_gross';
@@ -525,13 +687,13 @@ storyLookup[32] = function(data) {
 	config.baseline = true;
 	config.rating = false;
 	
-	handler.pressed(undefined, '#' + config.varX);
-
 	handler.plotpoint.compose(data); 
+
+	handler.pressed(undefined, '#' + config.varX);
 
 }; 
 
-storyLookup[33] = function(data) { 
+storyLookup[37] = function(data) { 
 
 	config.keyValue = 'low_budget_winners';
 	config.varX = 'worldwide_gross';
@@ -541,13 +703,17 @@ storyLookup[33] = function(data) {
 	config.baseline = true;
 	config.rating = false;
 	
+	handler.plotpoint.compose(data); 
+
 	handler.pressed(undefined, '#' + config.varX);
 
-	handler.plotpoint.compose(data); 
+	// programmatic button handler
+
+	d3.select('nav#sort p').html(hashSort[config.sortBy]); // set the sort value of the nav headline if programmatic
 
 }; 
 
-storyLookup[34] = function(data) { 
+storyLookup[38] = function(data) { 
 
 	config.keyValue = 'low_budget_winners';
 	config.varX = 'worldwide_gross';
@@ -557,12 +723,21 @@ storyLookup[34] = function(data) {
 	config.baseline = true;
 	config.rating = false;
 	
+	handler.plotpoint.compose(data); 
+
 	handler.pressed(undefined, '#' + config.varX);
 
-	handler.plotpoint.compose(data); 
+	// programmatic button handler
+
+	d3.select('nav#sort p').html(hashSort[config.sortBy]); // set the sort value of the nav headline if programmatic
 
 }; 
 
+storyLookup[39] = function(data) { 
+
+	// no action here
+
+}; 
 
 
 

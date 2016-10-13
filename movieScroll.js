@@ -1,5 +1,5 @@
 
-d3.json('data/story.json', function(error, storyData) {
+d3.json('data/story_ia.json', function(error, storyData) {
 	if (error) console.log(error);
 
 	
@@ -115,6 +115,7 @@ d3.json('data/story.json', function(error, storyData) {
 	d3.selectAll('span.film').on('mouseover', function() {
 				
 		var element = getAxisLabel(this.dataset.filmname);
+		
 		element
 				.style('fill', '#E33F96')
 			.transition()

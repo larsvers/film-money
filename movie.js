@@ -69,6 +69,7 @@ var globals = (function() {
 
 	// hashtables for lookups
 	window.hashSort = {};
+	hashSort.start_value = 'The films';
 	hashSort.production_budget = 'Production Budget';
 	hashSort.domestic_gross = 'US Revenue';
 	hashSort.worldwide_gross = 'Worldwide Revenue';
@@ -117,7 +118,7 @@ var navBuilder = (function() {
 	// // --- Sort dropdown --- //
 	
 	d3.select('nav#sort > ul').selectAll('.selectItems')
-			.data(hashToObjects(hashSort))
+			.data(_.drop(hashToObjects(hashSort),1)) // remove the start_value item from the list, as we don't want to sort by it
 			.enter()
 		.append('li')
 			.classed('selectItems', true)
@@ -144,7 +145,7 @@ var navBuilder = (function() {
 
 // === Load data, Initial state, Listeners === //
 
-d3.csv("data/movies.csv", type, function(data){
+d3.csv("data/movies_ia.csv", type, function(data){
 
 
 	// --- Initial state --- //
@@ -161,8 +162,6 @@ d3.csv("data/movies.csv", type, function(data){
 		// --- Click listener of graph elements (story elements come on specific .js file) --- //
 		
 		d3.selectAll('li.keyValueItems').on('mousedown', function() {
-
-			handler.pressed(this);
 			
 			config.keyValue = String(this.id);
 			config.varX = 'start_value'; // changed
@@ -178,6 +177,10 @@ d3.csv("data/movies.csv", type, function(data){
 			config.extentX = ['start_value', 'production_budget', 'domestic_gross', 'worldwide_gross'];
 			config.extentY = ['movie']; // not really needed in our case
 			
+			handler.pressed(this);
+
+			handler.legend(true);
+
 			handler.plotpoint.compose(data); 
 
 		}); // category = keyValue = dataset listener and handler
@@ -185,8 +188,6 @@ d3.csv("data/movies.csv", type, function(data){
 
 		d3.selectAll('li.sortItems').on('mousedown', function() { 
 		
-			handler.pressed(this);
-
 			config.keyValue = config.keyValue;
 			config.varX = config.varX;
 			config.varZ = config.varZ;
@@ -197,26 +198,25 @@ d3.csv("data/movies.csv", type, function(data){
 
 			// re-set in case we come from scatterplot
 			config.scatterplot = false;
+			config.varX = d3.select('.value.pressed').attr('id'); // get the x value pressed before teh scatterplot got rendered
 			config.varY = 'movie';
 			config.extentX = ['start_value', 'production_budget', 'domestic_gross', 'worldwide_gross'];
 			config.extentY = ['movie']; // not really needed in our case
 
-			
-			handler.plotpoint.compose(data); 
+			handler.pressed(this);
+	
+			handler.legend(true);
 
-			d3.select('nav#sort p').html(hashSort[this.id]); // set the value of the nav headline
+			handler.plotpoint.compose(data); 
 		
 		}); // sort listener and handler
 
 
 		d3.selectAll('button.value').on('mousedown', function() { 
 
-			// var x = this.id.replace('','');
 			var x = this.id;
 
 			x === 'start_value' || x === 'production_budget' ? config.baseline = false : config.baseline = true;
-
-			handler.pressed(this);
 			
 			config.keyValue = config.keyValue;
 			config.varX = x; // changed
@@ -232,6 +232,10 @@ d3.csv("data/movies.csv", type, function(data){
 			config.extentX = ['start_value', 'production_budget', 'domestic_gross', 'worldwide_gross'];
 			config.extentY = ['movie']; // not really needed in our case
 
+			handler.pressed(this);
+
+			handler.legend(true);
+
 			handler.plotpoint.compose(data); 
 
 		});
@@ -239,6 +243,8 @@ d3.csv("data/movies.csv", type, function(data){
 
 		d3.selectAll('button.rating').on('mousedown', function() { 
 
+			
+			
 			handler.pressed(this);
 
 			config.keyValue = config.keyValue;
@@ -247,9 +253,9 @@ d3.csv("data/movies.csv", type, function(data){
 			config.onlyYaxis = config.onlyYaxis;
 			config.sortBy = config.sortBy;
 			config.baseline = config.baseline;
-			config.rating = $('button.rating').hasClass('pressed'); // changed
+			config.rating = $('.rating').hasClass('pressed'); // changed
 
-			handler.legend();
+			handler.legend(true);
 			
 			handler.plotpoint.compose(data); 
 
@@ -266,6 +272,7 @@ d3.csv("data/movies.csv", type, function(data){
 				saveState.scatterplot = config.scatterplot;
 				saveState.varX = config.varX;
 				saveState.varY = config.varY;
+				saveState.varZ = config.varZ;
 				saveState.extentX = config.extentX;
 				saveState.extentY = config.extentY;
 				saveState.baseline = config.baseline;
@@ -288,12 +295,20 @@ d3.csv("data/movies.csv", type, function(data){
 				config.scatterplot = saveState.scatterplot;
 				config.varX = saveState.varX;
 				config.varY = saveState.varY;
+				config.varZ = saveState.varZ;
 				config.extentX = saveState.extentX;
 				config.extentY = saveState.extentY;
 				config.baseline = saveState.baseline;
 				config.rating = saveState.rating;
 
+
 				handler.legend(true);
+
+				if (config.rating) {
+		
+					handler.pressed(undefined, '#' + String(config.varZ)); // case: clicking scatterplot removes all rating sized bubbles. If there was a rating button clicked before we hit scatterplot, this makes sure it's being clicked again when we click away the scatterplot. However do this only when the rating has been clicked previously.	
+		
+				}
 
 				handler.plotpoint.compose(data)				
 
@@ -360,11 +375,28 @@ var handler = (function() {
 
 		that = arguments.length === 2 ? $('button' + value)[0] : that;
 
-		// --- Dataset and sort headline --- //
-
-		d3.select('nav#keyValue p').html(hashKeyValue[config.keyValue]); // set the dataset value in the nav headline if programmatic
+	
+		// --- Changed dataset --- //
 		
-		d3.select('nav#sort p').html(hashSort[config.sortBy]); // set the sort value of the nav headline if programmatic
+		if ($(that).hasClass('keyValueItems')) {
+
+			d3.select('nav#keyValue p').html(hashKeyValue[config.keyValue]); // set the dataset value in the nav headline if programmatic
+
+			$('button.value').removeClass('pressed');			
+			$('#start_value').addClass('pressed');
+
+			$('button.rating').removeClass('pressed');
+
+		} 
+
+
+		// --- Resort --- //
+
+		if ($(that).hasClass('sortItems')) {
+	
+			d3.select('nav#sort p').html(hashSort[config.sortBy]); // set the sort value of the nav headline if programmatic
+	
+		} 
 
 
 		// --- Changed x variable --- //
@@ -377,31 +409,47 @@ var handler = (function() {
 
 		// --- Changed rating --- //
 
+		// for button-triggered changes
+
 		if ($(that).hasClass('rating')) {
 
 			$(that).toggleClass('pressed'); // toggle the pressed button
-		
-			var c = config.extentZ.slice();
-			var a = c.filter(function(el) { return el !== that.id; }); // find the non-pressed id
 
-			a.forEach(function(el) {
+			var a = config.extentZ.slice();
+			var b = a.filter(function(el) { return el !== that.id; }); // find the non-pressed id
+
+			b.forEach(function(el) {
 				d3.select('button#' + el).classed('pressed', false);
 			}); // un-presses all other rating buttons
 			
 		}
 
+		// for programmatic changes - see the storyLookup()
+
 		
 		// --- Changed scatterplot --- //
 
+		// for button-triggered changes
+		
 		if ($(that).hasClass('scatterplot')) {
+		
+			if (d3.select(that).classed('pressed') === false) {
+
+				$('.rating').removeClass('pressed');
+
+			};
 			
-			$($(that)).toggleClass('pressed');
+			$(that).toggleClass('pressed');
 		
 		}
+
+		// for programmatic changes see storyLookup()
+
 		
 		// --- Remove scatterplot when any other button is pressed --- //
 
 		// if any button but the ratings or the scatterplot buttons are pressed remove the scatterplot
+		// if (d3.select(that).classed('rating') === false && d3.select(that).classed('scatterplot') === false) {
 		if (d3.select(that).classed('rating') === false && d3.select(that).classed('scatterplot') === false) {
 
 			$('button.scatterplot').removeClass('pressed');
@@ -413,7 +461,7 @@ var handler = (function() {
 
 	my.legend = function(genreFlag) {
 
-		if(!arguments.length) genreFlag = true;
+		// --- Handle genre menu --- //
 
 		if (genreFlag && !config.scatterplot) {
 
@@ -429,6 +477,7 @@ var handler = (function() {
 
 		}
 
+		// --- Handle rating legend --- //
 
 		// get the width of the legend elements (the images, svgs or whatever we use) 
 		var legendRatingSvgWidth = $('#legend-ratings svg').width();
@@ -449,6 +498,8 @@ var handler = (function() {
 				.transition().delay(300).style('width', '0px');
 
 		}
+
+		// --- Handle scatterplotProperties legend --- //
 
 		if (config.scatterplot) {
 				
@@ -499,10 +550,14 @@ var handler = (function() {
 
 		config.keyValue = 'biggest_budgets';
 		config.varX = 'start_value';
+		config.varY = 'movie';
+		config.extentX = ['start_value', 'production_budget', 'domestic_gross', 'worldwide_gross'];
+		config.extentY = ['movie'];
 		config.sortBy = 'production_budget';
 		config.onlyYaxis = true;
 		config.baseline = false;
 		config.rating = false;
+		config.scatterplot = false;
 
 		var newChart = chart()
 				.key(config.key)
@@ -525,9 +580,14 @@ var handler = (function() {
 
 		config.onlyYaxis = false;
 
+		my.pressed(undefined, '#start_value'); 
 
-		// d3.select('#keyValue > .headline > p').html(hashKeyValue[config.keyValue]);
-		// d3.select('#sort > .headline > p').html(hashSort[config.sortBy]);
+		my.legend(false);
+
+		// button handlers
+
+		d3.select('#keyValue > .headline > p').html(hashKeyValue[config.keyValue]);
+		d3.select('#sort > .headline > p').html(hashSort[config.sortBy]);
 		d3.selectAll('button.rating').classed('pressed', false);
 
 	}; // no axes
@@ -670,6 +730,7 @@ function chart() {
 
 			var legendBuilder = (function() {
 			
+				// === Rating circle legend === //
 
 				// --- Data prep --- //
 
@@ -683,7 +744,16 @@ function chart() {
 				var steps = 10;
 				var delta = (objZ.extent[1] - objZ.extent[0]) / steps;
 				var newExtent = [objZ.extent[0], (objZ.extent[1] + delta)];
-				var dataLegend = d3.range(newExtent[0], newExtent[1], delta);
+				var range = d3.range(newExtent[0], newExtent[1], delta);
+
+				var dataLegend = [];
+				range.forEach(function(el,i) {
+					dataLegend.push({
+						'data': el,
+						'id': parseFloat((Math.random()*100).toFixed(4))
+					});
+				}); // final dataset carries uniue ID's for the key function in the data-join. Otherwise circles and text elements will be re-used, not cleaned off or the like
+
 
 
 				// --- Create SVG --- //
@@ -711,18 +781,21 @@ function chart() {
 
 				var gL = d3.select('svg.svgL') // this M.U.S.T. be a d3.select-selector and can't be the stored variable (here: svgL).  
 						.selectAll('g.gl')
-						.data(dataLegend, function(d) { return d; });
+						.data(dataLegend, function(d) { return d.id; });
 
 				var gEnterL = gL
 						.enter()
 					.append('g')
+						// .merge(gL)
 						.classed('gl', true)
 						.attr('transform', function(d,i) { return translateG(100/dataLegend.length * i + 10, 30); });
 
 				gEnterL
 					.append('circle')
-						.attr('r', function(d) { return scaleZ(d); })
-						.style('fill', function(d) { return scaleZCol(d); });
+						.attr('r', function(d, i) { 
+							return scaleZ(d.data); 
+						})
+						.style('fill', function(d) { return scaleZCol(d.data); });
 
 				gEnterL
 					.append('text')
@@ -730,10 +803,11 @@ function chart() {
 						.attr('text-anchor', 'middle')
 						.style('font-size', '0.7em')
 						.style('fill', '#777')
-						.text(function(d,i) { if (i === 0 || i === dataLegend.length-1) { return form(d); } });
-				
+						.text(function(d,i) { if (i === 0 || i === dataLegend.length-1) { return form(d.data); } });
+
 				gL.exit().remove();
 
+				
 			})(); // legendBuilder() namespace
 
 
@@ -824,11 +898,11 @@ function chart() {
 			var xLabelText;
 			if (scatterplot) {
 
-				xLabelText = hashSort[config.varX];
+				xLabelText = hashSort[config.varX]; // 
 
 			} else if (!scatterplot && config.varX === 'start_value') {
 
-				xLabelText = '';
+				xLabelText = 'Top 20 ' + hashKeyValue[config.keyValue] + ' - ' + hashSort[config.varX];
 
 			} else {
 
@@ -836,14 +910,14 @@ function chart() {
 
 			}
 
-			// Add the labels depending on scatterplot - lollipops
+			// Add the labels depending on scatterplot or lollipops
 
 			d3.select('.x.axis')
 				.append('text')
 					.attr('class', 'label xLabel')
 					.text(xLabelText)
 					.attr('text-anchor', 'start')
-					.attr('transform', 'translate(' + 0 + ',' + (-margin.top * 0.75) + ')');
+					.attr('transform', 'translate(' + 0 + ',' + (-margin.top * 0.6) + ')');
 
 			if (scatterplot) {
 
@@ -1008,6 +1082,31 @@ function chart() {
 						.style('fill', '#4161F0')
 						.style('opacity', 1e-6);
 
+				// --- Baseline circle legend --- //
+
+				var baselineLegend = d3.select('g.x.axis')
+					.append('g')
+					.classed('baselineLegend', true)
+					.attr('transform', 'translate(' + width * 0.82 + ',' + -30 + ')');
+
+				baselineLegend
+					.append('circle')
+						.attr('cx', 0)
+						.attr('cy', -radius/2)
+						.attr('r', radius)
+						.style('fill', '#4161F0')
+						.style('opacity', 1e-6);
+
+				baselineLegend
+					.append('text')
+						.attr('x', radius * 2)
+						.attr('y', 0)
+						.style('text-anchor', 'start')
+						.text(hashSort[config.compareTo])
+						.style('opacity', 1e-6);
+
+
+
 				} // enter baseline circles
 
 				if (baseline  && !d3.select('.baseline').empty()) {
@@ -1019,6 +1118,9 @@ function chart() {
 							.attr('cy', function(d) { return scaleY(d.yValues); })
 							.style('opacity', 1);
 
+					d3.select('.baselineLegend > circle').transition().style('opacity', 1);
+					d3.select('.baselineLegend > text').transition().style('opacity', 1);
+
 				} // update baseline circles
 
 				if (!baseline) {
@@ -1029,6 +1131,8 @@ function chart() {
 						.delay(function(d,i) { return i * dur / n; })
 							.style('opacity', 1e-6)
 							.remove();
+
+					d3.select('.baselineLegend').transition().remove();
 
 				} // exit baseline circles
 
@@ -1094,10 +1198,11 @@ function chart() {
 
 				// --- Data prep for the genre highlight --- //
 
-				var genres = _.uniq(data.map(function(d) { return d.genreMain; })); // unique list of genres
-				var arrAxis = d3.select('.y.axis').selectAll('g > text').data(); // all films from axis
+				var genres = _.uniq(data.map(function(el) { return el.genre_main; })); // unique list of genres
+				var arrAxis = data.filter(function(el) { return el.category === config.keyValue; }).map(function(el) { return el.movie; }); // unique list of films
 
 				// main function returning an object showing the film list per genre
+
 				var genreArray = [];
 
 				genres.forEach(function(el, i) { 
@@ -1116,7 +1221,7 @@ function chart() {
 				function genreMatch(genre) {
 
 					var g = data
-						.filter(function(el) { return el.genreMain === genre; })
+						.filter(function(el) { return el.genre_main === genre; })
 						.map(function(elt) { return elt.movie; });
 
 					return g;
@@ -1135,10 +1240,11 @@ function chart() {
 					.append('button')
 						.classed('genres', true)
 						.attr('id', function(d) { return d.genre; })
-						.html(function(d) { return d.genre; });
+						.html(function(d) { return d.genre; })
+						.style('color', function(d) { return d.filmlist.length > 0 ? '#D9D9CE' : '#777'; });
 
 				// Update buttons
-				genreButtons.merge(genreButtons).style('color', function(d) { return d.filmlist.length > 0 ? '#D9D9CE' : '#777'; });
+				genreButtons.style('color', function(d) { return d.filmlist.length > 0 ? '#D9D9CE' : '#777'; });
 
 
 				// --- Listener and handler --- //
@@ -1149,14 +1255,19 @@ function chart() {
 					var arrAxis = d3.select('.y.axis').selectAll('g > text').data();
 					var intersection = _.intersection(arrAxis, d.filmlist);
 					
-					intersection.forEach(function(el) {
+					intersection.forEach(function(el, i) {
 
 						var axisLabel = getAxisLabel(el);
-						axisLabel.style('fill', '#E33F96').transition().duration(2000).style('fill', '#D9D9CE');
+						axisLabel.call(transAxisLabel);
 
 					}); // color the axis labels
 
 			 	}); // listener / handler
+
+				var transAxisLabel = function(selection) {
+					selection.style('fill', '#E33F96').transition().duration(2000).style('fill', '#D9D9CE');
+				} // named transition allows transitions on same elements 
+
 
 			})(); // genreDetection namespace
 
@@ -1181,8 +1292,8 @@ function chart() {
 								'<p class="tooltipText break">Production budget: ' + format(d.production_budget) + '</p>' +
 								'<p class="tooltipText">US revenue: ' + format(d.domestic_gross) + '</p>' +
 								'<p class="tooltipText">Worldwide revenue: ' + format(d.worldwide_gross) + '</p>' +
-								'<p class="tooltipText break">IMDb rating: ' + d.rating_imdb + ' of 10</p>' +
-								'<p class="tooltipText">Rotten Tomatoes: ' + d.rating_rt + ' of 10</p>' +
+								(d.rating_imdb === 0 ? '<p class="tooltipText break">IMDb doesn\'t rate this film</p>' : '<p class="tooltipText break">IMDb rating: ' + d.rating_imdb + ' of 10</p>') +
+								(d.rating_rt === 0 ? '<p class="tooltipText break">Rotten Tomatoes doesn\'t rate this film</p>' : '<p class="tooltipText break">Rotten Tomatoes rating: ' + d.rating_rt + ' of 10</p>') +
 							'</div>' +
 					  '</div>';
 
@@ -1382,6 +1493,6 @@ function type(d) {
 // about the data: inflation adjusted, hard to estimate in parts domestic gross === US
 // http://inflationdata.com/articles/2013/05/16/highest-grossing-movies-adjusted-for-inflation/
 
-
-
 // Trailing garbage
+
+
