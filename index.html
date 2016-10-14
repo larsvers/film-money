@@ -14,14 +14,25 @@
 	<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.9.2/lodash.min.js"></script>
 	<script src="lib/jquery.scrollstory.min.js"></script>
 	<script src="//use.fontawesome.com/8173c70a2e.js"></script>	
+	<script async src='//platform.twitter.com/widgets.js' charset='utf-8'></script>
 	<link href="//fonts.googleapis.com/css?family=Questrial" rel="stylesheet">
 	<link rel="stylesheet" href="movie.css"> 
-</head>
+<link rel="me" href="https://twitter.com/twitterdev"></head>
 <body>
   <!--[if lt IE 8]>
 		<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 	<![endif]-->
 
+	<!-- facebook button SDK -->
+
+	<div id="fb-root"></div>
+	<script>(function(d, s, id) {
+	  var js, fjs = d.getElementsByTagName(s)[0];
+	  if (d.getElementById(id)) return;
+	  js = d.createElement(s); js.id = id;
+	  js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.8";
+	  fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));</script>
 
 	<div id="mobile-screen">
 		<p>This looks a little better in landscape</p>

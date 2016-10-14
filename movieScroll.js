@@ -41,10 +41,37 @@ d3.json('data/story_ia.json', function(error, storyData) {
 
 
 	// add go-up button with reload to start over again
+/*
+<div class="fb-like" data-href="https://larsvers.github.io/film-money/" data-layout="standard" data-action="like" data-show-faces="true" 
+data-share="true"></div>
+
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="lars_vers" data-show-count="false">Tweet</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+*/
 
 	var lastItem = d3.select('#explanations p:last-child');
+	
 	lastItem.append('br');
 	lastItem.append('br');
+	
+	// lastItem.append('a')
+	// 	.classed('twitter-share-button', true)
+	// 	.attr('href', 'https://twitter.com/share')
+	// 	.attr('data-via', 'lars_vers')
+	// 	.attr('data-show-count', false)
+	// 	.html('Tweet');
+
+
+	lastItem.append('div')
+		.classed('fb-like', true)
+		.attr('data-href', 'https://larsvers.github.io/film-money/')
+		.attr('data-layout', 'button')
+		.attr('data-action', 'like')
+		.attr('data-show-faces', true)
+		.attr('data-share', true);
+
+	lastItem.append('br');
+	lastItem.append('br');
+	
 	lastItem.append('button')
 			.classed('top', true)
 			.html('go back up')
