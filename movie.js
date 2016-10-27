@@ -1490,9 +1490,6 @@ function type(d) {
 
 // === TODO === //
 
-// about the data: inflation adjusted, hard to estimate in parts domestic gross === US
-// http://inflationdata.com/articles/2013/05/16/highest-grossing-movies-adjusted-for-inflation/
-
 // Trailing garbage
 
 
