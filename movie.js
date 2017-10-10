@@ -1105,8 +1105,6 @@ function chart() {
 						.text(hashSort[config.compareTo])
 						.style('opacity', 1e-6);
 
-
-
 				} // enter baseline circles
 
 				if (baseline  && !d3.select('.baseline').empty()) {
