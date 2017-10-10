@@ -1,0 +1,256 @@
+{
+	"story":
+	{
+		"introduction": [
+			{
+				"id": 0,
+				"action": [100],
+				"headlineText": "Film money",
+				"sublineText": "a data story",
+				"text": "Films cost money. <br>However, they hope to make that money back and often do. When they do, it can be a lot and when they don’t it can be bitter. Sometimes they don’t expect to make money but they unexpectadly do. They often consume ridiculous amounts of effort, people and skill; they scream and shout to get into the public sphere which in turn decides their rise or fall. Films are bets on human taste and they ought to entertain to succeed. It's the fickle relationship between business interests and public taste that can make it joyous or painful to look at films and their money-harvest. Sizeable investments can in fact accrue mountains of gold while sometimes money just evaporates in front of empty screens. This visual story shows the ups and downs (or rather rights and lefts) of the film business, portraying a handful of stories, surprises and failures. Just keep on scrolling... (data from <a href='http://www.the-numbers.com/' target='_blank'>here</a>, <a href='www.imdb.com/' target='_blank'>here</a> and <a href='https://www.rottentomatoes.com/' target='_blank'>here</a>. All figures inflation adjusted for August 2016)"
+			}		
+		],
+		"main": [
+			{
+				"id": 0,
+				"action": [0],
+				"headline": 1,
+				"text": "The biggest budgets"
+			},
+			{
+				"id": 1,
+				"action": [1],
+				"headline": 0,
+				"text": "First let’s look at the big fish.<br> Up there are the 20 films with the biggest production budgets ever recorded."
+			},
+			{
+				"id": 2,
+				"action": [2],
+				"headline": 0,
+				"text": "<span class='film' data-filmname='Avatar' id=''>Avatar</span> is already a mature guest in this list being released in 2009. But it’s earned its top spot with a whopping $425 million budget, which translates to $470 million in 2016 dollars. However, <span class='film' data-filmname='Cleopatra'>Cleopatra</span> is the real silverback in this band of films, released in ancient 1963. The film cost $42 million at the time which is the equivalent of a mere $330 million in 2016. An interesting feature for us to watch will be <span class='film' data-filmname='John Carter'>John Carter</span> (previously known as <span class='film' data-filmname='John Carter'>John Carter of Mars</span>) checking in at $280 million as the 9th biggest production so far."
+			},
+			{
+				"id": 3,
+				"action": [3],
+				"headline": 0,
+				"text": "In general you might notice that all films are what one would call Action or its close friend Adventure &mdash; apart from <span class='film' data-filmname='Cleopatra'>Cleopatra</span>, <span class='film' data-filmname='Titanic'>Titanic</span> and <span class='film' data-filmname='Tangled'>Tangled</span>, the only Animation that cost the indecent sum of $300 million in 2016 money. <br>Play around with above genre buttons to see which films are what...<br><br>Now let’s see what they managed to get in."
+			},
+			{
+				"id": 4,
+				"action": [4],
+				"headline": 0,
+				"text": "First from North American screenings <br><span class='subline'>including United States, Canada, Puerto Rico and Guam. For brevity I shall call these revenues 'US revenues' - apologies, rather rude but much shorter</span> <br><br>Keeping the production budget on screen in blue, we can already see how some films lost all worry-lines after just counting the US revenue. <span class='film' data-filmname='Avatar'>Avatar</span>, <span class='film' data-filmname='Star Wars Ep. VII: The Force Awakens'>Star Wars</span>, <span class='film' data-filmname='Titanic'>Titanic</span> and some others could’ve just packed up to lay back and stay at home, while others were surely hoping for more international dollars."
+			},
+			{
+				"id": 5,
+				"action": [5],
+				"headline": 0,
+				"text": "Let's sort by US revenue. <br><br> <span class='film' data-filmname='Titanic'>Titanic</span> and <span class='film' data-filmname='Star Wars Ep. VII: The Force Awakens'>Star Wars</span> are in a good position having raked in more than double their costs just in the US. <span class='film' data-filmname='Avatar'>Avatar</span> didn't quite get that far at home. But much more importantly our animated friend <span class='film' data-filmname='Tangled'>Tangled</span> didn’t break even in the US while <span class='film' data-filmname='John Carter'>John Carter</span> also can't have been very pleased with its US performance."
+			},
+			{
+				"id": 6,
+				"action": [],
+				"headline": 0,
+				"text": "Let's now lift our eyes up to see what James Cameron has been spending his time on in the 90's and the early 2000's and enjoy the ride to the worldwide box-office revenues (including US - so all money made)."
+			},
+			{
+				"id": 7,
+				"action": [7],
+				"headline": 0,
+				"text": "Overall <span class='film' data-filmname='Avatar'>Avatar</span> made a mind boggling $3.1 billion only beaten by <span class='film' data-filmname='Titanic'>Titanic</span> with $3.3 billion in overall revenue. Stacking the Avatar dollars would lift you up 339.3 km (211 miles) above sea-level (<a href='http://www.ehd.org/science_technology_largenumbers.php' target='_blank'>it would apparently</a>). That would get you just 700 metres short of the <a href='https://upload.wikimedia.org/wikipedia/commons/8/82/Orbitalaltitudes.jpg' target='_blank'>International Space Station 340 km away</a>. You might want to use a <a href='https://www.youtube.com/watch?v=XgYZtNhAgaE'>fire extinguisher</a> for the last metres.<span class='film' data-filmname='Titanic'>Titanic</span> gets you 20 km passed the ISS."
+			},
+			{
+				"id": 8,
+				"action": [8],
+				"headline": 0,
+				"text": "In other news <span class='subline'>(while sorting by worldwide revenue)</span> we’re happy <span class='film' data-filmname='Tangled'>Tangled</span> as our lonesome premium animation made it comfortably to the safe zone, while it seems <span class='film' data-filmname='John Carter'>John Carter</span> actually just got its money worth. However &mdash; the production budget doesn’t show the marketing cost, which is pretty much exactly what it lost: around $150-200 million. Hurty. Wouldn’t quite make it to Mars.<br><br>So far this only shows the mass attractiveness. But how much in tune are film ratings with the revenue? Let’s have a look at 2 of them…"
+			},
+			{
+				"id": 9,
+				"action": [9],
+				"headline": 0,
+				"text": "The size and saturation of these bubbles show the <a href='http://www.imdb.com/help/show_leaf?votestopfaq' target='_blank'>IMDb rating</a> <span class='subline'>(the length of of these lollipops still show worldwide revenue, but we sorted by IMDb ratings)</span>. IMDb ratings are close to the masses (of at least film-aficionados) as every registered IMDb user can vote. You can hover over the circles to get more info. Not that much surprises here. <span class='film' data-filmname='Pirates of the Caribbean: On Stranger Tides'>Pirates of the Caribbean</span> wasn’t really as much loved as the income suggested and &mdash; well &mdash; <span class='film' data-filmname='John Carter'>John Carter</span> and <span class='film' data-filmname='The Lone Ranger'>The Lone Ranger</span> weren’t exactly embraced by the public either."
+			},
+			{
+				"id": 10,
+				"action": [10],
+				"headline": 0,
+				"text": "<a href='https://www.rottentomatoes.com/'>Rotten Tomatoes</a> is further away from the populace and closer to the distinguished film taste, one would hope, as only people who earn their money with going to the cinema are allowed to elaborate and <a href='http://www.mtv.com/news/1939097/rotten-tomatoes-youre-doing-it-wrong/'>cast their votes</a> from 1 (dismal) to 10 (blissful). In general it’s interesting to see how the patterns are more or less matching, yet more pronounced at Rotten Tomatoes. Much more variation in the data but both distributions follow the money.<br><br> In fact, let's have a look..."
+			},
+			{
+				"id": 11,
+				"action": [11],
+				"headline": 0,
+				"text": "Here's a scatterplot putting the 2 in relation to each other. And indeed, they move alongside each other more or less. See the 5 <span class='word-pulse'>blinking</span> bubbles? They indicate films with significantly lower ratings than the average of IMDb and/or Rotten Tomatoes ratings. <span class='blink-colour-orange'>Orange blink</span> means lower than average, <span class='blink-colour-green'>green</span> means higher than average and <span class='blink-colour-yellow'>yellow</span> means IMDb and Rotten Tomatoes ratings differ significantly more than their average discrepency. Science. Pah. Let's move on..."
+			},
+			{
+				"id": 12,
+				"action": [12],
+				"headline": 1,
+				"text": "The most profitable films"
+			},
+			{
+				"id": 13,
+				"action": [],
+				"headline": 0,
+				"text": "Now, let’s keep on the road of success, accelerating our trip a little. More surprises to come, though ! Let’s look at the top 20 most profitable films."
+			},
+			{
+				"id": 14,
+				"action": [14],
+				"headline": 0,
+				"text": "If I wanted to make a film with a big budget, I’d surely try Action as a Genre. If I wanted to make a profitable film, I’d probably call myself Walt and produce an Animation during the 1940's and the 50's. <span class='film' data-filmname='Cindarella (1950)'>Cindarella</span>, <span class='film' data-filmname='Snow White and the Seven Dwarfs'>Snow White</span>, <span class='film' data-filmname='Bambi'>Bambi</span>, <span class='film' data-filmname='Fantasia'>Fantasia</span> &mdash; all there.<br><br>Where are the US bubbles off to?"
+			},
+			{
+				"id": 15,
+				"action": [15],
+				"headline": 0,
+				"text": "All eyes to the right. <br><br><span class='film' data-filmname='Snow White and the Seven Dwarfs'>Snow White</span>? <span class='film' data-filmname='Gone with the Wind'>Gone with the Wind</span>? <br><br> The worldwide revenue shall tell us..."
+			},
+			{
+				"id": 16,
+				"action": [16],
+				"headline": 0,
+				"text": "<span class='film' data-filmname='Gone wth the Wind'>Gone with the wind</span> dwarves <span class='film' data-filmname='Snow White and the Seven Dwarfs'>Snow White</span> but well done Animations ! <br><span class='subline'>this is also sorted by worldwide revenues</span><br><br>"
+			},
+			{
+				"id": 17,
+				"action": [17],
+				"headline": 0,
+				"text": "<span class='subline'>lollipop length shows worldwide revenue - bubble size and saturation show IMDb rating</span> <br> The ratings (IMDb in this case) are all relatively decent... "
+			},
+			{
+				"id": 18,
+				"action": [18],
+				"headline": 0,
+				"text": "...with <span class='film' data-filmname='Grease'>Grease</span> and <span class='film' data-filmname='Jurassic World'>Jurassic World</span> not doing well (but at least having met in one sentence for the first time ever now)."
+			},
+			{
+				"id": 19,
+				"action": [19],
+				"headline": 0,
+				"text": "Interestingly rather modest IMDb ratings for E.T. and The Godfather up there between 7.8 and 8... "
+			},
+			{
+				"id": 20,
+				"action": [20],
+				"headline": 0,
+				"text": "...while Rotten Tomatoes celebrates the 2 appropriatley."
+			},
+			{
+				"id": 21,
+				"action": [21],
+				"headline": 1,
+				"text": "The biggest money losers"
+			},
+			{
+				"id": 22,
+				"action": [22],
+				"headline": 0,
+				"text": "Now let’s look at the bottom of the pile. Not necessarily in terms of quality (we’ll see…) but in terms of money made. Here are the top 20 money losers."
+			},
+			{
+				"id": 23,
+				"action": [23],
+				"headline": 0,
+				"text": "Here are their production budgets…"
+			},
+			{
+				"id": 24,
+				"action": [24],
+				"headline": 0,
+				"text": "…and their US gross moving to the shameful left. Can the worldwide revenue help?"
+			},
+			{
+				"id": 25,
+				"action": [25],
+				"headline": 0,
+				"text": "No. Gaping holes between the budgets and the revenues to the left mean quite a few costly bets. And these losses only show box office revenue less production budget. We don't see the marketing/PR millions that got sunk at the same time. <br><br>So what genre should I opt for if I wanted to lose as much money as possible? This is a little harder. I’m inclined to go Drama? Comedy maybe? Should be easy to spend a lot of money on a film trying and failing to be amusing..."
+			},
+			{
+				"id": 26,
+				"action": [26],
+				"headline": 0,
+				"text": "Some decent ratings here  with The Lion of the Desert achieving an 8.4 on IMDb. However, lots of disagreement between IMDb and RT as well as some real vegetables at the bottom of the pile."
+			},
+			{
+				"id": 27,
+				"action": [27],
+				"headline": 1,
+				"text": "The low budget winners"
+			},
+			{
+				"id": 28,
+				"action": [],
+				"headline": 0,
+				"text": "Let’s end on a high note, though. An unexpectedly high note. Some films don’t cost anything, compared to the money guzzlers we’ve been looking at but turn out to make hay.<br><br>Here are the 20 films with the lowest budgets who, however, managed to get some revenues beyond the $1 million mark and the biggest margins recorded."
+			},
+			{
+				"id": 29,
+				"action": [29],
+				"headline": 0,
+				"text": "Let's have a look at how much they cost to make..."
+			},
+			{
+				"id": 30,
+				"action": [30],
+				"headline": 0,
+				"text": "Nothing happened?"
+			},
+			{
+				"id": 31,
+				"action": [31],
+				"headline": 0,
+				"text": "Let's try again. Here are their production budgets..."
+			},
+			{
+				"id": 32,
+				"action": [32],
+				"headline": 0,
+				"text": "No?"
+			},
+			{
+				"id": 33,
+				"action": [],
+				"headline": 0,
+				"text": "Actually yes. But you can't see it on this scale (which is actually much tighter than what we've seen before). So one last (magnified) time..."
+			},
+			{
+				"id": 34,
+				"action": [34],
+				"headline": 0,
+				"text": "There you go. Cute..."
+			},
+			{
+				"id": 35,
+				"action": [35],
+				"headline": 0,
+				"text": "You can hover over them to see their budgets. <span class='film' data-filmname='El Mariachi'>El Mariachi</span> cost $7000 US at the time &mdash; now worth $12k. That could’ve bought us 0.24 seconds of Avatar. Not 24 seconds, no no: 0.24 seconds..."
+			},
+			{
+				"id": 36,
+				"action": [36],
+				"headline": 0,
+				"text": "Here come their US revenues… <br><br> What was that?"
+			},
+			{
+				"id": 37,
+				"action": [37],
+				"headline": 0,
+				"text": "…and their worldwide total all-in revenue"
+			},
+			{
+				"id": 38,
+				"action": [38],
+				"headline": 0,
+				"text": "...sorted by worldwide revenue. <br><br>I can’t claim to know all the films listed but if you want to make a low budget winner you should probably produce a Comedy. Just don't spend any money on it. 8 of 20 low budget winners are of the light-hearted kind. <br><br> But then of course... maybe a sequel of <span class='film' data-filmname='Deep Throat'>Deep Throat</span> might be a worthy thought?"
+			},
+			{
+				"id": 39,
+				"action": [],
+				"headline": 0,
+				"text": "Thanks for sticking around... <br> Have a play with the controls that just flew in, <a href='https://twitter.com/intent/tweet?url=https://larsvers.github.io/film-money/&via=lars_vers'>retweet this</a>, <a href='https://twitter.com/lars_vers'>follow me</a> for more to come, or pop me a mail <a href='mailto:lars@datamake.io?Subject=Film%20budgets' target='_top'>right here</a>"
+			}
+		]		
+	} 
+}
