@@ -1,6 +1,6 @@
 var log = console.log.bind(console);
 var dir = console.dir.bind(console);
-var noDecimal = d3.format('.1s');
+var noDecimal = d3.format('.2s');
 var singleDecimal = d3.format('.2s');
 var translateG = function(x,y) { return 'translate(' + x + ', ' + y + ')'; }
 var hashToObjects = function(_) {
